@@ -2,7 +2,88 @@
 
 html, body {
   background-color: black;
-  font-size: 10pt;
+  font-size: 12pt;
   color: white;
 }
 
+header {
+  background-color: #555;
+}
+
+button {
+  padding: 3px 8px;
+  border-radius: 5px;
+}
+
+#main {
+  padding: 10px;
+}
+
+#templates {
+  display: none;
+}
+
+#stack {
+  border: 1px solid white;
+  border-radius: 3px;
+  padding: 3px;
+}
+
+.block {
+  position: absolute;
+  border: 1px solid white;
+  background-color: navy;
+  width: 48px;
+  height: 48px;
+  &.start { background-color: yellow; }
+  &.empty { background-color: silver; }
+  &.enemy { background-color: red; }
+  &.treasure { background-color: green; }
+  &.boss { background-color: violet; }
+}
+
+.cursor {
+  position: absolute;
+  width: 20px;
+  height: 30px;
+  background-color: red;
+  border: 1px solid black;
+}
+
+.field {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  background-color: gray;
+  overflow-x: hidden;
+}
+
+.character {
+  display: inline-block;
+  width: 70px;
+  height: 70px;
+  border: 1px solid red;
+}
+
+.no-user-select {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.dice {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 48px;
+  background-color: white;
+  color: black;
+  line-height: 48px;
+  font-size: 40px;
+  text-align: center;
+  border: 1px solid black;
+  cursor: pointer;
+  -webkit-user-select: none;
+  .no-user-select;
+}
