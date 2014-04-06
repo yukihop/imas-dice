@@ -1,6 +1,7 @@
 doctype html
 html
   head
+    meta(charset='UTF-8')
     title モバマス実録
     script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
     script(src='js/main.js')
@@ -9,9 +10,13 @@ html
     header
       h1 DICE DE モバP!
     #main
-      #field_container
-      #stack
-      #players
+      #dicegame
+        #gamemode
+          #field_container
+          #battle
+          #treasure
+        #stack
+        #players
     #templates
       .character
         .name

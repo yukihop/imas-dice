@@ -94,8 +94,13 @@ class Field extends DisplayObject {
     if (thePosition >= this.blocks.length) thePosition = this.blocks.length - 1;
     this._position = thePosition;
     var block = this.blocks[this._position].element;
-    this._cursor.css({left: block.position().left});
+    var left: number = block.position().left + this.element.scrollLeft();
+    var fieldWidth = this.element.width();
+    this._cursor.css({left: left});
+    this.element.scrollLeft(Math.max(0, left - fieldWidth / 2));
     this._cursor.text(thePosition);
+    $('.block', this.element).removeClass('active');
+    block.addClass('active');
   }
 
   constructor() {
@@ -103,6 +108,7 @@ class Field extends DisplayObject {
     for (var i = 0; i < 40; i++) {
       var b = new Block();
       b.element.css({ left: i * 60 + 10, top: 50});
+      b.element.text((i+1).toString());
       this.element.append(b.element);
       this.blocks.push(b);
     }
@@ -151,6 +157,5 @@ class DiceGame {
 
   public proceed(step: number):void {
     this.field.position += step;
-    console.log(this.field.position);
   }
 }
