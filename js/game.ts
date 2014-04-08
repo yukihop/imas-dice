@@ -118,6 +118,19 @@ module CGDice {
     }
   }
 
+  class Battle extends DisplayObject {
+    public start() {
+      this.element.show();
+    }
+
+    constructor() {
+      super($('#battle'));
+      this.element.on('click', () => {
+        this.element.trigger('battleFinish');
+      });
+    }
+  }
+
   class Field extends DisplayObject {
     public maxPosition: number;
     private _position: number = 0;
@@ -188,11 +201,12 @@ module CGDice {
       for (var i = 0; i < 40; i++) {
         var b = new Block();
         b.element.css({ left: i * 60 + 10, top: 50 + Math.random() * 20 });
-        b.element.text((i + 1).toString());
+        b.element.text(i.toString() + BlockType[b.type]);
         this.element.append(b.element);
         this.blocks.push(b);
       }
       this._cursor = $('<div>').addClass('cursor').appendTo(this.element);
+      this._cursor.css(this.cursorXY(0));
     }
   }
 
@@ -229,6 +243,7 @@ module CGDice {
     private phase: GamePhase = GamePhase.Normal;
     private hp: HPIndicator;
     private field: Field;
+    private battle: Battle;
 
     private compatibilityCheck() {
       if (typeof console !== 'object') return false;
@@ -248,6 +263,11 @@ module CGDice {
       this.hp.maxHP = 120;
       this.hp.HP = 60;
 
+      this.battle = new Battle();
+      this.battle.element.on('battleFinish', () => {
+        this.battle.element.hide();
+      });
+
       this.field = new Field();
       this.field.position = 0;
       this.field.element.on('cursorMove', () => {
@@ -255,6 +275,7 @@ module CGDice {
         switch (block.type) {
           case BlockType.Enemy:
           case BlockType.Boss:
+            this.battle.start();
             break;
           case BlockType.Heal:
             this.hp.HP += 10;
