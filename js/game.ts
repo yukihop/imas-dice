@@ -100,7 +100,7 @@ module CGDice {
   }
 
   enum BlockType {
-    Start, Empty, Enemy, Boss, Treasure, Damage, Heal
+    Start, Empty, Enemy, Boss, Treasure, Heal, Damage
   }
 
   class Block extends DisplayObject {
@@ -112,7 +112,7 @@ module CGDice {
 
     constructor() {
       super('block');
-      var idx = Math.floor(Math.random() * 5);
+      var idx = Math.floor(Math.random() * 7);
       this.type = <BlockType>idx;
       this.element.addClass(BlockType[idx].toLowerCase());
     }
@@ -125,21 +125,28 @@ module CGDice {
     private _cursorPosition: number = 0;
     public blocks: Block[] = [];
 
+    public currentBlock(): Block {
+      if (this._position < 0 || this._position >= this.blocks.length) {
+        return null;
+      }
+      return this.blocks[this._position];
+    }
+
     private afterCursorMove() {
-      var block = this.blocks[this._cursorPosition].bounce();
+      this.blocks[this._cursorPosition].bounce();
       if (this._position != this._cursorPosition) {
         this.moveCursorByOne();
       } else {
         application.setInEffect(false);
-        this.element.trigger('cursorMoved', this);
+        this.element.trigger('cursorMove', this);
       }
     }
 
     private cursorXY(index: number): JQueryCoordinates {
-      var block = this.blocks[this._cursorPosition].element;
+      var block = this.blocks[index].element;
       var p: JQueryCoordinates = block.position();
-      var x: number = p.left + this.element.scrollLeft() + 20;
-      var y: number = 30;
+      var x: number = p.left + this.element.scrollLeft() + 15;
+      var y: number = p.top - 15;
       return { left: x, top: y };
     }
 
@@ -180,7 +187,7 @@ module CGDice {
       this.element.empty();
       for (var i = 0; i < 40; i++) {
         var b = new Block();
-        b.element.css({ left: i * 60 + 10, top: 50 });
+        b.element.css({ left: i * 60 + 10, top: 50 + Math.random() * 20 });
         b.element.text((i + 1).toString());
         this.element.append(b.element);
         this.blocks.push(b);
@@ -196,7 +203,12 @@ module CGDice {
     get maxHP(): number { return this._maxHP; }
     set maxHP(value: number) { this._maxHP = value; this.redraw(); }
     get HP(): number { return this._HP; }
-    set HP(value: number) { this._HP = value; this.redraw(); }
+    set HP(value: number) {
+      if (this._HP > value) {
+        this.element.effect('bounce');
+      }
+      this._HP = value; this.redraw();
+    }
 
     private redraw(): void {
       var txt = this._HP + '/' + this._maxHP;
@@ -237,20 +249,31 @@ module CGDice {
       this.hp.HP = 60;
 
       this.field = new Field();
+      this.field.position = 0;
+      this.field.element.on('cursorMove', () => {
+        var block = this.field.currentBlock();
+        switch (block.type) {
+          case BlockType.Enemy:
+          case BlockType.Boss:
+            break;
+          case BlockType.Heal:
+            this.hp.HP += 10;
+            break;
+          case BlockType.Damage:
+            this.hp.HP -= 10;
+            break;
+        }
+      });
 
       for (i = 0; i <= 2; i++) {
         var dice = new Dice();
         dice.roll();
         dice.element.on('diceClick', (event, dice: Dice) => {
-          this.proceed(dice.pips);
+          this.field.proceed(dice.pips);
           dice.roll();
         });
         $('#stack').append(dice.element);
       }
-    }
-
-    public proceed(step: number): void {
-      this.field.position += step;
     }
   }
 
