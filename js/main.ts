@@ -8,6 +8,6 @@
 
 
 $(() => {
-  var game = new DiceGame();
-  game.init();
+  CGDice.application = new CGDice.Application();
+  CGDice.application.run();
 });
