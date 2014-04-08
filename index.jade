@@ -4,7 +4,9 @@ html
     meta(charset='UTF-8')
     title モバマス実録
     script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
+    script(src='//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js')
     script(src='js/main.js')
+    link(rel='stylesheet' href='//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css')
     link(rel='stylesheet' href='css/style.css')
   body
     header
@@ -12,10 +14,11 @@ html
     #main
       #dicegame
         #gamemode
-          #field_container
+          #field
           #battle
           #treasure
         #stack
+        #dice_indicator
         #hp_indicator_container
           #hp_indicator
             .hp_bar
@@ -27,5 +30,4 @@ html
         .hp
         .mp
       button.dice
-      .field
       .block

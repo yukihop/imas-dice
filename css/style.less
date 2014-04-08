@@ -36,16 +36,15 @@ button {
 
 .block {
   position: absolute;
-  border: 1px solid white;
-  background-color: navy;
   width: 48px;
   height: 48px;
-  &.start { background-color: yellow; }
-  &.empty { background-color: silver; }
-  &.enemy { background-color: red; }
-  &.treasure { background-color: green; }
-  &.boss { background-color: violet; }
-  &.active { border-color: red; }
+  background-image: url('../images/blocks.png');
+  &.empty { background-position: (48px * 0) 0; }
+  &.start { background-position: (48px * 1) 0; }
+  &.treasure { background-position: (48px * 2) 0; }
+  &.enemy { background-position: (48px * 3) 0; }
+  &.boss { background-position: (48px * 8) 0; }
+  &.active { background-color: white; }
 }
 
 .cursor {
@@ -56,7 +55,7 @@ button {
   border: 1px solid black;
 }
 
-.field {
+#field {
   position: relative;
   width: 100%;
   height: 200px;

@@ -1,4 +1,5 @@
-/// <reference path="jquery.d.ts" />
+/// <reference path="types/jquery/jquery.d.ts" />
+/// <reference path="types/jqueryui/jqueryui.d.ts" />
 /// <reference path="game.ts" />
 
 /**
