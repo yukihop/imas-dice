@@ -15,6 +15,7 @@ module CGDice {
     }
 
     public run(): void {
+      createjs.Ticker.setFPS(30);
       this.diceGame = new DiceGame();
       this.diceGame.init();
     }
@@ -107,7 +108,11 @@ module CGDice {
     public type: BlockType;
 
     public bounce() {
-      this.element.effect('bounce');
+      var top = this.element.position().top;
+      createjs.Tween.get(this.element[0])
+        .to({top: top-10}, 300, createjs.Ease.bounceOut)
+        .to({top: top}, 300, createjs.Ease.bounceOut)
+        .call($.noop);
     }
 
     constructor() {
@@ -219,7 +224,10 @@ module CGDice {
     get HP(): number { return this._HP; }
     set HP(value: number) {
       if (this._HP > value) {
-        this.element.effect('bounce');
+        createjs.Tween.get(this.element[0])
+          .to({top: 10}, 400, createjs.Ease.bounceOut)
+          .to({top: 0}, 100)
+          .call($.noop);
       }
       this._HP = value; this.redraw();
     }
