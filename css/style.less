@@ -44,10 +44,6 @@ button {
   overflow: hidden;
 }
 
-#field {
-  .main_panel;
-}
-
 #field_canvas {
   .main_panel;
 }
@@ -71,6 +67,24 @@ button {
     padding: 3px;
     bottom: 10px;
     right: 10px;
+    transition: opacity 0.2;
+    body.in_effect & {
+      opacity: 0.5;
+    }
+  }
+  #dice_indicator {
+    width: 100px;
+    height: 30px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 0 0 10px 0;
+    .dice_stock {
+      display: inline-block;
+      font-weight: bold;
+      font-size: 24px;
+      color: salmon;
+      min-width: 40px;
+      text-align: center;
+    }
   }
 }
 
@@ -142,29 +156,24 @@ button {
   }
 }
 
-#hp_indicator_container {
-  position: relative;
-  height: 25px;
-  #hp_indicator {
+#hp_indicator {
+  position: absolute;
+  left: 200px;
+  top: 0px;
+  right: 10px;
+  height: 15px;
+  border: 1px solid pink;
+  .hp_value {
     position: absolute;
-    left: 10px;
-    top: 4px;
-    right: 10px;
-    bottom: 0;
+    font-weight: bold;
+    color: yellow;
+    font-size: 15px;
+    line-height: 15px;
+  }
+  .hp_bar {
+    position: absolute;
+    width: 100%;
     height: 15px;
-    border: 1px solid pink;
-    .hp_value {
-      position: absolute;
-      font-weight: bold;
-      color: yellow;
-      font-size: 15px;
-      line-height: 15px;
-    }
-    .hp_bar {
-      position: absolute;
-      width: 100%;
-      height: 15px;
-      background-color: red;
-    }
+    background: linear-gradient(to bottom, #f88, #f00, #800);
   }
 }

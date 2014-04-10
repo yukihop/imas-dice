@@ -1,4 +1,4 @@
-module CGDice.characters {
+module cgdice.characters {
   export class Skill extends createjs.EventDispatcher {
     public name: string;
     public use(): void {
@@ -16,7 +16,7 @@ module CGDice.characters {
 
   export class Character extends createjs.EventDispatcher {
     public name: string;
-    private _exp: number;
+    private _exp: number = 0;
     private _multipliers: Multiplier[];
 
     public gainExp(value: number): void {

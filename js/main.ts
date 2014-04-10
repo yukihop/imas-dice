@@ -10,6 +10,6 @@
 createjs.CSSPlugin.install();
 
 $(() => {
-  CGDice.application = new CGDice.Application();
-  CGDice.application.run();
+  cgdice.application = new cgdice.Application();
+  cgdice.application.run();
 });
