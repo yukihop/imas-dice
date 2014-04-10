@@ -104,22 +104,57 @@ module CGDice {
     Start, Empty, Enemy, Boss, Treasure, Heal, Damage
   }
 
-  class Block extends DisplayObject {
+  class Block extends createjs.Container {
     public type: BlockType;
+    private _box: createjs.Sprite;
+    private _text: createjs.DOMElement;
 
     public bounce() {
-      var top = this.element.position().top;
-      createjs.Tween.get(this.element[0])
-        .to({top: top-10}, 300, createjs.Ease.bounceOut)
-        .to({top: top}, 300, createjs.Ease.bounceOut)
+      var y = this.y;
+      createjs.Tween.get(this)
+        .to({ y: y - 10 }, 300, createjs.Ease.bounceOut)
+        .to({ y: y }, 300, createjs.Ease.bounceOut)
         .call($.noop);
     }
 
     constructor() {
-      super('block');
+      super();
+
       var idx = Math.floor(Math.random() * 7);
       this.type = <BlockType>idx;
-      this.element.addClass(BlockType[idx].toLowerCase());
+
+      var data = {
+        images: ["images/blocks.png"],
+        frames: { width: 48, height: 48 },
+        animations: {
+          Empty: [0],
+          Start: [1],
+          Treasure: [2],
+          Enemy: [3],
+          Heal: [4],
+          Damage: [5],
+          Back: [6],
+          Proceed: [7],
+          Boss: [8]
+        }
+      };
+      var spriteSheet = new createjs.SpriteSheet(data);
+      var animation = new createjs.Sprite(spriteSheet, "run");
+
+      this._box = new createjs.Sprite(spriteSheet, BlockType[this.type]);
+      this._box.regX = this._box.regY = 24;
+      this.addChild(this._box);
+
+      //var g = this._box.graphics;
+      //g.beginFill('lime').drawRoundRect(-24, -24, 48, 48, 5).endFill();
+
+      var t = $('<span>').addClass('block').text(BlockType[this.type]);
+      t.appendTo($('#field'));
+      this._text = new createjs.DOMElement(t[0]);
+      this._text.x = -24;
+      this._text.y = -24;
+      this.addChild(this._text);
+
     }
   }
 
@@ -139,9 +174,11 @@ module CGDice {
   class Field extends DisplayObject {
     public maxPosition: number;
     private _position: number = 0;
-    private _cursor: JQuery;
+    private _container: createjs.Container;
+    private _cursor: createjs.Shape;
     private _cursorPosition: number = 0;
     public blocks: Block[] = [];
+    private _stage: createjs.Stage;
 
     public currentBlock(): Block {
       if (this._position < 0 || this._position >= this.blocks.length) {
@@ -160,14 +197,6 @@ module CGDice {
       }
     }
 
-    private cursorXY(index: number): JQueryCoordinates {
-      var block = this.blocks[index].element;
-      var p: JQueryCoordinates = block.position();
-      var x: number = p.left + this.element.scrollLeft() + 15;
-      var y: number = p.top - 15;
-      return { left: x, top: y };
-    }
-
     private moveCursorByOne() {
       if (this._position > this._cursorPosition) {
         this._cursorPosition++;
@@ -177,13 +206,11 @@ module CGDice {
         return;
       }
       application.setInEffect(true);
-      var xy: JQueryCoordinates = this.cursorXY(this._cursorPosition);
+      var block = this.blocks[this._cursorPosition];
       var fieldWidth = this.element.width();
-      this.element.scrollLeft(Math.max(0, xy.left - fieldWidth / 2));
-      this._cursor.text(this._cursorPosition);
-      this._cursor.animate(xy, 400, () => { this.afterCursorMove() });
-      $('.block', this.element).removeClass('active');
-      this.blocks[this._cursorPosition].element.addClass('active');
+      var scroll = Math.min(0, fieldWidth / 2 - block.x);
+      createjs.Tween.get(this._cursor).to({ x: block.x, y: block.y - 20 }, 400).call(this.afterCursorMove, [], this);
+      createjs.Tween.get(this._container).to({ x: scroll }, 1000).call($.noop);
     }
 
     get position(): number { return this._position; }
@@ -203,15 +230,36 @@ module CGDice {
     constructor() {
       super($('#field'));
       this.element.empty();
+      $('#field_canvas').attr('width', $('#field_canvas').width());
+      $('#field_canvas').attr('height', $('#field_canvas').height());
+      this._stage = new createjs.Stage('field_canvas');
+      this._container = new createjs.Container();
+      createjs.Ticker.addEventListener('tick', () => {
+        this._stage.update();
+      });
+      this._stage.addChild(this._container);
+      var lines = new createjs.Shape();
+      this._container.addChild(lines);
+
+      var prev: Block;
       for (var i = 0; i < 40; i++) {
         var b = new Block();
-        b.element.css({ left: i * 60 + 10, top: 50 + Math.random() * 20 });
-        b.element.text(i.toString() + BlockType[b.type]);
-        this.element.append(b.element);
+        b.x = i * 60 + 10;
+        b.y = 30 + Math.random() * 40;
+        this._container.addChild(b);
         this.blocks.push(b);
+        if (i > 0) {
+          lines.graphics.setStrokeStyle(5).beginStroke('#ffff00')
+            .moveTo(prev.x, prev.y).lineTo(b.x, b.y).endStroke();
+        }
+        prev = b;
       }
-      this._cursor = $('<div>').addClass('cursor').appendTo(this.element);
-      this._cursor.css(this.cursorXY(0));
+      this._cursor = new createjs.Shape();
+      this._cursor.graphics.beginFill('red').beginStroke('white')
+        .drawRect(-10, -15, 20, 30).endFill().endStroke();
+      this._container.addChild(this._cursor);
+      this._stage.update();
+      this.position = 0;
     }
   }
 
@@ -225,8 +273,8 @@ module CGDice {
     set HP(value: number) {
       if (this._HP > value) {
         createjs.Tween.get(this.element[0])
-          .to({top: 10}, 400, createjs.Ease.bounceOut)
-          .to({top: 0}, 100)
+          .to({ top: 10 }, 400, createjs.Ease.bounceOut)
+          .to({ top: 0 }, 100)
           .call($.noop);
       }
       this._HP = value; this.redraw();
