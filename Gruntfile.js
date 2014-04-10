@@ -31,7 +31,8 @@ module.exports = function(grunt) {
       all: {
         files: { 'js/main.js': ['js/main.ts'] },
         options: {
-          target: "ES5"
+          target: "ES5",
+          sourceMap: true
         }
       }
     },
