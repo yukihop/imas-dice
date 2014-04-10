@@ -1,9 +1,17 @@
+/// <reference path="battle.ts" />
+/// <reference path="character.ts" />
+
 module CGDice {
   export var application: Application;
 
-  export class Application {
+  export class Application extends createjs.EventDispatcher {
     private inEffect: boolean = true;
     private diceGame: DiceGame;
+
+    private compatibilityCheck() {
+      if (typeof console !== 'object') return false;
+      return true;
+    }
 
     public setInEffect(inEffect: boolean): void {
       this.inEffect = inEffect;
@@ -21,12 +29,13 @@ module CGDice {
     }
   }
 
-  class DisplayObject {
+  class DomDisplayObject extends createjs.EventDispatcher {
     public element: JQuery;
 
     constructor(template: string);
     constructor(element: JQuery);
     constructor(element: any) {
+      super();
       if (typeof element == 'string') {
         this.element = $('.' + element, $('#templates')).clone();
       } else {
@@ -35,46 +44,12 @@ module CGDice {
     }
   }
 
-  class Character extends DisplayObject {
-    public maxHP: number;
-    private _HP: number;
-    private _name: string;
-
-    get name(): string {
-      return this._name;
-    }
-    set name(theName: string) {
-      this._name = theName;
-      $('.name', this.element).text(theName);
-    }
-
-    get HP(): number {
-      return this._HP;
-    }
-  }
-
-  class PlayerCharacter extends Character {
-    public damagePoint: number;
-    public skills: string[];
-    public stun: boolean;
-    public knockedOut: boolean;
-
-    public getDamage(amount: number) {
-      this.damagePoint -= amount;
-      if (this.damagePoint < 0) this.damagePoint = 0;
-    }
-
-    constructor() {
-      super('character');
-    }
-  }
-
   enum GamePhase {
     Normal,
     InAnimation // unresponsive to mouse events
   }
 
-  class Dice extends DisplayObject {
+  class Dice extends DomDisplayObject {
     private _pips: number;
     private _animating: boolean;
     get pips(): number { return this._pips; }
@@ -158,27 +133,12 @@ module CGDice {
     }
   }
 
-  class Battle extends DisplayObject {
-    public start() {
-      this.element.show();
-    }
-
-    constructor() {
-      super($('#battle'));
-      this.element.on('click', () => {
-        this.element.trigger('battleFinish');
-      });
-    }
-  }
-
-  class Field extends DisplayObject {
+  class Field extends createjs.Container {
     public maxPosition: number;
     private _position: number = 0;
-    private _container: createjs.Container;
     private _cursor: createjs.Shape;
     private _cursorPosition: number = 0;
     public blocks: Block[] = [];
-    private _stage: createjs.Stage;
 
     public currentBlock(): Block {
       if (this._position < 0 || this._position >= this.blocks.length) {
@@ -193,7 +153,7 @@ module CGDice {
         this.moveCursorByOne();
       } else {
         application.setInEffect(false);
-        this.element.trigger('cursorMove', this);
+        this.dispatchEvent(new createjs.Event('cursorMove', false, false));
       }
     }
 
@@ -207,10 +167,9 @@ module CGDice {
       }
       application.setInEffect(true);
       var block = this.blocks[this._cursorPosition];
-      var fieldWidth = this.element.width();
-      var scroll = Math.min(0, fieldWidth / 2 - block.x);
+      var scroll = Math.min(0, 300 - block.x);
       createjs.Tween.get(this._cursor).to({ x: block.x, y: block.y - 20 }, 400).call(this.afterCursorMove, [], this);
-      createjs.Tween.get(this._container).to({ x: scroll }, 1000).call($.noop);
+      createjs.Tween.get(this).to({ x: scroll }, 1000).call($.noop);
     }
 
     get position(): number { return this._position; }
@@ -228,25 +187,16 @@ module CGDice {
     }
 
     constructor() {
-      super($('#field'));
-      this.element.empty();
-      $('#field_canvas').attr('width', $('#field_canvas').width());
-      $('#field_canvas').attr('height', $('#field_canvas').height());
-      this._stage = new createjs.Stage('field_canvas');
-      this._container = new createjs.Container();
-      createjs.Ticker.addEventListener('tick', () => {
-        this._stage.update();
-      });
-      this._stage.addChild(this._container);
+      super();
       var lines = new createjs.Shape();
-      this._container.addChild(lines);
+      this.addChild(lines);
 
       var prev: Block;
       for (var i = 0; i < 40; i++) {
         var b = new Block();
-        b.x = i * 60 + 10;
-        b.y = 30 + Math.random() * 40;
-        this._container.addChild(b);
+        b.x = i * 60 + 50;
+        b.y = 120 + Math.random() * 40;
+        this.addChild(b);
         this.blocks.push(b);
         if (i > 0) {
           lines.graphics.setStrokeStyle(5).beginStroke('#ffff00')
@@ -257,13 +207,11 @@ module CGDice {
       this._cursor = new createjs.Shape();
       this._cursor.graphics.beginFill('red').beginStroke('white')
         .drawRect(-10, -15, 20, 30).endFill().endStroke();
-      this._container.addChild(this._cursor);
-      this._stage.update();
-      this.position = 0;
+      this.addChild(this._cursor);
     }
   }
 
-  class HPIndicator extends DisplayObject {
+  class HPIndicator extends DomDisplayObject {
     private _maxHP: number = 100;
     private _HP: number = 100;
 
@@ -293,26 +241,38 @@ module CGDice {
     }
   }
 
+  class CharacterView extends DomDisplayObject {
+    constructor(p: CGDice.characters.Character) {
+      super('character');
+      this.element.find('.name').text(p.name);
+    }
+  }
+
   class DiceGame {
-    private players: Character[] = [];
+    private players: CGDice.characters.Character[] = [];
     private energyCandies: number = 0;
     private phase: GamePhase = GamePhase.Normal;
     private hp: HPIndicator;
     private field: Field;
     private battle: Battle;
-
-    private compatibilityCheck() {
-      if (typeof console !== 'object') return false;
-      return true;
-    }
+    private _stage: createjs.Stage;
 
     public init(): void {
+      $('#dicegame_canvas').attr('width', $('#dicegame_canvas').width());
+      $('#dicegame_canvas').attr('height', $('#dicegame_canvas').height());
+
+      this._stage = new createjs.Stage('dicegame_canvas');
+      createjs.Ticker.addEventListener('tick', () => {
+        this._stage.update();
+      });
+
       var names = ['ゆきほP', 'あんずP', 'らんこP'];
       for (var i = 0; i <= 2; i++) {
-        var p = new PlayerCharacter();
+        var p = new CGDice.characters.Character();
         p.name = names[i];
         this.players.push(p);
-        $('#players').append(p.element);
+        var view = new CharacterView(p);
+        $('#players').append(view.element);
       }
 
       this.hp = new HPIndicator();
@@ -320,18 +280,17 @@ module CGDice {
       this.hp.HP = 60;
 
       this.battle = new Battle();
-      this.battle.element.on('battleFinish', () => {
-        this.battle.element.hide();
+      this.battle.on('battleFinish', () => {
       });
 
       this.field = new Field();
-      this.field.position = 0;
-      this.field.element.on('cursorMove', () => {
+      this._stage.addChild(this.field);
+      this.field.on('cursorMove', () => {
         var block = this.field.currentBlock();
         switch (block.type) {
           case BlockType.Enemy:
           case BlockType.Boss:
-            this.battle.start();
+            // this.battle.start();
             break;
           case BlockType.Heal:
             this.hp.HP += 10;

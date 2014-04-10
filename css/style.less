@@ -28,12 +28,6 @@ button {
   display: none;
 }
 
-#stack {
-  border: 1px solid white;
-  border-radius: 3px;
-  padding: 3px;
-}
-
 .block {
   position: absolute;
   color: black;
@@ -41,20 +35,12 @@ button {
   text-align: center;
 }
 
-.cursor {
-  position: absolute;
-  width: 20px;
-  height: 30px;
-  background-color: red;
-  border: 1px solid black;
-}
-
 .main_panel() {
   position: absolute;
   left: 0;
   top: 0;
   width: 100%;
-  height: 200px;
+  height: 400px;
   overflow: hidden;
 }
 
@@ -63,6 +49,32 @@ button {
 }
 
 #field_canvas {
+  .main_panel;
+}
+
+#dicegame {
+  .main_panel;
+  background-color: #555;
+  #players {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    bottom: 10px;
+    left: 10px;
+    border: 1px solid black;
+    padding: 5px;
+  }
+  #stack {
+    position: absolute;
+    border: 1px solid white;
+    border-radius: 3px;
+    padding: 3px;
+    bottom: 10px;
+    right: 10px;
+  }
+}
+
+#dicegame_canvas {
   .main_panel;
 }
 
@@ -103,7 +115,7 @@ button {
 
 #gamemode {
   position: relative;
-  height: 200px;
+  height: 400px;
   width: 100%;
 }
 
@@ -111,7 +123,7 @@ button {
   position: absolute;
   left: 0;
   top: 0;
-  height: 200px;
+  height: 400px;
   display: none;
   #enemy {
     position: absolute;

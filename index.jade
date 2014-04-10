@@ -12,25 +12,26 @@ html
     header
       h1 DICE DE モバP!
     #main
-      #dicegame
-        #gamemode
-          canvas#field_canvas
-          #field
+      #gamemode
+        #title
+        #option
+        #gameover
+        #dicegame
+          canvas#dicegame_canvas
           #battle
             #enemy
             #enemy_hp
           #treasure
-        #stack
-        #dice_indicator
-        #hp_indicator_container
-          #hp_indicator
-            .hp_bar
-            .hp_value
-        #players
+          #players
+          #stack
+          #dice_indicator
+          #hp_indicator_container
+            #hp_indicator
+              .hp_bar
+              .hp_value
     #templates
       .character
         .name
-        .hp
         .mp
       button.dice
       .block
