@@ -37,6 +37,12 @@ module cgdice.characters {
       return lv * 10 + 100;
     }
 
+    public attackPower(pips: number[]): number {
+      var result: number = 0;
+      pips.forEach(v => { result += v; });
+      return result;
+    }
+
     public availableMultipliers(): Multiplier[] {
       return [];
     }

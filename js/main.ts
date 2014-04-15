@@ -9,7 +9,7 @@
 
 createjs.CSSPlugin.install();
 
-$(() => {
+$(window).on('load', () => {
   cgdice.application = new cgdice.Application();
   cgdice.application.run();
 });

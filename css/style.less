@@ -134,15 +134,15 @@ button {
 }
 
 #battle {
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 400px;
+  .main_panel;
   display: none;
+  background-color: #080;
   #enemy {
-    position: absolute;
-    left: auto;
-    right: auto;
+    position: static;
+    border: 1px solid blue;
+    min-width: 100px;
+    min-height: 100px;
+    margin: 20px auto;
   }
   #enemy_hp {
     position: absolute;
@@ -150,9 +150,9 @@ button {
     height: 15px;
     border: 1px solid white;
     background-color: red;
-    left: auto;
-    right: auto;
-    bottom: 10px;
+    left: 50px;
+    right: 50px;
+    top: 350px;
   }
 }
 
