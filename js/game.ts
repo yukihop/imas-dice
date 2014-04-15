@@ -4,10 +4,10 @@
 
 module cgdice {
   export var application: Application;
+  export var game: DiceGame;
 
   export class Application extends createjs.EventDispatcher {
     private inEffect: boolean = true;
-    public diceGame: DiceGame;
 
     private compatibilityCheck() {
       if (typeof console !== 'object') return false;
@@ -25,12 +25,12 @@ module cgdice {
 
     public run(): void {
       createjs.Ticker.setFPS(30);
-      this.diceGame = new DiceGame();
-      this.diceGame.init();
+      game = new DiceGame();
+      game.init();
     }
   }
 
-  class Dice extends DomDisplayObject {
+  export class Dice extends DomDisplayObject {
     private _pips: number;
     private _animating: boolean;
     get pips(): number { return this._pips; }
@@ -157,7 +157,7 @@ module cgdice {
       }
       tween.call(() => {
         application.setInEffect(false);
-        this.dispatchEvent(new createjs.Event('cursorMove', false, false));
+        this.cursorMoved();
       });
       var scroll = Math.min(0, 300 - block.x);
       createjs.Tween.removeTweens(this);
@@ -167,6 +167,41 @@ module cgdice {
     public proceed(step: number, immediate: boolean = false) {
       var newPosition = this._position + step;
       this.moveTo(newPosition, immediate);
+    }
+
+    public diceDetermined(dice: Dice) {
+      this.proceed(dice.pips);
+    }
+
+    public cursorMoved() {
+      var block = this.currentBlock();
+      var move_end = true;
+
+      switch (block.type) {
+        case BlockType.Enemy:
+        case BlockType.Boss:
+          // this.battle.start();
+          break;
+        case BlockType.Heal:
+          game.hp.HP += 10;
+          break;
+        case BlockType.Damage:
+          game.getDamage(10);
+          break;
+        case BlockType.Treasure:
+          game.dice.stock += 1;
+          break;
+        case BlockType.Back:
+          move_end = false;
+          this.proceed(-3);
+          break;
+        case BlockType.Proceed:
+          move_end = false;
+          this.proceed(3);
+      }
+      if (move_end) {
+        this.dispatchEvent('diceProcess');
+      }
     }
 
     constructor() {
@@ -195,7 +230,7 @@ module cgdice {
     }
   }
 
-  class HPIndicator extends DomDisplayObject {
+  export class HPIndicator extends DomDisplayObject {
     private _maxHP: number = 100;
     private _HP: number = 100;
 
@@ -229,7 +264,7 @@ module cgdice {
     }
   }
 
-  class DiceIndicator extends DomDisplayObject {
+  export class DiceIndicator extends DomDisplayObject {
     private _stock: number = 0;
     get stock(): number { return this._stock; }
     set stock(value: number) {
@@ -243,7 +278,7 @@ module cgdice {
     }
   }
 
-  class CharacterView extends DomDisplayObject {
+  export class CharacterView extends DomDisplayObject {
     constructor(p: characters.Character) {
       super('character');
       this.element.find('.name').text(p.name);
@@ -284,13 +319,17 @@ module cgdice {
     }
   }
 
+  /**
+   * DiceGame is a general manager of one instance of dice game
+   * (from start block to boss).
+   */
   export class DiceGame {
     public players: characters.Character[] = [];
     private energyCandies: number = 0;
-    private hp: HPIndicator;
     private field: Field;
     private battle: battles.Battle;
-    private dice: DiceIndicator;
+    public hp: HPIndicator;
+    public dice: DiceIndicator;
     private stack: DiceStack;
     private _stage: createjs.Stage;
 
@@ -323,54 +362,36 @@ module cgdice {
       this.dice.stock = 10;
 
       this.stack = new DiceStack();
-      this.stack.element.on('diceDetermine', (event: JQueryEventObject, dice: Dice) => {
-        this.field.proceed(dice.pips);
-      });
+      this.stack.element.on('diceDetermine', $.proxy(this.diceDetermined, this));
 
-      this.battle = new battles.Battle(this);
+      this.battle = new battles.Battle();
       this.battle.on('battleFinish', () => {
       });
 
       this.field = new Field();
       this._stage.addChild(this.field);
       this.field.moveTo(0);
-      this.field.on('cursorMove', this.cursorMoved, this);
+      this.field.on('diceProcess', this.diceProcessed, this);
+
+      // temporary
+      // this.battle.start();
     }
 
-    public cursorMoved() {
-      var block = this.field.currentBlock();
-      var draw = true;
-
-      switch (block.type) {
-        case BlockType.Enemy:
-        case BlockType.Boss:
-          this.battle.start();
-          break;
-        case BlockType.Heal:
-          this.hp.HP += 10;
-          break;
-        case BlockType.Damage:
-          this.getDamage(10);
-          break;
-        case BlockType.Treasure:
-          this.dice.stock += 1;
-          break;
-        case BlockType.Back:
-          draw = false;
-          this.field.proceed(-3);
-          break;
-        case BlockType.Proceed:
-          draw = false;
-          this.field.proceed(3);
+    private diceProcessed() {
+      if (this.dice.stock > 0) {
+        this.dice.stock--;
+        this.stack.draw();
       }
-      if (draw) {
-        if (this.dice.stock > 0) {
-          this.dice.stock--;
-          this.stack.draw();
-        }
-        if (this.stack.length == 0) {
-          alert('GAME OVER');
-        }
+      if (this.stack.length == 0) {
+        alert('GAME OVER');
+      }
+    }
+
+    public diceDetermined(event: JQueryEventObject, dice: Dice) {
+      if (this.battle.element.is(':visible')) {
+        this.battle.diceDetermined(dice.pips);
+      } else {
+        this.field.diceDetermined(dice);
       }
     }
 

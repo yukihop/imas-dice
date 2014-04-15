@@ -21,34 +21,32 @@ module cgdice.battles {
   export class Battle extends cgdice.DomDisplayObject {
     public enemy: Enemy;
     public onboard: number[];
-    private _game: cgdice.DiceGame;
 
     public start() {
       this.enemy = new Enemy();
       this.enemy.on('enemyAttack', this.enemyAttacked);
       this.dispatchEvent('initialized');
-      this.element.find('#enemy').text(this.enemy.name);
+      this.element.find('#enemy_name').text(this.enemy.name);
       this.element.find('#enemy_hp').text(this.enemy.HP);
       this.element.show();
     }
 
-    public diceDrawn(pips: number) {
+    public diceDetermined(pips: number) {
       var all_power: number = 0;
       var all_pips: number[] = this.onboard.slice();
       all_pips.push(pips);
-      this._game.players.forEach((p: cgdice.characters.Character) => {
+      game.players.forEach((p: cgdice.characters.Character) => {
         all_power += p.attackPower(all_pips);
       });
       this.enemy.hit(all_power);
     }
 
     public enemyAttacked(damage: number) {
-      this._game.getDamage(damage);
+      game.getDamage(damage);
     }
 
-    constructor(owner: cgdice.DiceGame) {
+    constructor() {
       super($('#battle'));
-      this._game = owner;
     }
 
   }
