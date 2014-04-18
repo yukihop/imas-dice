@@ -319,6 +319,19 @@ module cgdice {
     }
   }
 
+  export class GameLog extends DomDisplayObject {
+    public log(message: any) {
+      if (typeof message == 'object') {
+        message = message.toString();
+      }
+      this.element.append(message);
+    }
+
+    constructor() {
+      super($('#gamelog'));
+    }
+  }
+
   /**
    * DiceGame is a general manager of one instance of dice game
    * (from start block to boss).
@@ -332,6 +345,7 @@ module cgdice {
     public dice: DiceIndicator;
     private stack: DiceStack;
     private _stage: createjs.Stage;
+    private log: GameLog;
 
     public init(): void {
       $('#dicegame_canvas').attr('width', $('#dicegame_canvas').width());
@@ -372,6 +386,8 @@ module cgdice {
       this._stage.addChild(this.field);
       this.field.moveTo(0);
       this.field.on('diceProcess', this.diceProcessed, this);
+
+      this.log = new GameLog();
 
       // temporary
       // this.battle.start();
