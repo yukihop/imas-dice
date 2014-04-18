@@ -2,10 +2,16 @@
 /// <reference path="game.ts" />
 
 module cgdice.battles {
+  export class BattleEffectEvent extends createjs.Event {
+    kind: string;
+    magnitude: number;
+    reflected: boolean; // not in use currently
+  }
+
   export class Enemy extends cgdice.DomDisplayObject {
     public name: string = 'てき';
-    public HP: number = 40;
-    public ATK: number = 15;
+    public HP: number;
+    public ATK: number;
 
     private update() {
       var e = this.element;
@@ -17,15 +23,36 @@ module cgdice.battles {
       this.HP = Math.max(this.HP - damage, 0);
       this.update();
       this.dispatchEvent('hpChange');
+      if (this.HP <= 0) {
+        this.die();
+      } else {
+        this.myTurn();
+      }
+    }
+
+    private myTurn(): void {
+      this.enemyAttack();
+      this.dispatchEvent('turnEnd');
+    }
+
+    private die(): void {
+      game.console.log(this.name + 'は倒れた');
+      this.dispatchEvent('turnEnd');
     }
 
     public enemyAttack(): void {
-      var power: number = Math.floor(Math.random() * 10) + 5;
-      this.dispatchEvent('enemyAttack');
+      var power: number = Math.floor(Math.random() * this.ATK);
+      game.console.log(this.name + 'から' + power + 'の攻撃!');
+      var event = new BattleEffectEvent('enemyAttack', false, false);
+      event.kind = 'physicalAttack';
+      event.magnitude = power;
+      this.dispatchEvent(event);
     }
 
     constructor() {
       super('enemy');
+      this.HP = Math.floor(Math.random() * 40 + 40);
+      this.ATK = 15;
       this.update();
     }
   }
@@ -39,12 +66,10 @@ module cgdice.battles {
       $('#enemies', this.element).empty();
       this.enemy.element.appendTo('#enemies');
       this.enemy.on('enemyAttack', this.enemyAttacked);
+      this.enemy.on('turnEnd', this.enemyTurnEnd);
       this.dispatchEvent('initialized');
       this.shuffleOnboardDice();
       this.element.show();
-    }
-
-    public updateEnemy() {
     }
 
     public shuffleOnboardDice() {
@@ -64,21 +89,24 @@ module cgdice.battles {
       game.players.forEach((p: cgdice.characters.Character) => {
         all_power += p.attackPower(all_pips);
       });
-      alert(all_pips.join(' & ') + ', ' + all_power);
+      game.console.log(all_power + 'の攻撃!');
       this.enemy.hit(all_power);
-
-      if (this.enemy.HP <= 0) {
-        alert('Win!');
-        this.element.hide();
-        this.dispatchEvent('battleFinish');
-      }
-
-      this.shuffleOnboardDice();
-      this.dispatchEvent('diceProcess');
     }
 
-    public enemyAttacked(damage: number) {
-      game.getDamage(damage);
+    private enemyTurnEnd() {
+      this.dispatchEvent('diceProcess');
+      if (this.enemy.HP <= 0) {
+        game.console.log('勝利!');
+        this.element.hide();
+        this.dispatchEvent('battleFinish');
+      } else {
+        this.shuffleOnboardDice();
+      }
+    }
+
+    public enemyAttacked(event: BattleEffectEvent) {
+      game.console.log(event.magnitude + 'の攻撃を受けた');
+      game.getDamage(event.magnitude);
     }
 
     constructor() {

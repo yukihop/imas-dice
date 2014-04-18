@@ -325,7 +325,8 @@ module cgdice {
       if (typeof message == 'object') {
         message = message.toString();
       }
-      this.element.append(message);
+      var elem = $('<div>').text(message);
+      this.element.append(elem);
     }
 
     constructor() {
@@ -346,7 +347,7 @@ module cgdice {
     public dice: DiceIndicator;
     private stack: DiceStack;
     private _stage: createjs.Stage;
-    private log: GameLog;
+    public console: GameLog;
 
     public init(): void {
       $('#dicegame_canvas').attr('width', $('#dicegame_canvas').width());
@@ -389,7 +390,7 @@ module cgdice {
       this.field.moveTo(0);
       this.field.on('diceProcess', this.diceProcessed, this);
 
-      this.log = new GameLog();
+      this.console = new GameLog();
 
       // temporary
       // this.battle.start();
