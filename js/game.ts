@@ -180,7 +180,7 @@ module cgdice {
       switch (block.type) {
         case BlockType.Enemy:
         case BlockType.Boss:
-          // this.battle.start();
+          game.battle.start();
           break;
         case BlockType.Heal:
           game.hp.HP += 10;
@@ -198,6 +198,7 @@ module cgdice {
         case BlockType.Proceed:
           move_end = false;
           this.proceed(3);
+          break;
       }
       if (move_end) {
         this.dispatchEvent('diceProcess');
@@ -340,7 +341,7 @@ module cgdice {
     public players: characters.Character[] = [];
     private energyCandies: number = 0;
     private field: Field;
-    private battle: battles.Battle;
+    public battle: battles.Battle;
     public hp: HPIndicator;
     public dice: DiceIndicator;
     private stack: DiceStack;
@@ -379,6 +380,7 @@ module cgdice {
       this.stack.element.on('diceDetermine', $.proxy(this.diceDetermined, this));
 
       this.battle = new battles.Battle();
+      this.battle.on('diceProcess', this.diceProcessed, this);
       this.battle.on('battleFinish', () => {
       });
 
