@@ -37,7 +37,8 @@ module cgdice {
       this.loader.on('complete', this.loadComplete);
       this.loader.loadManifest([
         { id: 'characters', src: 'settings/characters.json' },
-        { id: 'fieldData', src: 'settings/stage1.json' }
+        { id: 'fieldData', src: 'settings/stage1.json' },
+        { id: 'enemies', src: 'settings/enemies.json' }
       ]);
     }
   }

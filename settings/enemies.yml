@@ -1,0 +1,14 @@
+chibichihi1:
+  name: ちびちひ1号
+  image: chibichihi.jpg
+  start_talk: メダルガチャにマニーを詰める係にはなりたくない……
+  HP: 100
+  ATK: 20
+  defeated_talk: ばいばい！
+ranko:
+  name: 闇に飲まれたらんこP
+  image: chibichihi.jpg
+  start_talk: やみのまやみのま
+  HP: 300
+  ATK: 10
+  defeated_talk: ぐわああああああ

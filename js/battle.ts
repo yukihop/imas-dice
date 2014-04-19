@@ -9,7 +9,7 @@ module cgdice.battles {
   }
 
   export class Enemy extends cgdice.DomDisplayObject {
-    public name: string = 'てき';
+    public name: string;
     public HP: number;
     public ATK: number;
 
@@ -58,10 +58,16 @@ module cgdice.battles {
       this.dispatchEvent(event);
     }
 
-    constructor() {
+    constructor(id: string) {
       super('enemy');
-      this.HP = Math.floor(Math.random() * 40 + 40);
-      this.ATK = 15;
+      var data = application.loader.getResult('enemies');
+      if (!(id in data)) { alert('Runtime Error: no such enemy ID'); }
+      var e = data[id];
+      console.log(e);
+      this.element.find('.enemy_image').attr('src', 'images/' + e.image);
+      this.name = e.name;
+      this.HP = e.HP;
+      this.ATK = e.ATK;
       this.update();
     }
   }
@@ -71,7 +77,7 @@ module cgdice.battles {
     public onboard: number[];
 
     public start() {
-      this.enemy = new Enemy();
+      this.enemy = new Enemy('chibichihi1');
       $('#enemies', this.element).empty();
       this.enemy.element.appendTo('#enemies');
       this.enemy.on('enemyAttack', this.enemyAttacked, this);
