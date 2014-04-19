@@ -211,15 +211,20 @@ module cgdice {
       this.battle.on('battleFinish', () => {
       });
 
-      this.field = new fields.Field();
-      this._stage.addChild(this.field);
-      this.field.moveTo(0);
-      this.field.on('diceProcess', this.diceProcessed, this);
+      $.get('settings/stage1.json', (data) => {
+        for (var i = 0; i < data.blocks.length; i++) {
+          data.blocks[i].type = fields.BlockType[data.blocks[i].type];
+        }
+        var fieldData = <fields.FieldData>data;
+        console.log(fieldData);
+        this.field = new fields.Field();
+        this._stage.addChild(this.field);
+        this.field.reset(fieldData);
+        this.field.on('diceProcess', this.diceProcessed, this);
+      });
 
       this.console = new GameLog();
 
-      // temporary
-      // this.battle.start();
     }
 
     private diceProcessed() {
