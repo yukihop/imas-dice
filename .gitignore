@@ -7,3 +7,4 @@ js/*.map
 !css/lib
 /.project
 *.ai
+settings/*.json
