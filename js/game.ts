@@ -37,7 +37,7 @@ module cgdice {
     get pips(): number { return this._pips; }
     set pips(p: number) {
       this._pips = p;
-      this.element.text(p);
+      this.element.attr('class', 'dice dice'+ p);
     }
     public roll(): void {
       this.pips = Math.floor(Math.random() * 6) + 1;

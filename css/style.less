@@ -28,13 +28,6 @@ button {
   display: none;
 }
 
-.block {
-  position: absolute;
-  color: black;
-  font-size: 5px;
-  text-align: center;
-}
-
 .main_panel() {
   position: absolute;
   left: 0;
@@ -123,19 +116,21 @@ button {
   -ms-user-select: none;
 }
 
+.dicebg (@i) { background-position: (-@i * 48px + 48) 0; }
+
 .dice {
   position: relative;
   display: inline-block;
   width: 48px;
   height: 48px;
-  background-color: white;
-  color: black;
-  line-height: 48px;
-  font-size: 40px;
-  text-align: center;
-  border: 1px solid black;
-  -webkit-user-select: none;
-  .no-user-select;
+  background-image: url('../images/dices.png');
+  background-size: (48px * 6) 48px;
+  &.dice1 { .dicebg(1); }
+  &.dice2 { .dicebg(2); }
+  &.dice3 { .dicebg(3); }
+  &.dice4 { .dicebg(4); }
+  &.dice5 { .dicebg(5); }
+  &.dice6 { .dicebg(6); }
 }
 
 #gamemode {
