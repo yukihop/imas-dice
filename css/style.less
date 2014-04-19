@@ -68,8 +68,9 @@ button {
     bottom: 10px;
     right: 10px;
     transition: opacity 0.2;
-    body.in_effect & {
-      opacity: 0.5;
+    opacity: 0.5;
+    &.ready {
+      opacity: 1;
     }
   }
   #dice_indicator {

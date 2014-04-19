@@ -58,7 +58,6 @@ module cgdice.characters {
 
     public redraw() {
       this.element.find('.name').text(this.name);
-      console.log(this);
       var muls = this.element.find('.multipliers');
       muls.empty();
       $.each(this._multipliers, (i, mul) => {

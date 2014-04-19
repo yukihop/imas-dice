@@ -107,6 +107,7 @@ module cgdice {
 
   export class DiceStack extends DomDisplayObject {
     private _stack: Dice[];
+    private _ready: boolean = false;
 
     get length(): number {
       return this._stack.length;
@@ -117,10 +118,12 @@ module cgdice {
       this._stack.push(dice);
       dice.roll();
       dice.element.on('diceClick', (event, dice: Dice) => {
+        if (!this._ready) return;
         var idx = this._stack.indexOf(dice);
         if (idx == -1) {
           return; // dice already removed
         }
+        this.ready(false);
         this.element.trigger('diceDetermine', dice);
         this._stack.splice(idx, 1);
         dice.element.animate({ opacity: 0 }, 500, () => {
@@ -128,6 +131,11 @@ module cgdice {
         });
       });
       this.element.prepend(dice.element);
+    }
+
+    public ready(isReady: boolean = true) {
+      this._ready = isReady;
+      this.element.toggleClass('ready', isReady);
     }
 
     constructor() {
@@ -213,6 +221,7 @@ module cgdice {
         this._stage.addChild(this.field);
         this.field.reset(fieldData);
         this.field.on('diceProcess', this.diceProcessed, this);
+        this.stack.ready();
       });
 
       this.console = new GameLog();
@@ -223,6 +232,7 @@ module cgdice {
       if (this.dice.stock > 0) {
         this.dice.stock--;
         this.stack.draw();
+        this.stack.ready();
       }
       if (this.stack.length == 0) {
         alert('GAME OVER');
