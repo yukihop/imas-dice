@@ -2,6 +2,7 @@ node_modules
 *.html
 js/*.js
 js/*.map
+!js/lib
 *.css
 /.project
 *.ai
