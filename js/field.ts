@@ -125,6 +125,7 @@ module cgdice.fields {
       switch (block.type) {
         case BlockType.Enemy:
         case BlockType.Boss:
+          cgdice.talks.Talk.show('sample', 'enemy');
           game.battle.start();
           break;
         case BlockType.Heal:

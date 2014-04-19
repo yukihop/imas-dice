@@ -1,5 +1,6 @@
 /// <reference path="displayobject.ts" />
 /// <reference path="field.ts" />
+/// <reference path="talkshow.ts" />
 /// <reference path="battle.ts" />
 /// <reference path="character.ts" />
 
