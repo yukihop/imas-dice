@@ -10,11 +10,16 @@ module cgdice.characters {
 
     public check(checked: number[]) {
       var ok: boolean = true;
+      for (var p = 1; p <= 6; p++) {
+        var multiplier_count = this.dices.filter((n) => n == p).length;
+        var checked_count = checked.filter((n) => n == p).length;
+        if (multiplier_count > checked_count) ok = false;
+      }
       return ok;
     }
   }
 
-  export class Character extends createjs.EventDispatcher {
+  export class Character extends cgdice.DomDisplayObject {
     public name: string;
     private _exp: number = 0;
     private _multipliers: Multiplier[];
@@ -44,11 +49,31 @@ module cgdice.characters {
     }
 
     public availableMultipliers(): Multiplier[] {
-      return [];
+      return this._multipliers;
     }
 
     public availableSkills(): Skill[] {
       return [];
+    }
+
+    public redraw() {
+      this.element.find('.name').text(this.name);
+      console.log(this);
+      var muls = this.element.find('.multipliers');
+      muls.empty();
+      $.each(this._multipliers, (i, mul) => {
+        var m = $('<div>').addClass('multiplier');
+        m.text(mul.dices.join('/')).appendTo(muls);
+      });
+    }
+
+    constructor() {
+      super('character');
+      // random multiplier
+      var m = new Multiplier;
+      m.dices = [Math.floor(Math.random() * 6 + 1)];
+      this._multipliers = [m];
+      this.redraw();
     }
   }
 

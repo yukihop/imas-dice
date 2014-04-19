@@ -105,13 +105,6 @@ module cgdice {
     }
   }
 
-  export class CharacterView extends DomDisplayObject {
-    constructor(p: characters.Character) {
-      super('character');
-      this.element.find('.name').text(p.name);
-    }
-  }
-
   export class DiceStack extends DomDisplayObject {
     private _stack: Dice[];
 
@@ -189,8 +182,8 @@ module cgdice {
         var p = new characters.Character();
         p.name = names[i];
         this.players.push(p);
-        var view = new CharacterView(p);
-        $('#players').append(view.element);
+        p.redraw();
+        $('#players').append(p.element);
       }
 
       var maxHP = 0;
@@ -216,7 +209,6 @@ module cgdice {
           data.blocks[i].type = fields.BlockType[data.blocks[i].type];
         }
         var fieldData = <fields.FieldData>data;
-        console.log(fieldData);
         this.field = new fields.Field();
         this._stage.addChild(this.field);
         this.field.reset(fieldData);
