@@ -4,5 +4,6 @@ js/*.js
 js/*.map
 !js/lib
 *.css
+!css/lib
 /.project
 *.ai
