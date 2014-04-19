@@ -1,17 +1,48 @@
 module cgdice.talks {
+  /**
+   * Talkクラスはダイアログとして表示される会話イベントを制御します。
+   */
   export class Talk extends DomDisplayObject {
     static loaded: { [file_id: string]: JQuery } = {};
+
+    private dialog: JQuery;
+    private talk_index: number;
+    private talks: JQuery;
 
     static show(fileid: string, id: string) {
       return new Talk(fileid, id);
     }
 
     private doShow(item: JQuery) {
-      alert(item.text());
+      if (!item || item.length == 0) {
+        alert('Internal error: No matching dialog ID');
+      }
+      this.talks = item.children();
+      this.talk_index = 0;
+      this.dialog.on('click', () => {
+        if (this.talk_index >= this.talks.length) {
+          this.dialog.dialog('close');
+          this.dialog = null;
+        } else {
+          var elem = this.talks.eq(this.talk_index++);
+          this.dialog.append(elem);
+          elem.animate({ left: 0 }, 200);
+        }
+      });
+      this.dialog.click();
     }
 
     constructor(fileid: string, id: string) {
       super('talkshow');
+      this.dialog = $('<div>').dialog({
+        dialogClass: 'talkshow',
+        draggable: false,
+        resizable: false,
+        width: 400,
+        height: 300,
+        modal: true,
+        closeOnEscape: false
+      });
       if (fileid in Talk.loaded) {
         var item = Talk.loaded[fileid].find('.' + id);
         this.doShow(item);
