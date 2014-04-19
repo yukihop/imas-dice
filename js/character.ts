@@ -7,6 +7,7 @@ module cgdice.characters {
 
   export class Multiplier {
     public dices: number[];
+    public scale: number = 2;
 
     public check(checked: number[]) {
       var ok: boolean = true;
@@ -17,12 +18,19 @@ module cgdice.characters {
       }
       return ok;
     }
+
+    constructor(data: string) {
+      var m = data.split('>', 2);
+      this.dices = m[0].split('').map((v) => parseInt(v));
+      this.scale = parseInt(m[1]);
+    }
   }
 
   export class Character extends cgdice.DomDisplayObject {
     public name: string;
     private _exp: number = 0;
     private _multipliers: Multiplier[];
+    private _baseHP: number = 10;
 
     public gainExp(value: number): void {
       this._exp += value;
@@ -39,7 +47,7 @@ module cgdice.characters {
 
     public maxHP(): number {
       var lv = this.level();
-      return lv * 10 + 100;
+      return lv * this._baseHP;
     }
 
     public attackPower(pips: number[]): number {
@@ -62,17 +70,22 @@ module cgdice.characters {
       muls.empty();
       $.each(this._multipliers, (i, mul) => {
         var m = $('<div>').addClass('multiplier');
-        m.text(mul.dices.join('/')).appendTo(muls);
+        m.text(mul.dices.join('/') + ' x' + mul.scale).appendTo(muls);
       });
     }
 
-    constructor() {
+    constructor(id: string) {
       super('character');
-      // random multiplier
-      var m = new Multiplier;
-      m.dices = [Math.floor(Math.random() * 6 + 1)];
-      this._multipliers = [m];
-      this.redraw();
+      var character_data = <Array<any>>application.loader.getResult('characters');
+      for (var i = 0; i < character_data.length; i++) {
+        var c = character_data[i];
+        if (c.name == id) {
+          this.name = c.name;
+          this._baseHP = c.base_hp;
+          this.element.css('background-image', 'url(images/' + c.image + ')');
+          this._multipliers = $.map(c.multipliers, (v) => { return new Multiplier(v); });
+        }
+      }
     }
   }
 

@@ -198,8 +198,7 @@ module cgdice {
 
       var names = ['ゆきほP', 'あんずP', 'らんこP'];
       for (var i = 0; i <= 2; i++) {
-        var p = new characters.Character();
-        p.name = names[i];
+        var p = new characters.Character(names[i]);
         this.players.push(p);
         p.redraw();
         $('#players').append(p.element);
