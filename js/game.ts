@@ -45,7 +45,7 @@ module cgdice {
         this.element.animate({ top: 0 }, 200, () => {
           this._animating = false;
         })
-    });
+      });
     }
     constructor() {
       super('dice');
@@ -69,8 +69,7 @@ module cgdice {
       var y = this.y;
       createjs.Tween.get(this)
         .to({ y: y - 10, scaleX: 1.2, scaleY: 1.2 }, 300, createjs.Ease.bounceOut)
-        .to({ y: y, scaleX: 1, scaleY: 1 }, 300, createjs.Ease.bounceOut)
-        .call($.noop);
+        .to({ y: y, scaleX: 1, scaleY: 1 }, 300, createjs.Ease.bounceOut);
     }
 
     constructor() {

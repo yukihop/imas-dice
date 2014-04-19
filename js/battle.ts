@@ -20,6 +20,15 @@ module cgdice.battles {
     }
 
     public hit(damage: number): void {
+      createjs.Tween.get(this.element[0])
+        .to({top: 15}, 150)
+        .to({top: 0}, 150)
+        .call(() => {
+          this.hitEffectEnd(damage);
+        });
+    }
+
+    private hitEffectEnd(damage: number) {
       this.HP = Math.max(this.HP - damage, 0);
       this.update();
       this.dispatchEvent('hpChange');
@@ -65,8 +74,8 @@ module cgdice.battles {
       this.enemy = new Enemy();
       $('#enemies', this.element).empty();
       this.enemy.element.appendTo('#enemies');
-      this.enemy.on('enemyAttack', this.enemyAttacked);
-      this.enemy.on('turnEnd', this.enemyTurnEnd);
+      this.enemy.on('enemyAttack', this.enemyAttacked, this);
+      this.enemy.on('turnEnd', this.enemyTurnEnd, this);
       this.dispatchEvent('initialized');
       this.shuffleOnboardDice();
       this.element.show();
@@ -94,7 +103,6 @@ module cgdice.battles {
     }
 
     private enemyTurnEnd() {
-      this.dispatchEvent('diceProcess');
       if (this.enemy.HP <= 0) {
         game.console.log('勝利!');
         this.element.hide();
@@ -102,6 +110,7 @@ module cgdice.battles {
       } else {
         this.shuffleOnboardDice();
       }
+      this.dispatchEvent('diceProcess');
     }
 
     public enemyAttacked(event: BattleEffectEvent) {
