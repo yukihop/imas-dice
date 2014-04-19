@@ -1,0 +1,20 @@
+- name: ゆきほP
+  image: yukiho_p.jpg
+  base_hp: 20
+  multipliers: [ [ 6 ] ]
+- name: あんずP
+  image: anzu_p.jpg
+  base_hp: 22
+  multipliers: [ [ 1 ] ]
+- name: ことりP
+  image: kotori_p.jpg
+  base_hp: 30
+  multipliers: [ [ 5 ] ]
+- name: さえP
+  image: sae_p.jpg
+  base_hp: 25
+  multipliers: [ [ 3, 1 ] ]
+- name: らんこP
+  image: ranko_p.jpg
+  base_hp: 18
+  multipliers: [ [ 6, 6, 6 ] ]
