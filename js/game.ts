@@ -188,12 +188,16 @@ module cgdice {
     public console: GameLog;
 
     public init(): void {
-      $('#dicegame_canvas').attr('width', $('#dicegame_canvas').width());
-      $('#dicegame_canvas').attr('height', $('#dicegame_canvas').height());
+      $('#field_canvas')
+        .attr('width', $('#field_canvas').width())
+        .attr('height', $('#field_canvas').height());
 
-      this._stage = new createjs.Stage('dicegame_canvas');
+      this._stage = new createjs.Stage('field_canvas');
       createjs.Ticker.addEventListener('tick', () => {
         this._stage.update();
+      });
+      $(window).on('resize', () => {
+        $('#field_canvas').attr('width', $('#field_canvas').width());
       });
 
       var names = ['ゆきほP', 'あんずP', 'らんこP'];
