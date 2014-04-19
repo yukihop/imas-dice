@@ -11,6 +11,8 @@ module cgdice {
   export class Application extends createjs.EventDispatcher {
     private inEffect: boolean = true;
 
+    public loader = new createjs.LoadQueue();
+
     private compatibilityCheck() {
       if (typeof console !== 'object') return false;
       return true;
@@ -25,10 +27,18 @@ module cgdice {
       }
     }
 
-    public run(): void {
+    private loadComplete() {
       createjs.Ticker.setFPS(30);
       game = new DiceGame();
       game.init();
+    }
+
+    public run(): void {
+      this.loader.on('complete', this.loadComplete);
+      this.loader.loadManifest([
+        { id: 'characters', src: 'settings/characters.json' },
+        { id: 'fieldData', src: 'settings/stage1.json' }
+      ]);
     }
   }
 
@@ -38,7 +48,7 @@ module cgdice {
     get pips(): number { return this._pips; }
     set pips(p: number) {
       this._pips = p;
-      this.element.attr('class', 'dice dice'+ p);
+      this.element.attr('class', 'dice dice' + p);
     }
     public roll(): void {
       this.pips = Math.floor(Math.random() * 6) + 1;
@@ -213,17 +223,16 @@ module cgdice {
       this.battle.on('battleFinish', () => {
       });
 
-      $.get('settings/stage1.json', (data) => {
-        for (var i = 0; i < data.blocks.length; i++) {
-          data.blocks[i].type = fields.BlockType[data.blocks[i].type];
-        }
-        var fieldData = <fields.FieldData>data;
-        this.field = new fields.Field();
-        this._stage.addChild(this.field);
-        this.field.reset(fieldData);
-        this.field.on('diceProcess', this.diceProcessed, this);
-        this.stack.ready();
-      });
+      var data: any = application.loader.getResult('fieldData');
+      for (var i = 0; i < data.blocks.length; i++) {
+        data.blocks[i].type = fields.BlockType[data.blocks[i].type];
+      }
+      var fieldData = <fields.FieldData>data;
+      this.field = new fields.Field();
+      this._stage.addChild(this.field);
+      this.field.reset(fieldData);
+      this.field.on('diceProcess', this.diceProcessed, this);
+      this.stack.ready();
 
       this.console = new GameLog();
 

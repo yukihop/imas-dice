@@ -27,6 +27,7 @@ module cgdice.talks {
           var elem = this.talks.eq(this.talk_index++);
           this.dialog.append(elem);
           elem.animate({ left: 0 }, 200);
+          $('.ui-dialog-content').scrollTop(9999);
         }
       });
       this.dialog.click();

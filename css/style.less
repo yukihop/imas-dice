@@ -231,7 +231,26 @@ button {
     color: white;
     font-size: 18px;
     overflow-x: hidden;
-    p { position: relative; left: 400px; }
+    p {
+      position: relative;
+      left: 400px;
+      min-height: 100px;
+      padding-left: 110px;
+      margin-bottom: 3px;
+      background-repeat: no-repeat;
+      .character_talk(@character) {
+        &.@{character} {
+          padding-left: 110px;
+          background-image: url('../images/@{character}_p.jpg');
+        }
+      }
+      .character_talk(kotori);
+      .character_talk(yukiho);
+      .character_talk(ranko);
+      .character_talk(sae);
+      .character_talk(anzu);
+      &.right { background-position: 240px 0; padding-left: 0; padding-right: 110px; }
+    }
   }
   .ui-dialog-titlebar { display: none; }
 }
