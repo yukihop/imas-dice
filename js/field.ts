@@ -75,14 +75,16 @@ module cgdice.fields {
     get position(): number { return this._position; }
 
     public moveTo(newPosition: number, immediate: boolean = false) {
+      var block: Block;
       if (newPosition >= this.blocks.length) newPosition = this.blocks.length - 1;
       if (newPosition < 0) newPosition = 0;
-      if (this._position == newPosition) return;
       if (immediate) {
-        this._position = newPosition;
+        block = this.blocks[newPosition];
         this._cursor.setTransform(block.x, block.y - 20);
+        this._position = newPosition;
         return;
       }
+      if (this._position == newPosition) return;
 
       var startPosition = this._position;
       this._position = newPosition;
@@ -93,7 +95,7 @@ module cgdice.fields {
       var p = startPosition;
       while (newPosition != p) {
         p += step;
-        var block = this.blocks[p];
+        block = this.blocks[p];
         tween.to({ x: block.x, y: block.y - 20 }, 400);
         (() => {
           var _block = block;
@@ -155,11 +157,12 @@ module cgdice.fields {
       var data = fieldData.blocks;
       var prev: Block;
 
-      if (this._lines) this.removeChild(this._lines);
+      this.removeAllChildren();
+      this.blocks = [];
       var lines = new createjs.Shape();
       this._lines = lines;
-
       this.addChild(lines);
+
       for (var i = 0; i < data.length; i++) {
         var b = new Block();
         b.type = data[i].type;
@@ -173,16 +176,17 @@ module cgdice.fields {
         }
         prev = b;
       }
-      this.moveTo(0);
-    }
-
-    constructor() {
-      super();
 
       this._cursor = new createjs.Shape();
       this._cursor.graphics.beginFill('red').beginStroke('white')
         .drawRect(-10, -15, 20, 30).endFill().endStroke();
       this.addChild(this._cursor);
+
+      this.moveTo(0, true);
+    }
+
+    constructor() {
+      super();
     }
   }
 
