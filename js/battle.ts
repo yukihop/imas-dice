@@ -90,10 +90,14 @@ module cgdice.battles {
     public shuffleOnboardDice() {
       var i = 0;
       this.onboard = [];
+      var elem = this.element.find('#onboard');
+      elem.empty();
       for (i = 0; i <= 1; i++) {
-        var d = Math.floor(Math.random() * 6 + 1);
-        this.onboard.push(d);
-        this.element.find('#onboard').text(this.onboard.join(', '));
+        var pips = Math.floor(Math.random() * 6 + 1);
+        this.onboard.push(pips);
+        var dice = new cgdice.Dice();
+        dice.pips = pips;
+        dice.element.appendTo(elem);
       }
     }
 

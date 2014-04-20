@@ -60,22 +60,26 @@ button {
   }
   #stack {
     position: absolute;
+    height: 50px;
+    min-width: 200px;
     border: 1px solid white;
     border-radius: 3px;
-    padding: 3px;
-    bottom: 10px;
-    right: 10px;
+    bottom: 0px;
+    right: 0px;
     transition: opacity 0.2;
     opacity: 0.5;
     &.ready {
       opacity: 1;
+      .dice { cursor: pointer; }
     }
   }
   #dice_indicator {
-    width: 100px;
+    display: inline-block;
+    text-align: center;
+    width: 120px;
     height: 30px;
     background-color: rgba(0, 0, 0, 0.5);
-    border-radius: 0 0 10px 0;
+    border-radius: 10px 10px 0 0;
     .dice_stock {
       display: inline-block;
       font-weight: bold;
@@ -84,7 +88,6 @@ button {
       min-width: 40px;
       text-align: center;
     }
-    z-index: 10;
   }
 }
 
