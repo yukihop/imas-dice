@@ -23,8 +23,8 @@ module cgdice.battles {
 
     public hit(damage: number): void {
       createjs.Tween.get(this.element[0])
-        .to({top: 15}, 150)
-        .to({top: 0}, 150)
+        .to({ top: 15 }, 150)
+        .to({ top: 0 }, 150)
         .call(() => {
           this.hitEffectEnd(damage);
         });
@@ -35,15 +35,25 @@ module cgdice.battles {
       this.update();
       this.dispatchEvent('hpChange');
       if (this.HP <= 0) {
-        this.die();
+        this.element.animate({ opacity: 0 }, 1000, () => {
+          this.die();
+        });
       } else {
         this.myTurn();
       }
     }
 
     private myTurn(): void {
-      this.enemyAttack();
-      this.dispatchEvent('turnEnd');
+      this.element.transition(
+        { scale: 1.1 },
+        500,
+        'ease',
+        () => {
+          this.element.transition({ scale: 1 });
+          this.enemyAttack();
+          this.dispatchEvent('turnEnd');
+        }
+        );
     }
 
     private die(): void {
