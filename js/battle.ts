@@ -22,10 +22,9 @@ module cgdice.battles {
     }
 
     public hit(damage: number): void {
-      createjs.Tween.get(this.element[0])
-        .to({ top: 15 }, 150)
-        .to({ top: 0 }, 150)
-        .call(() => {
+      this.element
+        .transition({ y: 15 }, 150)
+        .transition({ y: 0 }, 150, 'ease', () => {
           this.hitEffectEnd(damage);
         });
     }
