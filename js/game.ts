@@ -284,10 +284,11 @@ module cgdice {
       if (this.dice.stock > 0) {
         this.dice.stock--;
         this.stack.draw();
-        this.stack.ready();
       }
       if (this.stack.length == 0) {
         alert('GAME OVER');
+      } else {
+        this.stack.ready();
       }
     }
 
