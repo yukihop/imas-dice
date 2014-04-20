@@ -70,7 +70,10 @@ module cgdice.characters {
       muls.empty();
       $.each(this._multipliers, (i, mul) => {
         var m = $('<div>').addClass('multiplier');
-        m.text(mul.dices.join('/') + ' x' + mul.scale).appendTo(muls);
+        $.each(mul.dices, (idx, pips) => {
+          $('<div>').addClass('dice').addClass('dice' + pips).appendTo(m);
+        });
+        m.append(' x' + mul.scale).appendTo(muls);
       });
     }
 

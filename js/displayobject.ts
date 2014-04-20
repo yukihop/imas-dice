@@ -1,4 +1,7 @@
 module cgdice {
+  /**
+   * Wraps HTML element as jQuery object
+   */
   export class DomDisplayObject extends createjs.EventDispatcher {
     public element: JQuery;
 

@@ -95,6 +95,8 @@ button {
   .main_panel;
 }
 
+.dicebg (@i, @size: 48px) { background-position: (-(@i - 1) * @size) 0; }
+
 .character {
   display: inline-block;
   position: relative;
@@ -103,15 +105,27 @@ button {
   margin: 0 3px;
   .multipliers {
     position: absolute;
-    width: 90px;
+    width: 100px;
     bottom: 103px;
-    left: 5px;
-    background-color: white;
-    color: black;
+    background-color: rgba(255, 255, 255, 0.8);
+    color: navy;
+    font-weight: bold;
     min-height: 1em;
     border: 1px solid white;
     border-radius: 5px;
     text-align: center;
+    .dice {
+      @size: 18px;
+      width: @size;
+      height: @size;
+      background-size: (@size * 6) @size;
+      &.dice1 { .dicebg(1, @size); }
+      &.dice2 { .dicebg(2, @size); }
+      &.dice3 { .dicebg(3, @size); }
+      &.dice4 { .dicebg(4, @size); }
+      &.dice5 { .dicebg(5, @size); }
+      &.dice6 { .dicebg(6, @size); }
+    }
   }
   .name { display: none; }
 }
@@ -122,8 +136,6 @@ button {
   -moz-user-select: none;
   -ms-user-select: none;
 }
-
-.dicebg (@i) { background-position: (-@i * 48px + 48) 0; }
 
 .dice {
   position: relative;
