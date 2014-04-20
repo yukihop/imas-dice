@@ -95,12 +95,6 @@ button {
   .main_panel;
 }
 
-#battle {
-  .main_panel;
-  background-color: #383;
-  overflow-x: hidden;
-}
-
 .character {
   display: inline-block;
   position: relative;
@@ -155,7 +149,8 @@ button {
 #battle {
   .main_panel;
   display: none;
-  background-color: #080;
+  background-image: url('../images/background_flame.jpg');
+  background-size: cover;
   #enemies {
     position: static;
     text-align: center;
@@ -165,7 +160,6 @@ button {
   .enemy {
     display: inline-block;
     position: relative;
-    border: 1px dotted cyan;
     margin: 0 15px;
     .enemy_image {
       margin-bottom: -10px;

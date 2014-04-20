@@ -77,7 +77,7 @@ module cgdice.battles {
     public onboard: number[];
 
     public start() {
-      this.enemy = new Enemy('chibichihi1');
+      this.enemy = new Enemy('chihiro');
       $('#enemies', this.element).empty();
       this.enemy.element.appendTo('#enemies');
       this.enemy.on('enemyAttack', this.enemyAttacked, this);
