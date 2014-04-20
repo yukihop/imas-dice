@@ -10,13 +10,15 @@ module cgdice.battles {
 
   export class Enemy extends cgdice.DomDisplayObject {
     public name: string;
+    public maxHP: number;
     public HP: number;
     public ATK: number;
 
     private update() {
       var e = this.element;
       $('.enemy_name', e).text(this.name);
-      $('.enemy_hp', e).text(this.HP);
+      $('.enemy_hp_value', e).text(this.HP);
+      $('.enemy_hp_bar', e).css('width', this.HP / this.maxHP * 100 + '%');
     }
 
     public hit(damage: number): void {
@@ -66,6 +68,7 @@ module cgdice.battles {
       this.element.find('.enemy_image').attr('src', 'images/' + e.image);
       this.name = e.name;
       this.HP = e.HP;
+      this.maxHP = e.HP;
       this.ATK = e.ATK;
       this.update();
     }
