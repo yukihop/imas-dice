@@ -14,6 +14,7 @@ module cgdice.talks {
     }
 
     private doShow(item: JQuery) {
+      item = item.clone();
       if (!item || item.length == 0) {
         alert('Internal error: No matching dialog ID');
       }
