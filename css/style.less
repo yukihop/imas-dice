@@ -214,23 +214,42 @@ button {
 
 #hp_indicator {
   position: absolute;
-  left: 200px;
-  top: 0px;
+  left: 10px;
+  top: 10px;
   right: 10px;
   height: 15px;
   border: 1px solid pink;
   .hp_value {
     position: absolute;
     font-weight: bold;
-    color: yellow;
+    color: black;
     font-size: 15px;
     line-height: 15px;
   }
   .hp_bar {
     position: absolute;
     width: 100%;
-    height: 15px;
-    background: linear-gradient(to bottom, #f88, #f00, #800);
+    height: 100%;
+    background: linear-gradient(to bottom, #fa0, #f30, #850);
+  }
+  .hp_healbar {
+    position: absolute;
+    width: 0;
+    height: 100%;
+    background-color: lime;
+  }
+  .hp_damagebar {
+    position: absolute;
+    width: 0;
+    height: 100%;
+    background: linear-gradient(to bottom, #800, #000);
+  }
+  &.healing {
+    border: 1px solid yellow;
+    box-shadow: 3px 3px 3px cyan;
+  }
+  &.damaging {
+    box-shadow: 3px 3px 3px red;
   }
 }
 

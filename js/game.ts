@@ -72,34 +72,72 @@ module cgdice {
   export class HPIndicator extends DomDisplayObject {
     private _maxHP: number = 100;
     private _HP: number = 100;
+    private _hp_bar: JQuery;
+    private _hp_healbar: JQuery;
+    private _hp_damagebar: JQuery;
 
     get maxHP(): number { return this._maxHP; }
     set maxHP(value: number) {
       this._maxHP = value;
-      this.redraw();
-    }
-    get HP(): number { return this._HP; }
-    set HP(value: number) {
-      if (this._HP > value) {
-        var top = this.element.position().top;
-        createjs.Tween.get(this.element[0])
-          .to({ top: top + 10 }, 400, createjs.Ease.bounceOut)
-          .to({ top: top }, 100);
-      }
-      this._HP = value;
-      this.redraw();
+      this.refresh();
     }
 
-    private redraw(): void {
+    get HP(): number { return this._HP; }
+    set HP(value: number) {
+      if (value < 0) value = 0;
+      if (value > this._maxHP) value = this._maxHP;
+      if (this._HP > value) { // damage!
+        var top = this.element.position().top;
+        // bounce[
+        this.element.addClass('damaging').animate(
+          { top: top + 10 }, 400, 'easeInOutBounce', () => {
+            this.element.animate(
+              { top: top }, 100
+            );
+          }
+        );
+        this._hp_damagebar
+          .show()
+          .css('width', this.barWidth(this._HP))
+          .animate(
+            { width: this.barWidth(value) }, 1000, 'swing', () => {
+              this._hp_damagebar.hide();
+              this.element.removeClass('damaging healing');
+            }
+          );
+        this._hp_bar.css('width', this.barWidth(value));
+      }
+      if (this._HP < value) { // heal!
+        this.element.addClass('healing');
+        this._hp_healbar.show().css('width', this.barWidth(value));
+        this._hp_bar
+          .animate({ width: this.barWidth(value) }, 1000, 'swing', () => {
+            this._hp_healbar.hide();
+            this.element.removeClass('damaging healing');
+          });
+      }
+      this._HP = value;
       var txt = this._HP + '/' + this._maxHP;
-      var w = Math.max(this._HP / this._maxHP * 100, 0);
       $('.hp_value', this.element).text(txt);
-      $('.hp_bar', this.element).css('width', w + '%');
+    }
+
+    private barWidth(hp: number) {
+      return Math.min(1, Math.max(hp / this._maxHP, 0)) * 100 + '%';
+    }
+
+    private refresh(): void {
+      var txt = this._HP + '/' + this._maxHP;
+      $('.hp_value', this.element).text(txt);
+      $('.hp_bar', this.element).css('width', this.barWidth(this._HP));
+      this.element.removeClass('healing damaging');
     }
 
     constructor() {
       super($('#hp_indicator'));
-      this.redraw();
+      this._hp_bar = this.element.find('.hp_bar');
+      this._hp_damagebar = this.element.find('.hp_damagebar');
+      this._hp_healbar = this.element.find('.hp_healbar');
+      this.refresh();
     }
   }
 
