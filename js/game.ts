@@ -1,4 +1,5 @@
 /// <reference path="displayobject.ts" />
+/// <reference path="title.ts" />
 /// <reference path="field.ts" />
 /// <reference path="talkshow.ts" />
 /// <reference path="battle.ts" />
@@ -12,6 +13,8 @@ module cgdice {
     private inEffect: boolean = true;
 
     public loader = new createjs.LoadQueue();
+
+    private _title = new cgdice.titles.Title();
 
     private compatibilityCheck() {
       if (typeof console !== 'object') return false;
