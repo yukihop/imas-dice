@@ -48,18 +48,21 @@ module cgdice {
 
   export class Dice extends DomDisplayObject {
     private _pips: number;
+
     get pips(): number { return this._pips; }
     set pips(p: number) {
       this._pips = p;
       this.element.attr('class', 'dice dice' + p);
     }
+
     public roll(): void {
       this.pips = Math.floor(Math.random() * 6) + 1;
-      this.element.animate({ top: -10 }, 200, () => {
-        this.element.animate({ top: 0 }, 200, () => {
-        })
-      });
+      this.element
+        .transition({ scale: 2 }, 100)
+        .transition({ top: -10, scale: 1.0 }, 200)
+        .transition({ top: 0 }, 200);
     }
+
     constructor() {
       super('dice');
       this.element.data('self', this);
