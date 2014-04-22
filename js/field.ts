@@ -60,7 +60,11 @@ module cgdice.fields {
 
     static fromObject(blockData: any) {
       var block = new Block();
-      block.type = BlockType[<string>(blockData.type)];
+      if (typeof blockData == 'string') {
+        block.type = BlockType[<string>blockData];
+      } else {
+        block.type = BlockType[<string>(blockData.type)];
+      }
       return block;
     }
   }

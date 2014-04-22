@@ -14,7 +14,7 @@ module cgdice {
 
     public loader = new createjs.LoadQueue();
 
-    private _title = new cgdice.titles.Title();
+    private _title: cgdice.titles.Title;
 
     private compatibilityCheck() {
       if (typeof console !== 'object') return false;
@@ -31,12 +31,14 @@ module cgdice {
     }
 
     private loadComplete() {
-      createjs.Ticker.setFPS(30);
       game = new DiceGame();
       game.init();
+      this._title = new cgdice.titles.Title();
+      this._title.element.show();
     }
 
     public run(): void {
+      createjs.Ticker.setFPS(30);
       this.loader.on('complete', this.loadComplete);
       this.loader.loadManifest([
         { id: 'characters', src: 'settings/characters.json' },
@@ -183,9 +185,9 @@ module cgdice {
     }
 
     public diceClicked(dice: Dice) {
-        this.ready(false);
-        // The event handler must call dice.element.remove()
-        this.dispatchEvent(new DiceEvent('diceDetermine', dice));
+      this.ready(false);
+      // The event handler must call dice.element.remove()
+      this.dispatchEvent(new DiceEvent('diceDetermine', dice));
     }
 
     constructor() {
@@ -224,6 +226,10 @@ module cgdice {
       }
       var elem = $('<div>').text(message);
       this.element.append(elem);
+    }
+
+    public clear() {
+      this.element.empty();
     }
 
     constructor() {
@@ -284,15 +290,18 @@ module cgdice {
       this.battle.on('battleFinish', () => {
       });
 
-      var data: any = application.loader.getResult('fieldData');
       this.field = new fields.Field();
       this._stage.addChild(this.field);
-      this.field.reset(data);
       this.field.on('diceProcess', this.diceProcessed, this);
-      this.stack.ready();
 
       this.console = new GameLog();
 
+    }
+
+    public reset(data: any) {
+      this.field.reset(data);
+      this.console.clear();
+      this.stack.ready();
     }
 
     private handleDiceEvent(event: DiceEvent) {

@@ -1,42 +1,53 @@
-title: テストステージ
-blocks:
-  - { "type": "Start" }
-  - { "type": "Proceed" }
-  - { "type": "Enemy" }
-  - { "type": "Enemy" }
-  - { "type": "Treasure" }
-  - { "type": "Enemy" }
-  - { "type": "Enemy" }
-  - { "type": "Back" }
-  - { "type": "Empty" }
-  - { "type": "Empty" }
-  - { "type": "Proceed" }
-  - { "type": "Empty" }
-  - { "type": "Heal" }
-  - { "type": "Damage" }
-  - { "type": "Empty" }
-  - { "type": "Treasure" }
-  - { "type": "Proceed" }
-  - { "type": "Empty" }
-  - { "type": "Heal" }
-  - { "type": "Damage" }
-  - { "type": "Empty" }
-  - { "type": "Empty" }
-  - { "type": "Proceed" }
-  - { "type": "Empty" }
-  - { "type": "Heal" }
-  - { "type": "Damage" }
-  - { "type": "Empty" }
-  - { "type": "Empty" }
-  - { "type": "Proceed" }
-  - { "type": "Empty" }
-  - { "type": "Heal" }
-  - { "type": "Damage" }
-  - { "type": "Empty" }
-  - { "type": "Empty" }
-  - { "type": "Proceed" }
-  - { "type": "Empty" }
-  - { "type": "Heal" }
-  - { "type": "Damage" }
-  - { "type": "Empty" }
-  - { "type": "Boss" }
+- title: テストステージ
+  blocks:
+    - Start
+    - Proceed
+    - Enemy
+    - Enemy
+    - Treasure
+    - Enemy
+    - Enemy
+    - Back
+    - Empty
+    - Empty
+    - Proceed
+    - Empty
+    - Heal
+    - Damage
+    - Empty
+    - Treasure
+    - Proceed
+    - Empty
+    - Heal
+    - Damage
+    - Empty
+    - Empty
+    - Proceed
+    - Empty
+    - Heal
+    - Damage
+    - Empty
+    - Empty
+    - Proceed
+    - Empty
+    - Heal
+    - Damage
+    - Empty
+    - Empty
+    - Proceed
+    - Empty
+    - Heal
+    - Damage
+    - Empty
+    - Boss
+- title: テストステージ2
+  blocks:
+    - Start
+    - Enemy
+    - Empty
+    - Enemy
+    - Enemy
+    - Enemy
+    - Enemy
+    - Enemy
+    - Boss
