@@ -28,6 +28,12 @@ module cgdice.fields {
         .to({ y: y, scaleX: 1, scaleY: 1 }, 300, createjs.Ease.bounceOut);
     }
 
+    public rotate() {
+      createjs.Tween.get(this)
+        .to({ rotation: 360 }, 200)
+        .set({ rotation: 0 });
+    }
+
     private redraw() {
       this._box.gotoAndStop(BlockType[this._type]);
     }
@@ -140,12 +146,14 @@ module cgdice.fields {
           game.stack.stock += 1;
           break;
         case BlockType.Back:
-          move_end = false;
+          block.rotate();
           this.proceed(-3);
+          move_end = false;
           break;
         case BlockType.Proceed:
-          move_end = false;
+          block.rotate();
           this.proceed(3);
+          move_end = false;
           break;
       }
       if (move_end) {
