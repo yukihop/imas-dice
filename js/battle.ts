@@ -43,30 +43,32 @@ module cgdice.battles {
     }
 
     private myTurn(): void {
+      var power: number = Math.floor(Math.random() * this.ATK) + 1;
+      game.console.log(this.name + 'から' + power + 'の攻撃!');
+
+      new FlyText({
+        text: power.toString(),
+        parent: this.element,
+        class: 'enemy_attack'
+      });
       this.element.transition(
         { scale: 1.1 },
         500,
         'ease',
         () => {
           this.element.transition({ scale: 1 });
-          this.enemyAttack();
+          var event = new BattleEffectEvent('enemyAttack', false, false);
+          event.kind = 'physicalAttack';
+          event.magnitude = power;
+          this.dispatchEvent(event);
           this.dispatchEvent('turnEnd');
         }
-        );
+      );
     }
 
     private die(): void {
       game.console.log(this.name + 'は倒れた');
       this.dispatchEvent('turnEnd');
-    }
-
-    public enemyAttack(): void {
-      var power: number = Math.floor(Math.random() * this.ATK);
-      game.console.log(this.name + 'から' + power + 'の攻撃!');
-      var event = new BattleEffectEvent('enemyAttack', false, false);
-      event.kind = 'physicalAttack';
-      event.magnitude = power;
-      this.dispatchEvent(event);
     }
 
     constructor(id: string) {
@@ -83,22 +85,45 @@ module cgdice.battles {
     }
   }
 
+  interface FlyTextOptions {
+    text: string;
+    parent: any;
+    callback?: () => void;
+    duration?: number;
+    transition?: Object;
+    class?: string;
+  }
+
   /**
    * Flying text effect that shows damage value, etc.
    */
   class FlyText extends cgdice.DomDisplayObject {
 
-    constructor(text: string, parent: HTMLElement, callback: () => void);
+    constructor(options: FlyTextOptions);
     constructor(text: string, parent: JQuery, callback: () => void);
-    constructor(text: string, parent: any, callback: () => void) {
+    constructor(opt: any, ...args) {
+      if (typeof opt == 'string') {
+        opt = {
+          text: opt
+        };
+        $.each(args, (i, arg) => {
+          if (typeof arg == 'function') opt.callback = arg;
+          else if (arg instanceof jQuery) opt.parent = arg;
+        });
+      }
+      if (!('transition' in opt)) opt.transition = { y: -20, opacity: 0 };
+      if (!('duration' in opt)) opt.duration = 1000;
+
       super('flytext');
-      this.element.text(text).appendTo(parent);
+      if ('class' in opt) this.element.addClass(opt.class);
+
+      this.element.text(opt.text).appendTo(opt.parent);
       this.element.position({
-        of: parent
+        of: opt.parent
       });
       var from = this.element.position().top;
-      this.element.transition({ y: "-20", opacity: 0 }, 1000, 'out', () => {
-        callback();
+      this.element.transition(opt.transition, opt.duration, 'out', () => {
+        if ('callback' in opt) opt.callback();
         this.element.remove();
       });
     }

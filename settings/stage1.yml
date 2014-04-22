@@ -1,10 +1,10 @@
 title: テストステージ
 blocks:
   - { "type": "Start" }
+  - { "type": "Proceed" }
   - { "type": "Enemy" }
   - { "type": "Enemy" }
-  - { "type": "Enemy" }
-  - { "type": "Empty" }
+  - { "type": "Treasure" }
   - { "type": "Enemy" }
   - { "type": "Enemy" }
   - { "type": "Back" }
@@ -15,7 +15,7 @@ blocks:
   - { "type": "Heal" }
   - { "type": "Damage" }
   - { "type": "Empty" }
-  - { "type": "Empty" }
+  - { "type": "Treasure" }
   - { "type": "Proceed" }
   - { "type": "Empty" }
   - { "type": "Heal" }
