@@ -70,12 +70,25 @@ module cgdice.fields {
     }
   }
 
+  interface Vector {
+    x: number;
+    y: number;
+  }
+
+  interface Bounds {
+    xmin: number;
+    xmax: number;
+    ymin: number;
+    ymax: number;
+  }
+
   export class Field extends createjs.Container {
     private _position: number = 0;
     private _lines: createjs.Shape;
     private _cursor: createjs.Shape;
     public blocks: Block[] = [];
     private _selected_dice: Dice;
+    private _blockBounds: Bounds;
 
     public currentBlock(): Block {
       if (this._position < 0 || this._position >= this.blocks.length) {
@@ -87,6 +100,22 @@ module cgdice.fields {
     get position(): number { return this._position; }
 
     get maxPosition(): number { return this.blocks.length - 1; }
+
+    private scrollField(block: Block, animation: boolean = true) {
+      var b = this._blockBounds;
+      var w = this.getStage().canvas.width;
+      var h = this.getStage().canvas.height;
+      var pad = 100;
+      console.log('b', b, 'w', w, 'h', h);
+      var x = (w/2) - block.x;
+      x = Math.min(x, b.xmin + pad);
+      x = Math.max(x, w - b.xmax - pad);
+      var y = (h/2) - block.y;
+      // var scroll = Math.min(0, 300 - block.x);
+      createjs.Tween.removeTweens(this);
+      createjs.Tween.get(this)
+        .to({ x: x, y: y }, 2000, createjs.Ease.quadOut);
+    }
 
     public moveTo(newPosition: number, immediate: boolean = false) {
       var block: Block;
@@ -120,9 +149,7 @@ module cgdice.fields {
         application.setInEffect(false);
         this.cursorMoved();
       });
-      var scroll = Math.min(0, 300 - block.x);
-      createjs.Tween.removeTweens(this);
-      createjs.Tween.get(this).to({ x: scroll }, 2000, createjs.Ease.quadOut);
+      this.scrollField(block);
     }
 
     public proceed(step: number, immediate: boolean = false) {
@@ -195,10 +222,21 @@ module cgdice.fields {
       this._lines = lines;
       this.addChild(lines);
 
+      var bn: Bounds;
+
       for (var i = 0; i < blocksData.length; i++) {
         var b = Block.fromObject(blocksData[i]);
-        b.x = i * 60 + 50;
-        b.y = 120 + Math.random() * 40;
+        var pos = FieldLayout.horizontal(i, blocksData.length);
+        if (i == 0) {
+          bn = { xmin: pos.x, xmax: pos.x, ymin: pos.y, ymax: pos.y };
+        } else {
+          bn.xmin = Math.min(bn.xmin, pos.x);
+          bn.xmax = Math.max(bn.xmax, pos.x);
+          bn.ymin = Math.min(bn.ymin, pos.y);
+          bn.ymax = Math.max(bn.ymax, pos.y);
+        }
+        b.x = pos.x;
+        b.y = pos.y;
         this.addChild(b);
         this.blocks.push(b);
         if (i > 0) {
@@ -207,6 +245,8 @@ module cgdice.fields {
         }
         prev = b;
       }
+
+      this._blockBounds = bn;
 
       this._cursor = new createjs.Shape();
       this._cursor.graphics.beginFill('red').beginStroke('white')
@@ -220,6 +260,16 @@ module cgdice.fields {
     constructor() {
       super();
       this.on('diceDetermine', this.diceDetermined, this);
+    }
+  }
+
+  class FieldLayout {
+    static horizontal(index: number, count: number): Vector {
+      return { x: index * 60 + 50, y: 150 + Math.random() * 40 };
+    }
+
+    static vertical(index: number, count: number): Vector {
+      return { x: 300, y: index * 60 };
     }
   }
 
