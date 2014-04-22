@@ -83,6 +83,27 @@ module cgdice.battles {
     }
   }
 
+  /**
+   * Flying text effect that shows damage value, etc.
+   */
+  class FlyText extends cgdice.DomDisplayObject {
+
+    constructor(text: string, parent: HTMLElement, callback: () => void);
+    constructor(text: string, parent: JQuery, callback: () => void);
+    constructor(text: string, parent: any, callback: () => void) {
+      super('flytext');
+      this.element.text(text).appendTo(parent);
+      this.element.position({
+        of: parent
+      });
+      var from = this.element.position().top;
+      this.element.transition({ y: "-20", opacity: 0 }, 1000, 'out', () => {
+        callback();
+        this.element.remove();
+      });
+    }
+  }
+
   export class Battle extends cgdice.DomDisplayObject {
     public enemy: Enemy;
     public onboard: number[];
@@ -118,7 +139,9 @@ module cgdice.battles {
       var all_pips: number[] = this.onboard.slice();
       all_pips.push(pips);
       game.players.forEach((p: cgdice.characters.Character) => {
-        all_power += p.attackPower(all_pips);
+        var attack_power = p.attackPower(all_pips);
+        new FlyText(attack_power.toString(), p.element, $.noop());
+        all_power += attack_power;
       });
       game.console.log(all_power + 'の攻撃!');
       this.enemy.hit(all_power);
