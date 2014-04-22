@@ -15,6 +15,7 @@ module cgdice {
     public loader = new createjs.LoadQueue();
 
     private _title: cgdice.titles.Title;
+    private _stage_selector: cgdice.titles.StageSelector;
 
     private compatibilityCheck() {
       if (typeof console !== 'object') return false;
@@ -33,8 +34,16 @@ module cgdice {
     private loadComplete() {
       game = new DiceGame();
       game.init();
+
       this._title = new cgdice.titles.Title();
-      this._title.element.show();
+      this._title.on('titleClose', () => {
+        this._title.element.hide();
+        this._stage_selector.reset();
+      });
+
+      this._stage_selector = new cgdice.titles.StageSelector();
+      this._stage_selector.on('stageSelect', () => {
+      });
     }
 
     public run(): void {
@@ -241,7 +250,7 @@ module cgdice {
    * DiceGame is a general manager of one instance of dice game
    * (from start block to boss).
    */
-  export class DiceGame {
+  export class DiceGame extends DomDisplayObject {
     public players: characters.Character[] = [];
     private energyCandies: number = 0;
     private field: fields.Field;
@@ -334,6 +343,10 @@ module cgdice {
 
     public getDamage(power: number) {
       this.hp.HP -= power;
+    }
+
+    constructor() {
+      super($('#dicegame'));
     }
 
   }

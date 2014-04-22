@@ -6,6 +6,8 @@ html, body {
   color: white;
 }
 
+li { list-style-type: none; }
+
 .transform(@param) {
   -webkit-transform: @param;
   transform: @param;
@@ -60,13 +62,34 @@ button {
 }
 
 #title {
-  background: linear-gradient(to right bottom, salmon, purple);
   .main_panel;
+  background: linear-gradient(to right bottom, salmon, purple);
   text-align: center;
   .main_menu {
     font-size: 18px;
     font-weight: bolder;
     width: 200px;
+  }
+}
+
+#stage_select {
+  .main_panel;
+  background: linear-gradient(to right bottom, salmon, white);
+  #stage_list {
+    margin: 30px;
+    height: 250px;
+    li {
+      text-align: center;
+      font-size: 36px;
+      background-color: maroon;
+      border: 2px solid brown;
+      border-radius: 10px;
+      margin: 10px 0;
+      cursor: pointer;
+      &:hover {
+        background-color: brown;
+      }
+    }
   }
 }
 
