@@ -6,6 +6,18 @@ html, body {
   color: white;
 }
 
+.transform(@param) {
+  -webkit-transform: @param;
+  transform: @param;
+}
+
+.no-user-select() {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
 body.in_effect {
   cursor: wait;
   background-color: #333;
@@ -79,9 +91,18 @@ button {
     right: 0px;
     transition: opacity 0.2;
     opacity: 0.5;
+    .dice {
+      margin: 0 2px;
+    }
     &.ready {
       opacity: 1;
-      .dice { cursor: pointer; }
+      .dice {
+        cursor: pointer;
+        &:hover {
+          .transform(scale(1.1));
+        }
+      }
+
     }
   }
   #dice_indicator {
@@ -141,13 +162,6 @@ button {
   .name { display: none; }
 }
 
-.no-user-select {
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-}
-
 .dice {
   position: relative;
   display: inline-block;
@@ -155,6 +169,7 @@ button {
   height: 48px;
   background-image: url('../images/dices.png');
   background-size: (48px * 6) 48px;
+  transition: 0.1s linear;
   &.dice1 { .dicebg(1); }
   &.dice2 { .dicebg(2); }
   &.dice3 { .dicebg(3); }
