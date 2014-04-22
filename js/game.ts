@@ -144,26 +144,20 @@ module cgdice {
     }
   }
 
-  export class DiceIndicator extends DomDisplayObject {
+  export class DiceStack extends DomDisplayObject {
+    private _stack: Dice[];
     private _stock: number = 0;
+    private _ready: boolean = false;
+
+    get length(): number {
+      return this._stack.length;
+    }
+
     get stock(): number { return this._stock; }
     set stock(value: number) {
       if (value < 0) value = 0;
       this._stock = Math.floor(value);
       this.element.find('.dice_stock').text(this._stock);
-    }
-    constructor() {
-      super($('#dice_indicator'));
-      this.stock = 0;
-    }
-  }
-
-  export class DiceStack extends DomDisplayObject {
-    private _stack: Dice[];
-    private _ready: boolean = false;
-
-    get length(): number {
-      return this._stack.length;
     }
 
     public draw() {
@@ -224,8 +218,7 @@ module cgdice {
     private field: fields.Field;
     public battle: battles.Battle;
     public hp: HPIndicator;
-    public dice: DiceIndicator;
-    private stack: DiceStack;
+    public stack: DiceStack;
     private _stage: createjs.Stage;
     public console: GameLog;
 
@@ -257,10 +250,9 @@ module cgdice {
       this.hp.maxHP = maxHP;
       this.hp.HP = maxHP;
 
-      this.dice = new DiceIndicator();
-      this.dice.stock = 10;
 
       this.stack = new DiceStack();
+      this.stack.stock = 10;
       this.stack.element.on('diceDetermine', $.proxy(this.diceDetermined, this));
 
       this.battle = new battles.Battle();
@@ -284,8 +276,8 @@ module cgdice {
     }
 
     private diceProcessed() {
-      if (this.dice.stock > 0) {
-        this.dice.stock--;
+      if (this.stack.stock > 0) {
+        this.stack.stock--;
         this.stack.draw();
       }
       if (this.stack.length == 0) {
