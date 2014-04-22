@@ -34,6 +34,9 @@ module cgdice {
     private loadComplete() {
       game = new DiceGame();
       game.init();
+      game.on('gameFinish', () => {
+        this._title.element.show();
+      });
 
       this._title = new cgdice.titles.Title();
       this._title.on('titleClose', () => {
@@ -199,12 +202,17 @@ module cgdice {
       this.dispatchEvent(new DiceEvent('diceDetermine', dice));
     }
 
-    constructor() {
-      super($('#stack'));
+    public reset(stock: number) {
       this._stack = [];
+      this.element.find('.dice').remove();
       for (var i = 0; i <= 2; i++) {
         this.draw();
       }
+      this.stock = stock;
+    }
+
+    constructor() {
+      super($('#stack'));
       this.element.on('click', '.dice:not(.detached)', (event) => {
         if (!this._ready) {
           return;
@@ -281,15 +289,9 @@ module cgdice {
         $('#players').append(p.element);
       }
 
-      var maxHP = 0;
-      this.players.forEach((p) => { maxHP += p.maxHP() });
-
       this.hp = new HPIndicator();
-      this.hp.maxHP = maxHP;
-      this.hp.HP = maxHP;
 
       this.stack = new DiceStack();
-      this.stack.stock = 10;
       this.stack.on('diceDetermine', $.proxy(this.handleDiceEvent, this));
       this.stack.on('diceHover', $.proxy(this.handleDiceEvent, this));
       this.stack.on('diceUnhover', $.proxy(this.handleDiceEvent, this));
@@ -308,7 +310,15 @@ module cgdice {
     }
 
     public reset(data: any) {
+      var maxHP = 0;
+      this.players.forEach((p) => { maxHP += p.maxHP() });
+      this.hp.maxHP = maxHP;
+      this.hp.HP = maxHP;
+
       this.field.reset(data);
+      this.stack.reset(10);
+      this.battle.element.hide();
+      $('#stage_failed, #stage_clear').hide();
       this.console.clear();
       this.stack.ready();
     }
@@ -321,13 +331,27 @@ module cgdice {
       }
     }
 
+    private finalize() {
+      $('#stage_failed, #stage_clear').filter(':visible')
+        .css({ y: 0 })
+        .transition({
+          y: 30,
+          duration: 3000,
+          complete: () => {
+            this.dispatchEvent('gameFinish');
+          }
+        });
+    }
+
     private diceProcessed() {
       if (this.hp.HP == 0) {
         $('#stage_failed').show();
+        this.finalize();
         return;
       }
       if (this.field.position == this.field.maxPosition && !this.battle.element.is(':visible')) {
         $('#stage_clear').show();
+        this.finalize();
         return;
       }
       if (this.stack.stock > 0) {
@@ -336,6 +360,7 @@ module cgdice {
       }
       if (this.stack.length == 0) {
         $('#stage_failed').show();
+        this.finalize();
       } else {
         this.stack.ready();
       }

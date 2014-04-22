@@ -40,14 +40,11 @@
     - Damage
     - Empty
     - Boss
-- title: テストステージ2
+- title: テストステージ2（短）
   blocks:
     - Start
     - Enemy
     - Empty
     - Enemy
-    - Enemy
-    - Enemy
-    - Enemy
-    - Enemy
+    - Empty
     - Boss

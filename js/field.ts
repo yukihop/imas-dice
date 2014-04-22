@@ -121,7 +121,7 @@ module cgdice.fields {
       });
       var scroll = Math.min(0, 300 - block.x);
       createjs.Tween.removeTweens(this);
-      createjs.Tween.get(this).to({ x: scroll }, 2000, createjs.Ease.quadOut).call($.noop);
+      createjs.Tween.get(this).to({ x: scroll }, 2000, createjs.Ease.quadOut);
     }
 
     public proceed(step: number, immediate: boolean = false) {
@@ -213,6 +213,7 @@ module cgdice.fields {
       this.addChild(this._cursor);
 
       this.moveTo(0, true);
+      this.x = 0;
     }
 
     constructor() {
