@@ -64,6 +64,10 @@ module cgdice.characters {
       return [];
     }
 
+    public highlightMultipliers(pips: number[]) {
+      this.element.find('.multplier').removeClass('bingo reach');
+    }
+
     public redraw() {
       this.element.find('.name').text(this.name);
       var muls = this.element.find('.multipliers');

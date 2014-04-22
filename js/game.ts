@@ -69,6 +69,13 @@ module cgdice {
     }
   }
 
+  export class DicePlaceholder extends DomDisplayObject {
+    constructor() {
+      super('dice');
+      this.element.addClass('placeholder');
+    }
+  }
+
   export class HPIndicator extends DomDisplayObject {
     private _maxHP: number = 100;
     private _HP: number = 100;
@@ -175,32 +182,34 @@ module cgdice {
       this.element.toggleClass('ready', isReady);
     }
 
+    public diceClicked(dice: Dice) {
+        this.ready(false);
+        // The event handler must call dice.element.remove()
+        this.dispatchEvent(new DiceEvent('diceDetermine', dice));
+    }
+
     constructor() {
       super($('#stack'));
       this._stack = [];
       for (var i = 0; i <= 2; i++) {
         this.draw();
       }
-      this.element.on('click', '.dice', (event) => {
-        if (!this._ready) return;
-        var dice = <Dice>$(event.currentTarget).data('self');
-        var idx = this._stack.indexOf(dice);
-        if (idx == -1) {
-          return; // dice already removed
+      this.element.on('click', '.dice:not(.detached)', (event) => {
+        if (!this._ready) {
+          return;
         }
-        this.ready(false);
+        var dice = <Dice>$(event.currentTarget).data('self');
+        dice.element.addClass('detached');
+        var idx = this._stack.indexOf(dice);
         this._stack.splice(idx, 1);
-        this.dispatchEvent(new DiceEvent('diceDetermine', dice));
-        dice.element.animate({ opacity: 0 }, 500, () => {
-          dice.element.remove();
-        });
+        this.diceClicked(dice);
       });
-      this.element.on('mouseenter', '.dice', (event) => {
+      this.element.on('mouseenter', '.dice:not(.detached)', (event) => {
         if (!this._ready) return;
         var dice = <Dice>$(event.currentTarget).data('self');
         this.dispatchEvent(new DiceEvent('diceHover', dice));
       });
-      this.element.on('mouseleave', '.dice', (event) => {
+      this.element.on('mouseleave', '.dice:not(.detached)', (event) => {
         if (!this._ready) return;
         var dice = <Dice>$(event.currentTarget).data('self');
         this.dispatchEvent(new DiceEvent('diceUnhover', dice));

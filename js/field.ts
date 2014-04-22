@@ -70,6 +70,7 @@ module cgdice.fields {
     private _lines: createjs.Shape;
     private _cursor: createjs.Shape;
     public blocks: Block[] = [];
+    private _selected_dice: Dice;
 
     public currentBlock(): Block {
       if (this._position < 0 || this._position >= this.blocks.length) {
@@ -123,12 +124,28 @@ module cgdice.fields {
     }
 
     private diceDetermined(event: DiceEvent) {
+      this._selected_dice = event.dice;
       this.proceed(event.dice.pips);
+      event.dice.element
+        .stop(true)
+        .transition({
+          x: 0,
+          y: -100,
+          rotate: 360,
+          scale: 1.5
+        }, 300);
     }
 
     public cursorMoved() {
       var block = this.currentBlock();
       var move_end = true;
+
+      this._selected_dice.element.transition({
+        opacity: 0,
+        complete: () => {
+          this._selected_dice.element.remove();
+        }
+      }, 300);
 
       switch (block.type) {
         case BlockType.Enemy:

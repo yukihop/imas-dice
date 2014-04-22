@@ -63,7 +63,7 @@ module cgdice.battles {
           this.dispatchEvent(event);
           this.dispatchEvent('turnEnd');
         }
-      );
+        );
     }
 
     private die(): void {
@@ -132,6 +132,7 @@ module cgdice.battles {
   export class Battle extends cgdice.DomDisplayObject {
     public enemy: Enemy;
     public onboard: number[];
+    private _onboard_area: JQuery;
 
     public start() {
       this.enemy = new Enemy('chihiro');
@@ -147,19 +148,39 @@ module cgdice.battles {
     public shuffleOnboardDice() {
       var i = 0;
       this.onboard = [];
-      var elem = this.element.find('#onboard');
-      elem.empty();
+      this._onboard_area.empty();
       for (i = 0; i <= 1; i++) {
-        var pips = Math.floor(Math.random() * 6 + 1);
-        this.onboard.push(pips);
         var dice = new cgdice.Dice();
-        dice.pips = pips;
-        dice.element.appendTo(elem);
+        dice.element.appendTo(this._onboard_area);
+        dice.roll();
+        this.onboard.push(dice.pips);
       }
+      new DicePlaceholder().element.appendTo(this._onboard_area);
     }
 
     private diceDetermined(event: DiceEvent) {
-      var pips = event.dice.pips;
+      // dice animation
+      var dice = event.dice;
+      var placeholder = this._onboard_area.find('.placeholder');
+      var delta_x = placeholder.offset().left - dice.element.offset().left;
+      var delta_y = placeholder.offset().top - dice.element.offset().top;
+      dice.element
+        .stop(true)
+        .transition({
+          x: delta_x,
+          y: delta_y,
+          rotate: 360,
+          scale: 1.1
+        }, 300)
+        .transition({
+          scale: 1
+        }, 1000)
+        .transition({
+          opacity: 0,
+          complete: () => { dice.element.remove(); }
+        }, 300);
+
+      var pips = dice.pips;
       var all_power: number = 0;
       var all_pips: number[] = this.onboard.slice();
       all_pips.push(pips);
@@ -201,6 +222,7 @@ module cgdice.battles {
       this.on('diceDetermine', this.diceDetermined, this);
       this.on('diceHover', this.diceHovered, this);
       this.on('diceUnhover', this.diceUnhovered, this);
+      this._onboard_area = this.element.find('#onboard');
     }
 
   }
