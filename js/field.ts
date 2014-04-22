@@ -65,7 +65,6 @@ module cgdice.fields {
   }
 
   export class Field extends createjs.Container {
-    public maxPosition: number;
     private _position: number = 0;
     private _lines: createjs.Shape;
     private _cursor: createjs.Shape;
@@ -80,6 +79,8 @@ module cgdice.fields {
     }
 
     get position(): number { return this._position; }
+
+    get maxPosition(): number { return this.blocks.length - 1; }
 
     public moveTo(newPosition: number, immediate: boolean = false) {
       var block: Block;
@@ -143,7 +144,7 @@ module cgdice.fields {
       this._selected_dice.element.transition({
         opacity: 0,
         complete: () => {
-          this._selected_dice.element.remove();
+          if (this._selected_dice) this._selected_dice.element.remove();
         }
       }, 300);
 

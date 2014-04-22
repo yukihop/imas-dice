@@ -117,6 +117,24 @@ button {
       text-align: center;
     }
   }
+  #stage_end {
+    position: static;
+    z-index: 10;
+    width: 300px;
+    margin: 100px auto 0 auto;
+    border: 1px solid red;
+    #stage_clear, #stage_failed {
+      position: absolute;
+      background-image: url('../images/gameclear.png');
+      width: 300px;
+      height: 150px;
+      overflow: hidden;
+      display: none;
+    }
+    #stage_failed {
+      background-position: 0 -150px;
+    }
+  }
 }
 
 #dicegame_canvas {

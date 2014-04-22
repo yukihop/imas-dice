@@ -308,12 +308,20 @@ module cgdice {
     }
 
     private diceProcessed() {
+      if (this.hp.HP == 0) {
+        $('#stage_failed').show();
+        return;
+      }
+      if (this.field.position == this.field.maxPosition && !this.battle.element.is(':visible')) {
+        $('#stage_clear').show();
+        return;
+      }
       if (this.stack.stock > 0) {
         this.stack.stock--;
         this.stack.draw();
       }
       if (this.stack.length == 0) {
-        alert('GAME OVER');
+        $('#stage_failed').show();
       } else {
         this.stack.ready();
       }
