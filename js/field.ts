@@ -116,8 +116,8 @@ module cgdice.fields {
       this.moveTo(newPosition, immediate);
     }
 
-    public diceDetermined(dice: Dice) {
-      this.proceed(dice.pips);
+    private diceDetermined(event: DiceEvent) {
+      this.proceed(event.dice.pips);
     }
 
     public cursorMoved() {
@@ -187,6 +187,7 @@ module cgdice.fields {
 
     constructor() {
       super();
+      this.on('diceDetermine', this.diceDetermined, this);
     }
   }
 

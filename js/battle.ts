@@ -112,7 +112,8 @@ module cgdice.battles {
       }
     }
 
-    public diceDetermined(pips: number) {
+    private diceDetermined(event: DiceEvent) {
+      var pips = event.dice.pips;
       var all_power: number = 0;
       var all_pips: number[] = this.onboard.slice();
       all_pips.push(pips);
@@ -121,6 +122,14 @@ module cgdice.battles {
       });
       game.console.log(all_power + 'の攻撃!');
       this.enemy.hit(all_power);
+    }
+
+    private diceHovered(event: DiceEvent) {
+      //
+    }
+
+    private diceUnhovered(event: DiceEvent) {
+      //
     }
 
     private enemyTurnEnd() {
@@ -141,6 +150,9 @@ module cgdice.battles {
 
     constructor() {
       super($('#battle'));
+      this.on('diceDetermine', this.diceDetermined, this);
+      this.on('diceHover', this.diceHovered, this);
+      this.on('diceUnhover', this.diceUnhovered, this);
     }
 
   }

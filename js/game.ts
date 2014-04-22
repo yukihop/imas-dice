@@ -48,7 +48,6 @@ module cgdice {
 
   export class Dice extends DomDisplayObject {
     private _pips: number;
-    private _animating: boolean;
     get pips(): number { return this._pips; }
     set pips(p: number) {
       this._pips = p;
@@ -56,19 +55,14 @@ module cgdice {
     }
     public roll(): void {
       this.pips = Math.floor(Math.random() * 6) + 1;
-      this._animating = true;
       this.element.animate({ top: -10 }, 200, () => {
         this.element.animate({ top: 0 }, 200, () => {
-          this._animating = false;
         })
       });
     }
     constructor() {
       super('dice');
-      this.element.on('click', (event) => {
-        if (this._animating) return;
-        this.element.trigger('diceClick', this);
-      });
+      this.element.data('self', this);
     }
   }
 
@@ -96,17 +90,17 @@ module cgdice {
           { top: top + 10 }, 400, 'easeInOutBounce', () => {
             this.element.animate(
               { top: top }, 100
-            );
+              );
           }
-        );
+          );
         this._hp_damagebar
           .show()
           .css('width', this.barWidth(this._HP))
           .animate(
-            { width: this.barWidth(value) }, 1000, 'swing', () => {
-              this._hp_damagebar.hide();
-              this.element.removeClass('damaging healing');
-            }
+          { width: this.barWidth(value) }, 1000, 'swing', () => {
+            this._hp_damagebar.hide();
+            this.element.removeClass('damaging healing');
+          }
           );
         this._hp_bar.css('width', this.barWidth(value));
       }
@@ -144,6 +138,12 @@ module cgdice {
     }
   }
 
+  export class DiceEvent extends createjs.Event {
+    constructor(type: string, public dice: Dice) {
+      super(type, false, false);
+    }
+  }
+
   export class DiceStack extends DomDisplayObject {
     private _stack: Dice[];
     private _stock: number = 0;
@@ -164,19 +164,6 @@ module cgdice {
       var dice = new Dice();
       this._stack.push(dice);
       dice.roll();
-      dice.element.on('diceClick', (event, dice: Dice) => {
-        if (!this._ready) return;
-        var idx = this._stack.indexOf(dice);
-        if (idx == -1) {
-          return; // dice already removed
-        }
-        this.ready(false);
-        this.element.trigger('diceDetermine', dice);
-        this._stack.splice(idx, 1);
-        dice.element.animate({ opacity: 0 }, 500, () => {
-          dice.element.remove();
-        });
-      });
       this.element.prepend(dice.element);
     }
 
@@ -191,6 +178,30 @@ module cgdice {
       for (var i = 0; i <= 2; i++) {
         this.draw();
       }
+      this.element.on('click', '.dice', (event) => {
+        if (!this._ready) return;
+        var dice = <Dice>$(event.currentTarget).data('self');
+        var idx = this._stack.indexOf(dice);
+        if (idx == -1) {
+          return; // dice already removed
+        }
+        this.ready(false);
+        this._stack.splice(idx, 1);
+        this.dispatchEvent(new DiceEvent('diceDetermine', dice));
+        dice.element.animate({ opacity: 0 }, 500, () => {
+          dice.element.remove();
+        });
+      });
+      this.element.on('mouseenter', '.dice', (event) => {
+        if (!this._ready) return;
+        var dice = <Dice>$(event.currentTarget).data('self');
+        this.dispatchEvent(new DiceEvent('diceHover', dice));
+      });
+      this.element.on('mouseleave', '.dice', (event) => {
+        if (!this._ready) return;
+        var dice = <Dice>$(event.currentTarget).data('self');
+        this.dispatchEvent(new DiceEvent('diceUnhover', dice));
+      });
     }
   }
 
@@ -250,10 +261,11 @@ module cgdice {
       this.hp.maxHP = maxHP;
       this.hp.HP = maxHP;
 
-
       this.stack = new DiceStack();
       this.stack.stock = 10;
-      this.stack.element.on('diceDetermine', $.proxy(this.diceDetermined, this));
+      this.stack.on('diceDetermine', $.proxy(this.handleDiceEvent, this));
+      this.stack.on('diceHover', $.proxy(this.handleDiceEvent, this));
+      this.stack.on('diceUnhover', $.proxy(this.handleDiceEvent, this));
 
       this.battle = new battles.Battle();
       this.battle.on('diceProcess', this.diceProcessed, this);
@@ -275,6 +287,14 @@ module cgdice {
 
     }
 
+    private handleDiceEvent(event: DiceEvent) {
+      if (this.battle.element.is(':visible')) {
+        this.battle.dispatchEvent(event);
+      } else {
+        this.field.dispatchEvent(event);
+      }
+    }
+
     private diceProcessed() {
       if (this.stack.stock > 0) {
         this.stack.stock--;
@@ -284,14 +304,6 @@ module cgdice {
         alert('GAME OVER');
       } else {
         this.stack.ready();
-      }
-    }
-
-    public diceDetermined(event: JQueryEventObject, dice: Dice) {
-      if (this.battle.element.is(':visible')) {
-        this.battle.diceDetermined(dice.pips);
-      } else {
-        this.field.diceDetermined(dice);
       }
     }
 
