@@ -285,13 +285,9 @@ module cgdice {
       });
 
       var data: any = application.loader.getResult('fieldData');
-      for (var i = 0; i < data.blocks.length; i++) {
-        data.blocks[i].type = fields.BlockType[data.blocks[i].type];
-      }
-      var fieldData = <fields.FieldData>data;
       this.field = new fields.Field();
       this._stage.addChild(this.field);
-      this.field.reset(fieldData);
+      this.field.reset(data);
       this.field.on('diceProcess', this.diceProcessed, this);
       this.stack.ready();
 

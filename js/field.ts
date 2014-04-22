@@ -8,11 +8,6 @@ module cgdice.fields {
     type: BlockType;
   }
 
-  export interface FieldData {
-    name: string;
-    blocks: BlockInfo[];
-  }
-
   export class Block extends createjs.Container {
     private _type: BlockType = BlockType.Empty;
     private _box: createjs.Sprite;
@@ -61,6 +56,12 @@ module cgdice.fields {
       this._box = new createjs.Sprite(spriteSheet, BlockType[this.type]);
       this._box.regX = this._box.regY = 24;
       this.addChild(this._box);
+    }
+
+    static fromObject(blockData: any) {
+      var block = new Block();
+      block.type = BlockType[<string>(blockData.type)];
+      return block;
     }
   }
 
@@ -179,8 +180,8 @@ module cgdice.fields {
       }
     }
 
-    public reset(fieldData: FieldData) {
-      var data = fieldData.blocks;
+    public reset(fieldData: any) {
+      var blocksData = fieldData.blocks;
       var prev: Block;
 
       this.removeAllChildren();
@@ -189,9 +190,8 @@ module cgdice.fields {
       this._lines = lines;
       this.addChild(lines);
 
-      for (var i = 0; i < data.length; i++) {
-        var b = new Block();
-        b.type = data[i].type;
+      for (var i = 0; i < blocksData.length; i++) {
+        var b = Block.fromObject(blocksData[i]);
         b.x = i * 60 + 50;
         b.y = 120 + Math.random() * 40;
         this.addChild(b);
