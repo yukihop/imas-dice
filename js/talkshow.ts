@@ -9,8 +9,15 @@ module cgdice.talks {
     private talk_index: number;
     private talks: JQuery;
 
-    static show(fileid: string, id: string) {
-      return new Talk(fileid, id);
+    static show(fullid: string);
+    static show(fileid: string, talkid: string);
+    static show(fileid: string, talkid?: string) {
+      if (talkid) {
+        return new Talk(fileid, talkid);
+      } else {
+        var splitted = fileid.split('/');
+        return new Talk(splitted[0], splitted[1]);
+      }
     }
 
     private doShow(item: JQuery) {

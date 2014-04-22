@@ -4,7 +4,8 @@
     - Proceed
     - Enemy
     - Enemy
-    - Treasure
+    - type: Empty
+      talk: sample/empty
     - Enemy
     - Enemy
     - Back
@@ -12,8 +13,10 @@
     - Empty
     - Proceed
     - Empty
-    - Heal
-    - Damage
+    - type: Heal
+      talk: sample/heal
+    - type: Damage
+      talk: sample/damage
     - Empty
     - Treasure
     - Proceed
@@ -39,7 +42,8 @@
     - Heal
     - Damage
     - Empty
-    - Boss
+    - type: Boss
+      talk: sample/enemy_appear
 - title: テストステージ2（短）
   blocks:
     - Start

@@ -105,11 +105,18 @@ module cgdice {
 
     get HP(): number { return this._HP; }
     set HP(value: number) {
+      this.setHP(value, true);
+    }
+
+    public setHP(value: number, animation: boolean = false) {
       if (value < 0) value = 0;
       if (value > this._maxHP) value = this._maxHP;
-      if (this._HP > value) { // damage!
+
+      if (!animation) {
+        this._hp_bar.stop(true).css('width', this.barWidth(value));
+      } else if (this._HP > value) { // damage!
         var top = this.element.position().top;
-        // bounce[
+        // bounce
         this.element.addClass('damaging').animate(
           { top: top + 10 }, 400, 'easeInOutBounce', () => {
             this.element.animate(
@@ -120,19 +127,25 @@ module cgdice {
         this._hp_damagebar
           .show()
           .css('width', this.barWidth(this._HP))
-          .animate(
-          { width: this.barWidth(value) }, 1000, 'swing', () => {
+          .transition({
+            width: this.barWidth(value),
+            duration: 1000,
+            easing: 'easeOutQuad'
+          }, () => {
             this._hp_damagebar.hide();
             this.element.removeClass('damaging healing');
-          }
-          );
+          });
         this._hp_bar.css('width', this.barWidth(value));
       }
       if (this._HP < value) { // heal!
         this.element.addClass('healing');
         this._hp_healbar.show().css('width', this.barWidth(value));
         this._hp_bar
-          .animate({ width: this.barWidth(value) }, 1000, 'swing', () => {
+          .transition({
+            width: this.barWidth(value),
+            duration: 1000,
+            easing: 'easeOutQuad'
+          }, () => {
             this._hp_healbar.hide();
             this.element.removeClass('damaging healing');
           });
@@ -306,14 +319,13 @@ module cgdice {
       this.field.on('diceProcess', this.diceProcessed, this);
 
       this.console = new GameLog();
-
     }
 
     public reset(data: any) {
       var maxHP = 0;
       this.players.forEach((p) => { maxHP += p.maxHP() });
       this.hp.maxHP = maxHP;
-      this.hp.HP = maxHP;
+      this.hp.setHP(maxHP);
 
       this.field.reset(data);
       this.stack.reset(10);

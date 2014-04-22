@@ -11,7 +11,7 @@ module cgdice.fields {
   export class Block extends createjs.Container {
     private _type: BlockType = BlockType.Empty;
     private _box: createjs.Sprite;
-    private _text: createjs.DOMElement;
+    public talk: string;
 
     get type(): BlockType { return this._type; }
     set type(value: BlockType) { this._type = value; this.redraw(); }
@@ -64,6 +64,7 @@ module cgdice.fields {
         block.type = BlockType[<string>blockData];
       } else {
         block.type = BlockType[<string>(blockData.type)];
+        block.talk = ('talk' in blockData) ? blockData.talk : null;
       }
       return block;
     }
@@ -156,7 +157,6 @@ module cgdice.fields {
       switch (block.type) {
         case BlockType.Enemy:
         case BlockType.Boss:
-          cgdice.talks.Talk.show('sample', 'enemy_appear');
           game.battle.start();
           break;
         case BlockType.Heal:
@@ -180,6 +180,7 @@ module cgdice.fields {
           break;
       }
       if (move_end) {
+        if (block.talk) cgdice.talks.Talk.show(block.talk);
         this.dispatchEvent('diceProcess');
       }
     }
