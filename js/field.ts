@@ -106,15 +106,24 @@ module cgdice.fields {
       var w = this.getStage().canvas.width;
       var h = this.getStage().canvas.height;
       var pad = 100;
-      console.log('b', b, 'w', w, 'h', h);
-      var x = (w/2) - block.x;
-      x = Math.min(x, b.xmin + pad);
-      x = Math.max(x, w - b.xmax - pad);
-      var y = (h/2) - block.y;
-      // var scroll = Math.min(0, 300 - block.x);
+      var x = (w / 2) - block.x;
+      if (b.xmax - b.xmin < w - 2 * pad) {
+        x = (w - b.xmax - b.xmin) / 2;
+      } else {
+        x = Math.min(x, b.xmin + pad);
+        x = Math.max(x, w - b.xmax - pad);
+      }
+      var y = (h / 2) - block.y;
+      if (b.ymax - b.ymin < h - 2 * pad) {
+        y = (h - b.ymax - b.ymin) / 2;
+      } else {
+        y = Math.min(y, b.ymin + pad);
+        y = Math.max(y, w - b.ymax - pad);
+      }
       createjs.Tween.removeTweens(this);
+      var duration = animation ? 2000 : 0;
       createjs.Tween.get(this)
-        .to({ x: x, y: y }, 2000, createjs.Ease.quadOut);
+        .to({ x: x, y: y }, duration, createjs.Ease.quadOut);
     }
 
     public moveTo(newPosition: number, immediate: boolean = false) {
@@ -254,6 +263,7 @@ module cgdice.fields {
       this.addChild(this._cursor);
 
       this.moveTo(0, true);
+      this.scrollField(this.blocks[0], false);
       this.x = 0;
     }
 
