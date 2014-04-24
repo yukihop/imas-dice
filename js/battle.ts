@@ -113,7 +113,7 @@ module cgdice.battles {
         });
       }
       if (!('transition' in opt)) opt.transition = { y: -20, opacity: 0 };
-      if (!('duration' in opt)) opt.duration = 1000;
+      if (!('duration' in opt)) opt.duration = 2000;
 
       super('flytext');
       if ('class' in opt) this.element.addClass(opt.class);

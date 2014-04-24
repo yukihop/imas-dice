@@ -166,6 +166,8 @@ button {
 
 .dicebg (@i, @size: 48px) { background-position: (-(@i - 1) * @size) 0; }
 
+// Character
+
 .character {
   display: inline-block;
   position: relative;
@@ -206,7 +208,6 @@ button {
       &.invokable { background-color: yellow; }
     }
   }
-  .name { display: none; }
   .current_attack {
     position: absolute;
     bottom: 20px;
@@ -218,6 +219,18 @@ button {
     text-shadow: 2px 2px 1px black;
     text-align: center;
   }
+  .tooltip {
+    position: absolute;
+    width: 100px;
+    bottom: 103px;
+    background-color: rgba(0, 0, 0, 0.8);
+    border: 2px solid white;
+    box-shadow: 2px 2px 2px black;
+    color: white;
+    text-align: center;
+    display: none;
+  }
+  &:hover .tooltip { display: block; }
 }
 
 .dice {

@@ -101,6 +101,8 @@ module cgdice.characters {
 
     public redraw() {
       this.element.find('.name').text(this.name);
+      this.element.find('.hp_max').text(this.maxHP());
+      this.element.find('.lv').text(this.level());
       var muls = this.element.find('.multipliers');
       muls.empty();
       $.each(this._multipliers, (i, mul) => {
