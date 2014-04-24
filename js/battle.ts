@@ -101,6 +101,7 @@ module cgdice.battles {
 
     constructor(options: FlyTextOptions);
     constructor(text: string, parent: JQuery, callback: () => void);
+    constructor(text: string, parent: JQuery);
     constructor(opt: any, ...args) {
       if (typeof opt == 'string') {
         opt = {
@@ -158,11 +159,13 @@ module cgdice.battles {
       new DicePlaceholder().element.appendTo(this._onboard_area);
       game.players.forEach((c) => {
         c.highlightMultipliers(this.onboard, game.stack.getNumbers());
+        c.showCurrentAttackPower(this.onboard);
       });
     }
 
     private diceDetermined(event: DiceEvent) {
       // dice animation
+      game.players.forEach(p => p.resetHighlight());
       var dice = event.dice;
       var placeholder = this._onboard_area.find('.placeholder');
       var delta_x = placeholder.offset().left - dice.element.offset().left;
@@ -189,11 +192,20 @@ module cgdice.battles {
       all_pips.push(pips);
       game.players.forEach((p: cgdice.characters.Character) => {
         var attack_power = p.attackPower(all_pips);
-        new FlyText(attack_power.toString(), p.element, $.noop());
+        new FlyText(attack_power.toString(), p.element);
         all_power += attack_power;
       });
-      game.console.log(all_power + 'の攻撃!');
-      this.enemy.hit(all_power);
+      setTimeout(() => {
+        new FlyText({
+          text: all_power.toString(),
+          parent: this.element,
+          class: 'all_attack'
+        });
+      }, 500);
+      setTimeout(() => {
+        game.console.log(all_power + 'の攻撃!');
+        this.enemy.hit(all_power);
+      }, 1000);
     }
 
     private diceHovered(event: DiceEvent) {
@@ -205,7 +217,7 @@ module cgdice.battles {
     }
 
     private enemyTurnEnd() {
-      game.players.forEach(p => p.highlightMultipliers([], []));
+      game.players.forEach(p => p.resetHighlight());
       if (this.enemy.HP <= 0) {
         game.console.log('勝利!');
         this.element.hide();

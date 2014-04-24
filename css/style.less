@@ -207,6 +207,17 @@ button {
     }
   }
   .name { display: none; }
+  .current_attack {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    font-size: 36px;
+    font-weight: bold;
+    color: yellow;
+    text-shadow: 2px 2px 1px black;
+    text-align: center;
+  }
 }
 
 .dice {
@@ -350,14 +361,24 @@ button {
   overflow-y: scroll;
 }
 
+// FlyText
+
 .flytext {
   font-size: 40px;
   position: absolute;
-  color: yellow;
+  color: orange;
   font-weight: bold;
   text-shadow: 1px 1px 2px black;
+  text-align: center;
   &.enemy_attack {
     color: red;
+  }
+  &.all_attack {
+    min-width: 150px;
+    color: orange;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-top: 1px solid orange;
+    border-bottom: 1px solid orange;
   }
 }
 

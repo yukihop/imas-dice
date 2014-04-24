@@ -50,9 +50,14 @@ module cgdice.characters {
       return lv * this._baseHP;
     }
 
+    public resetHighlight() {
+      this.element.find('.multiplier').removeClass('invoked invokable');
+      this.element.find('.current_attack').text('');
+    }
+
     public highlightMultipliers(pips: number[], selectable: number[]) {
       var elem = this.element.find('.multiplier');
-      elem.removeClass('invoked invokable');
+      this.resetHighlight();
       this._multipliers.forEach((mul, mul_idx) => {
         if (mul.check(pips)) {
           // invoked
@@ -68,6 +73,11 @@ module cgdice.characters {
           });
         }
       });
+    }
+
+    public showCurrentAttackPower(pips: number[]) {
+      var atk = this.attackPower(pips);
+      this.element.find('.current_attack').text(atk);
     }
 
     public attackPower(pips: number[]): number {
