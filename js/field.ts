@@ -167,7 +167,7 @@ module cgdice.fields {
       while (newPosition != p) {
         p += step;
         block = this.blocks[p];
-        tween.to({ x: block.x, y: block.y - 20 }, 400);
+        tween.to({ x: block.x, y: block.y - 20 }, 400, createjs.Ease.quadOut);
         (() => {
           var _block = block;
           if (newPosition != p) {
@@ -214,6 +214,11 @@ module cgdice.fields {
           if (this._selected_dice) this._selected_dice.element.remove();
         }
       }, 300);
+
+      if (game.stack.length == 0 && block.type != BlockType.Back && block.type != BlockType.Proceed) {
+        this.dispatchEvent('diceProcess');
+        return;
+      }
 
       switch (block.type) {
         case BlockType.Enemy:

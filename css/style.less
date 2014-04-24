@@ -35,7 +35,7 @@ button {
 }
 
 #main {
-  padding: 10px;
+  padding: 0px;
 }
 
 #templates {
@@ -48,7 +48,7 @@ button {
   left: 0;
   top: 0;
   width: 100%;
-  height: 400px;
+  height: 500px;
   overflow: hidden;
 }
 
@@ -85,7 +85,7 @@ button {
   }
   #stage_list {
     margin: 0 30px;
-    height: 150px;
+    height: 250px;
     li {
       text-align: center;
       font-size: 36px;
@@ -276,7 +276,7 @@ button {
 
 #gamemode {
   position: relative;
-  height: 400px;
+  height: 500px;
   width: 100%;
 }
 
@@ -409,14 +409,20 @@ button {
   text-shadow: 1px 1px 2px black;
   text-align: center;
   &.enemy_attack {
-    color: red;
+    min-width: 150px;
+    padding: 0 15px;
+    font-size: 60px;
+    background: linear-gradient(to bottom, red, salmon, red);
+    color: white;
   }
   &.all_attack {
     min-width: 150px;
+    padding: 0 15px;
+    font-size: 60px;
     color: orange;
-    background-color: rgba(255, 255, 255, 0.3);
-    border-top: 1px solid orange;
-    border-bottom: 1px solid orange;
+    background-color: rgba(255, 200, 200, 0.5);
+    border-top: 2px solid orange;
+    border-bottom: 2px solid orange;
   }
 }
 

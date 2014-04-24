@@ -67,7 +67,7 @@ module cgdice.titles {
       list.find('.character').detach(); // do not empty
       application.availableCharacters.forEach((p) => {
         p.resetHighlight();
-        $('<li>').append(p.element).appendTo(list);
+        $('<li>').append(p.element.addClass('selected')).appendTo(list);
       });
 
       this.element.show().css({ opacity: 1 });

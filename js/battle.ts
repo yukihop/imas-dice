@@ -195,6 +195,7 @@ module cgdice.battles {
       all_pips.push(pips);
 
       game.players.forEach(p => {
+        p.resetHighlight();
         p.highlightMultipliers(all_pips, []);
         var attack_power = p.attackPower(all_pips);
         new FlyText(attack_power.toString(), p.element);
