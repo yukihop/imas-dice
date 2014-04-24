@@ -105,20 +105,20 @@ module cgdice.fields {
       var b = this._blockBounds;
       var w = this.getStage().canvas.width;
       var h = this.getStage().canvas.height;
-      var pad = 100;
+      var pad = { left: 50, right: 50, top: 50, bottom: 150 };
       var x = (w / 2) - block.x;
-      if (b.xmax - b.xmin < w - 2 * pad) {
-        x = (w - b.xmax - b.xmin) / 2;
+      if (b.xmax - b.xmin < w - pad.left - pad.right) {
+        x = (w - b.xmax - b.xmin + pad.left - pad.right) / 2;
       } else {
-        x = Math.min(x, b.xmin + pad);
-        x = Math.max(x, w - b.xmax - pad);
+        x = Math.min(x, b.xmin + pad.left);
+        x = Math.max(x, w - b.xmax - pad.right);
       }
       var y = (h / 2) - block.y;
-      if (b.ymax - b.ymin < h - 2 * pad) {
-        y = (h - b.ymax - b.ymin) / 2;
+      if (b.ymax - b.ymin < h - pad.top - pad.bottom) {
+        y = (h - b.ymax - b.ymin + pad.top - pad.bottom) / 2;
       } else {
-        y = Math.min(y, b.ymin + pad);
-        y = Math.max(y, w - b.ymax - pad);
+        y = Math.min(y, b.ymin + pad.top);
+        y = Math.max(y, w - b.ymax - pad.bottom);
       }
       createjs.Tween.removeTweens(this);
       var duration = animation ? 2000 : 0;
@@ -232,10 +232,14 @@ module cgdice.fields {
       this.addChild(lines);
 
       var bn: Bounds;
+      var layout_func = FieldLayout.horizontal;
+      if ('layout' in fieldData && fieldData.layout in FieldLayout) {
+        layout_func = FieldLayout[fieldData.layout];
+      }
 
       for (var i = 0; i < blocksData.length; i++) {
         var b = Block.fromObject(blocksData[i]);
-        var pos = FieldLayout.horizontal(i, blocksData.length);
+        var pos = layout_func(i, blocksData.length);
         if (i == 0) {
           bn = { xmin: pos.x, xmax: pos.x, ymin: pos.y, ymax: pos.y };
         } else {
@@ -275,11 +279,22 @@ module cgdice.fields {
 
   class FieldLayout {
     static horizontal(index: number, count: number): Vector {
-      return { x: index * 60 + 50, y: 150 + Math.random() * 40 };
+      return { x: index * 60, y: Math.sin(2 * Math.PI / 10 * index) * 40 };
     }
 
     static vertical(index: number, count: number): Vector {
       return { x: 300, y: index * 60 };
+    }
+
+    static zigzagHorizontal(index: number, count: number): Vector {
+      var amp = 3;
+      var x = Math.floor(index / amp) * 60;
+      var y = index % amp;
+      if (index % (amp * 2) < amp) {
+        y = amp - y - 1;
+      }
+      y *= 60;
+      return { x: x, y: y };
     }
   }
 

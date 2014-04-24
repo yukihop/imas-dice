@@ -1,4 +1,5 @@
 - title: テストステージ
+  layout: zigzagHorizontal
   blocks:
     - Start
     - Proceed
