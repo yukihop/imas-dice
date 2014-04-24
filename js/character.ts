@@ -50,6 +50,26 @@ module cgdice.characters {
       return lv * this._baseHP;
     }
 
+    public highlightMultipliers(pips: number[], selectable: number[]) {
+      var elem = this.element.find('.multiplier');
+      elem.removeClass('invoked invokable');
+      this._multipliers.forEach((mul, mul_idx) => {
+        if (mul.check(pips)) {
+          // invoked
+          elem.eq(mul_idx).addClass('invoked');
+        } else {
+          // invokable
+          selectable.forEach((choice) => {
+            var tmp = pips.slice();
+            tmp.push(choice);
+            if (mul.check(tmp)) {
+              elem.eq(mul_idx).addClass('invokable');
+            }
+          });
+        }
+      });
+    }
+
     public attackPower(pips: number[]): number {
       var result: number = 0;
       var scale: number = 1;
@@ -67,10 +87,6 @@ module cgdice.characters {
 
     public availableSkills(): Skill[] {
       return [];
-    }
-
-    public highlightMultipliers(pips: number[]) {
-      this.element.find('.multplier').removeClass('bingo reach');
     }
 
     public redraw() {

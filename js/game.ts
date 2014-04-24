@@ -197,6 +197,10 @@ module cgdice {
       this.element.find('.dice_stock').text(this._stock);
     }
 
+    public getNumbers(): number[] {
+      return this._stack.map(d => d.pips);
+    }
+
     public draw() {
       var dice = new Dice();
       this._stack.push(dice);

@@ -156,6 +156,9 @@ module cgdice.battles {
         this.onboard.push(dice.pips);
       }
       new DicePlaceholder().element.appendTo(this._onboard_area);
+      game.players.forEach((c) => {
+        c.highlightMultipliers(this.onboard, game.stack.getNumbers());
+      });
     }
 
     private diceDetermined(event: DiceEvent) {
@@ -202,6 +205,7 @@ module cgdice.battles {
     }
 
     private enemyTurnEnd() {
+      game.players.forEach(p => p.highlightMultipliers([], []));
       if (this.enemy.HP <= 0) {
         game.console.log('勝利!');
         this.element.hide();
