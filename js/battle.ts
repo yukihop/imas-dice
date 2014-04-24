@@ -151,6 +151,13 @@ module cgdice.battles {
       this.element.show();
     }
 
+    public diceChanged() {
+      game.players.forEach((c) => {
+        c.highlightMultipliers(this.onboard, game.stack.getNumbers());
+        c.showCurrentAttackPower(this.onboard);
+      });
+    }
+
     public shuffleOnboardDice() {
       var i = 0;
       this.onboard = [];
@@ -162,10 +169,20 @@ module cgdice.battles {
         this.onboard.push(dice.pips);
       }
       new DicePlaceholder().element.appendTo(this._onboard_area);
-      game.players.forEach((c) => {
-        c.highlightMultipliers(this.onboard, game.stack.getNumbers());
-        c.showCurrentAttackPower(this.onboard);
-      });
+      this.diceChanged();
+    }
+
+    public addOnboardDice(num: number = 1) {
+      for (var i = 0; i < num; i++) {
+        var dice = new cgdice.Dice();
+        dice.element.appendTo(this._onboard_area);
+        dice.roll();
+        this.onboard.push(dice.pips);
+      }
+      this._onboard_area.find('.placeholder')
+        .detach()
+        .appendTo(this._onboard_area); // move to last
+      this.diceChanged();
     }
 
     private diceDetermined(event: DiceEvent) {

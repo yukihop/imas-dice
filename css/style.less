@@ -160,6 +160,18 @@ button {
       background-color: rgba(180, 0, 0, 0.5);
       .dice_stock { color: red; }
     }
+    .next {
+      display: none;
+      width: 120px;
+      position: absolute;
+      right: 0;
+      top: 0;
+      color: #842;
+      text-align: center;
+      font-weight: bold;
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 10px;
+    }
   }
   #stage_end {
     position: static;
@@ -339,11 +351,10 @@ button {
       }
     }
   }
+  #onboard_container { text-align: center; }
   #onboard {
-    margin: 0 auto;
+    display: inline-block;
     padding: 3px;
-    text-align: center;
-    width: 150px;
     background-color: rgba(0, 0, 0, 0.5);
     border-radius: 5px;
   }

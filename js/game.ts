@@ -196,9 +196,10 @@ module cgdice {
   export class DiceStack extends DomDisplayObject {
     private _stock: number = 0;
     private _ready: boolean = false;
+    private _next: number = 0;
 
     get length(): number {
-      return this.element.find('.dice:not(.placeholder)').length;
+      return this.element.find('>.dice:not(.placeholder)').length;
     }
 
     get stock(): number { return this._stock; }
@@ -214,9 +215,21 @@ module cgdice {
       return this.element.find('.dice').map((i, d) => $(d).data('self').pips).get();
     }
 
+    public specifyNext(pips: number) {
+      this._next = pips;
+      this.element
+        .find('.next').toggle(this._next > 0)
+        .find('.next_pips').text(this._next);
+    }
+
     public draw() {
       var dice = new Dice();
       dice.roll();
+      if (this._next > 0) {
+        dice.pips = this._next;
+        this._next = 0;
+        this.element.find('.next').hide(300);
+      }
       this.element.prepend(dice.element);
     }
 
