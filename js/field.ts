@@ -216,7 +216,11 @@ module cgdice.fields {
       switch (block.type) {
         case BlockType.Enemy:
         case BlockType.Boss:
-          setTimeout(() => { game.battle.start(); }, 1000);
+          move_end = false;
+          setTimeout(() => {
+            game.battle.start();
+            this.dispatchEvent('diceProcess');
+          }, 1000);
           break;
         case BlockType.Heal:
           game.hp.HP += 10;
