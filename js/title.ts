@@ -23,13 +23,14 @@ module cgdice.titles {
       this.element.on('click', 'li.stage', () => {
         var idx = $(event.target).index();
         var players: cgdice.characters.Character[];
-        players = $('#character_list .selected').map((i, elem) => {
+        players = $('#character_list .selected', this.element).map((i, elem) => {
           return $(elem).data('self');
         }).get();
         $('#character_list .selected', this.element).removeClass('selected');
 
         if (players.length == 0) {
-          alert('select someone'); return;
+          alert('select someone');
+          return;
         }
 
         game.reset(this._data[idx], players);
@@ -62,8 +63,9 @@ module cgdice.titles {
 
       // characters
       list = this.element.find('#character_list');
-      list.empty();
+      list.find('.character').detach(); // do not empty
       application.availableCharacters.forEach((p) => {
+        p.resetHighlight();
         $('<li>').append(p.element).appendTo(list);
       });
 
