@@ -236,7 +236,7 @@ module cgdice.fields {
           game.getDamage(10);
           break;
         case BlockType.Treasure:
-          game.stack.stock += 1;
+          game.stack.stock += 5;
           break;
         case BlockType.Back:
           this.proceed(-3);

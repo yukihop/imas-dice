@@ -19,7 +19,8 @@
     - type: Damage
       talk: sample/damage
     - Empty
-    - Treasure
+    - type: Treasure
+      talk: sample/treasure
     - Proceed
     - Empty
     - Heal
