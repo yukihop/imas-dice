@@ -169,7 +169,6 @@ module cgdice.battles {
 
     private diceDetermined(event: DiceEvent) {
       // dice animation
-      game.players.forEach(p => p.resetHighlight());
       var dice = event.dice;
       var placeholder = this._onboard_area.find('.placeholder');
       var delta_x = placeholder.offset().left - dice.element.offset().left;
@@ -194,7 +193,9 @@ module cgdice.battles {
       var all_power: number = 0;
       var all_pips: number[] = this.onboard.slice();
       all_pips.push(pips);
-      game.players.forEach((p: cgdice.characters.Character) => {
+
+      game.players.forEach(p => {
+        p.highlightMultipliers(all_pips, []);
         var attack_power = p.attackPower(all_pips);
         new FlyText(attack_power.toString(), p.element);
         all_power += attack_power;

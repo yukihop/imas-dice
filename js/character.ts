@@ -56,18 +56,20 @@ module cgdice.characters {
     }
 
     public highlightMultipliers(pips: number[], selectable: number[]) {
-      var elem = this.element.find('.multiplier');
-      this.resetHighlight();
+      var elem = this.element.find('.multiplier').removeClass('invoked invokable');
       this._multipliers.forEach((mul, mul_idx) => {
         if (mul.check(pips)) {
           // invoked
-          elem.eq(mul_idx).addClass('invoked');
+          elem.eq(mul_idx)
+            .addClass('invoked')
+            .css({ scale: 2 })
+            .transition({ scale: 1 }, 700);
         } else {
-          // invokable
           selectable.forEach((choice) => {
             var tmp = pips.slice();
             tmp.push(choice);
             if (mul.check(tmp)) {
+              // invokable
               elem.eq(mul_idx).addClass('invokable');
             }
           });

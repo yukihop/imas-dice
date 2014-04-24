@@ -218,13 +218,15 @@ button {
     }
     .multiplier {
       border-radius: 5px;
-      transition: background-color 0.3s;
+      transition: background 0.3s;
       &.invoked {
-        background-color: #800;
+        background: linear-gradient(to bottom, #800, #f00, #700);
         color: white;
         text-shadow: 1px 1px 1px red;
       }
-      &.invokable { background-color: yellow; }
+      &.invokable {
+        background: linear-gradient(to bottom, yellow, white, yellow);
+      }
     }
   }
   .current_attack {

@@ -48,6 +48,7 @@ module cgdice.titles {
       });
 
       $('#character_list', this.element).sortable({
+        distance: 10
       });
 
     }
