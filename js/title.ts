@@ -20,7 +20,7 @@ module cgdice.titles {
 
     constructor() {
       super($('#stage_select'));
-      this.element.on('click', 'li.stage', () => {
+      this.element.on('click', 'li.stage', (event) => {
         var idx = $(event.target).index();
         var players: cgdice.characters.Character[];
         players = $('#character_list .selected', this.element).map((i, elem) => {
