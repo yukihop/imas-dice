@@ -205,7 +205,9 @@ module cgdice {
     set stock(value: number) {
       if (value < 0) value = 0;
       this._stock = Math.floor(value);
-      this.element.find('.dice_stock').text(this._stock);
+      this.element
+        .toggleClass('stock_empty', this._stock == 0)
+        .find('.dice_stock').text(this._stock);
     }
 
     public getNumbers(): number[] {

@@ -139,21 +139,26 @@ button {
         cursor: pointer;
       }
     }
-  }
-  #dice_indicator {
-    display: inline-block;
-    text-align: center;
-    width: 120px;
-    height: 30px;
-    background-color: rgba(0, 0, 0, 0.5);
-    border-radius: 10px 10px 0 0;
-    .dice_stock {
+    #dice_indicator {
       display: inline-block;
-      font-weight: bold;
-      font-size: 24px;
-      color: salmon;
-      min-width: 40px;
       text-align: center;
+      width: 120px;
+      height: 30px;
+      background-color: rgba(0, 0, 0, 0.5);
+      border-radius: 10px 10px 0 0;
+      .dice_stock {
+        display: inline-block;
+        text-shadow: 1px 1px 1px black;
+        font-weight: bold;
+        font-size: 24px;
+        color: salmon;
+        min-width: 40px;
+        text-align: center;
+      }
+    }
+    &.stock_empty #dice_indicator {
+      background-color: rgba(180, 0, 0, 0.5);
+      .dice_stock { color: red; }
     }
   }
   #stage_end {
