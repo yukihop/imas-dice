@@ -112,8 +112,12 @@ module cgdice.battles {
           else if (arg instanceof jQuery) opt.parent = arg;
         });
       }
-      if (!('transition' in opt)) opt.transition = { y: -20, opacity: 0 };
-      if (!('duration' in opt)) opt.duration = 2000;
+      if (!('transition' in opt)) opt.transition = {
+        y: -20,
+        opacity: 0
+      };
+      if (!('duration' in opt)) opt.duration = 1200;
+      if (!('easing' in opt)) opt.easing = 'easeInQuad';
 
       super('flytext');
       if ('class' in opt) this.element.addClass(opt.class);
@@ -123,7 +127,7 @@ module cgdice.battles {
         of: opt.parent
       });
       var from = this.element.position().top;
-      this.element.transition(opt.transition, opt.duration, 'out', () => {
+      this.element.transition(opt.transition, opt.duration, opt.easing, () => {
         if ('callback' in opt) opt.callback();
         this.element.remove();
       });
