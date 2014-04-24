@@ -138,6 +138,7 @@ module cgdice.battles {
     public enemy: Enemy;
     public onboard: number[];
     private _onboard_area: JQuery;
+    private _selected_dice: Dice;
 
     public start() {
       this.enemy = new Enemy('chihiro');
@@ -169,25 +170,24 @@ module cgdice.battles {
 
     private diceDetermined(event: DiceEvent) {
       // dice animation
+      this._selected_dice = event.dice;
+
       var dice = event.dice;
-      var placeholder = this._onboard_area.find('.placeholder');
-      var delta_x = placeholder.offset().left - dice.element.offset().left;
-      var delta_y = placeholder.offset().top - dice.element.offset().top;
+      var to = this._onboard_area.find('.placeholder');
+      event.dice.element
+        .css({ position: 'absolute' })
+        .appendTo(this._onboard_area)
+        .position({ of: to });
+
       dice.element
         .stop(true)
         .transition({
-          x: delta_x,
-          y: delta_y,
           rotate: 360,
-          scale: 1.1
-        }, 300)
+          scale: 1.5,
+        }, 400)
         .transition({
           scale: 1
-        }, 1000)
-        .transition({
-          opacity: 0,
-          complete: () => { dice.element.remove(); }
-        }, 300);
+        }, 1000);
 
       var pips = dice.pips;
       var all_power: number = 0;

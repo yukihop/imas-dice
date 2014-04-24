@@ -193,6 +193,8 @@ module cgdice.fields {
       this._selected_dice = event.dice;
       this.proceed(event.dice.pips);
       event.dice.element
+        .appendTo($('#field'))
+        .position({ of: event.placeholder.element })
         .stop(true)
         .transition({
           x: 0,
