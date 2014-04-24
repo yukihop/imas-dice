@@ -22,7 +22,8 @@ module cgdice.titles {
       super($('#stage_select'));
       this.element.on('click', 'li', () => {
         var idx = $(event.target).index();
-        game.reset(this._data[idx]);
+        var players = application.availableCharacters.slice(0, 3);
+        game.reset(this._data[idx], players);
         this.element.transition({
           opacity: 0,
           duration: 300,

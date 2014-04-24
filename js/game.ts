@@ -14,8 +14,10 @@ module cgdice {
 
     public loader = new createjs.LoadQueue();
 
-    private _title: cgdice.titles.Title;
-    private _stage_selector: cgdice.titles.StageSelector;
+    private _title: titles.Title;
+    private _stage_selector: titles.StageSelector;
+
+    public availableCharacters: characters.Character[];
 
     private compatibilityCheck() {
       if (typeof console !== 'object') return false;
@@ -47,11 +49,20 @@ module cgdice {
       this._stage_selector = new cgdice.titles.StageSelector();
       this._stage_selector.on('stageSelect', () => {
       });
+
+      // initialize character data from settings file
+      this.availableCharacters = [];
+      var data = this.loader.getResult('characters');
+      $.each(data, (i, cdata) => {
+        var p = new characters.Character(cdata.name);
+        this.availableCharacters.push(p);
+        p.redraw();
+      });
     }
 
     public run(): void {
       createjs.Ticker.setFPS(30);
-      this.loader.on('complete', this.loadComplete);
+      this.loader.on('complete', this.loadComplete, this);
       this.loader.loadManifest([
         { id: 'characters', src: 'settings/characters.json' },
         { id: 'fieldData', src: 'settings/stage1.json' },
@@ -298,15 +309,6 @@ module cgdice {
         $('#field_canvas').attr('width', $('#field_canvas').width());
       });
 
-      var names = ['ゆきほP', 'あんずP', 'らんこP'];
-      for (var i = 0; i <= 2; i++) {
-        var p = new characters.Character(names[i]);
-        this.players.push(p);
-        p.redraw();
-        $('#players').append(p.element);
-      }
-      this.players.forEach(p => p.resetHighlight());
-
       this.hp = new HPIndicator();
 
       this.stack = new DiceStack();
@@ -326,13 +328,19 @@ module cgdice {
       this.console = new GameLog();
     }
 
-    public reset(data: any) {
+    public reset(fieldData: any, players: characters.Character[]) {
       var maxHP = 0;
+      this.players = players;
+      this.players.forEach(p => {
+        p.element.appendTo($('#players', this.element));
+        p.resetHighlight();
+      });
+
       this.players.forEach((p) => { maxHP += p.maxHP() });
       this.hp.maxHP = maxHP;
       this.hp.setHP(maxHP);
 
-      this.field.reset(data);
+      this.field.reset(fieldData);
       this.stack.reset(10);
       this.battle.element.hide();
       $('#stage_failed, #stage_clear').hide();
