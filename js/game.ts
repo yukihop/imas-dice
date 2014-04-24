@@ -198,7 +198,7 @@ module cgdice {
     private _ready: boolean = false;
 
     get length(): number {
-      return this.element.find('.dice').length;
+      return this.element.find('.dice:not(.placeholder)').length;
     }
 
     get stock(): number { return this._stock; }
