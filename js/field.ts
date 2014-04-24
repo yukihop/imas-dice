@@ -16,17 +16,36 @@ module cgdice.fields {
     get type(): BlockType { return this._type; }
     set type(value: BlockType) { this._type = value; this.redraw(); }
 
-    public bounce() {
-      var y = this.y;
-      createjs.Tween.get(this)
-        .to({ y: y - 10, scaleX: 1.2, scaleY: 1.2 }, 300, createjs.Ease.bounceOut)
-        .to({ y: y, scaleX: 1, scaleY: 1 }, 300, createjs.Ease.bounceOut);
+    public cursorStep(callback: () => void = $.noop) {
+      this.bounce(callback);
     }
 
-    public rotate() {
+    public cursorStop(callback: () => void = $.noop) {
+      switch (this._type) {
+        case BlockType.Back:
+        case BlockType.Proceed:
+          this.rotate(callback);
+          break;
+        case BlockType.Enemy:
+          this.bounce(callback, 2, 1000);
+        default:
+          this.bounce(callback);
+      }
+    }
+
+    private bounce(callback: () => void, scale: number = 1.2, duration: number = 600) {
+      var y = this.y;
+      createjs.Tween.get(this)
+        .to({ y: y - 10, scaleX: scale, scaleY: scale }, duration / 2, createjs.Ease.bounceOut)
+        .to({ y: y, scaleX: 1, scaleY: 1 }, duration / 2, createjs.Ease.bounceOut)
+        .call(callback);
+    }
+
+    private rotate(callback: () => void) {
       createjs.Tween.get(this)
         .to({ rotation: 360 }, 200)
-        .set({ rotation: 0 });
+        .set({ rotation: 0 })
+        .call(callback);
     }
 
     private redraw() {
@@ -151,7 +170,11 @@ module cgdice.fields {
         tween.to({ x: block.x, y: block.y - 20 }, 400);
         (() => {
           var _block = block;
-          tween.call(() => { _block.bounce(); });
+          if (newPosition != p) {
+            tween.call(() => { _block.cursorStep(); });
+          } else {
+            tween.call(() => { _block.cursorStop(); });
+          }
         })();
       }
       tween.call(() => {
@@ -193,7 +216,7 @@ module cgdice.fields {
       switch (block.type) {
         case BlockType.Enemy:
         case BlockType.Boss:
-          game.battle.start();
+          setTimeout(() => { game.battle.start(); }, 1000);
           break;
         case BlockType.Heal:
           game.hp.HP += 10;
@@ -205,12 +228,10 @@ module cgdice.fields {
           game.stack.stock += 1;
           break;
         case BlockType.Back:
-          block.rotate();
           this.proceed(-3);
           move_end = false;
           break;
         case BlockType.Proceed:
-          block.rotate();
           this.proceed(3);
           move_end = false;
           break;
