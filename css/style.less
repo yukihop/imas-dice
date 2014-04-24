@@ -195,8 +195,16 @@ button {
       &.dice5 { .dicebg(5, @size); }
       &.dice6 { .dicebg(6, @size); }
     }
-    .multiplier.invoked { background-color: salmon; }
-    .multiplier.invokable { background-color: yellow; }
+    .multiplier {
+      border-radius: 5px;
+      transition: background-color 0.3s;
+      &.invoked {
+        background-color: #800;
+        color: white;
+        text-shadow: 1px 1px 1px red;
+      }
+      &.invokable { background-color: yellow; }
+    }
   }
   .name { display: none; }
 }

@@ -305,6 +305,7 @@ module cgdice {
         p.redraw();
         $('#players').append(p.element);
       }
+      this.players.forEach(p => p.highlightMultipliers([], []));
 
       this.hp = new HPIndicator();
 
