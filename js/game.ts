@@ -56,6 +56,7 @@ module cgdice {
       $.each(data, (i, cdata) => {
         var p = new characters.Character(cdata.name);
         this.availableCharacters.push(p);
+        p.element.data('self', p);
         p.redraw();
       });
     }

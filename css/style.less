@@ -61,6 +61,8 @@ button {
   }
 }
 
+// Title
+
 #title {
   .main_panel;
   background: linear-gradient(to right bottom, salmon, purple);
@@ -75,9 +77,15 @@ button {
 #stage_select {
   .main_panel;
   background: linear-gradient(to right bottom, salmon, white);
+  >p {
+    color: brown;
+    text-align: center;
+    font-size: 30px;
+    text-shadow: 1px 1px white;
+  }
   #stage_list {
-    margin: 30px;
-    height: 250px;
+    margin: 0 30px;
+    height: 150px;
     li {
       text-align: center;
       font-size: 36px;
@@ -89,6 +97,18 @@ button {
       &:hover {
         background-color: brown;
       }
+    }
+  }
+  #character_list {
+    padding-top: 45px;
+    width: 550px;
+    height: 100px;
+    text-align: center;
+    border: 1px solid white;
+    margin: 0 auto;
+    li {
+      float: left;
+      border: 1px solid blue;
     }
   }
 }
@@ -174,6 +194,7 @@ button {
   width: 100px;
   height: 100px;
   margin: 0 3px;
+  cursor: pointer;
   .multipliers {
     position: absolute;
     width: 100px;
@@ -231,6 +252,7 @@ button {
     display: none;
   }
   &:hover .tooltip { display: block; }
+  &.selected { box-shadow: 0 0 3px 5px red; }
 }
 
 .dice {
