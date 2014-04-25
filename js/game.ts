@@ -351,13 +351,13 @@ module cgdice {
       this.battle = new battles.Battle();
       this.battle.on('diceProcess', this.diceProcessed, this);
       this.battle.on('battleFinish', () => {
-        this._phase = GamePhase.InField;
+        this.setPhase(GamePhase.InField);
         if (this.field.position == this.field.maxPosition) {
           $('#stage_clear').show();
           this.stageCleared();
         }
       });
-      this.battle.on('initialized', () => { this._phase = GamePhase.InBattle; });
+      this.battle.on('initialized', () => { this.setPhase(GamePhase.InBattle); });
 
       this.gameResult = new GameResult();
       this.gameResult.on('gameFinish', () => {
@@ -395,7 +395,7 @@ module cgdice {
       this.battle.element.hide();
       $('#stage_failed, #stage_clear').hide();
       this.console.clear();
-      this._phase = GamePhase.InField;
+      this.setPhase(GamePhase.InField);
       this.stack.ready();
     }
 
@@ -408,12 +408,12 @@ module cgdice {
     }
 
     private stageCleared() {
-      this._phase = GamePhase.InResults;
+      this.setPhase(GamePhase.InResults);
       this.gameResult.start();
     }
 
     private stageFailed() {
-      this._phase = GamePhase.InResults;
+      this.setPhase(GamePhase.InResults);
       $('#stage_failed, #stage_clear').filter(':visible')
         .css({ y: 0 })
         .transition({

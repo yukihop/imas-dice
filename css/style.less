@@ -105,7 +105,7 @@ button {
     height: 100px;
     text-align: center;
     margin: 0 auto;
-    li {
+    >li {
       float: left;
     }
   }
@@ -256,9 +256,11 @@ button {
   }
   .popup {
     position: absolute;
-    width: 100px;
+    width: 120px;
     bottom: 100px;
-    background-color: rgba(0, 0, 0, 0.8);
+    left: -10px;
+    z-index: 10;
+    background-color: rgba(0, 0, 50, 0.7);
     border: 2px solid white;
     border-radius: 5px;
     box-shadow: 2px 2px 2px black;
@@ -266,15 +268,22 @@ button {
     text-align: center;
     display: none;
     .skills {
+      margin-top: 3px;
+      border-top: 1px solid white;
+      background-color: rgba(0, 0, 0, 0.8);
+      border-radius: 0 0 5px 5px;
       li.skill {
-        cursor: pointer;
         color: gray;
+        padding: 2px 0;
         &.enabled {
           color: white;
           cursor: pointer;
           &:hover {
             color: yellow;
             background-color: #550;
+          }
+          &:active {
+            background-color: #330;
           }
         }
       }

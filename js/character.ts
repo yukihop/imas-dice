@@ -103,7 +103,7 @@ module cgdice.characters {
       return this._skills;
     }
 
-    private updateSkillInvokableStatus() {
+    private updateSkillInvokableStatus(event) {
       this.element.find('.skill').each((i, elem) => {
         var e = $(elem);
         var skill: cgdice.skills.AbstractSkill = e.data('skill');
