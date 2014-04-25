@@ -13,6 +13,7 @@ module cgdice.battles {
     public maxHP: number;
     public HP: number;
     public ATK: number;
+    public EXP: number;
 
     private update() {
       var e = this.element;
@@ -81,6 +82,7 @@ module cgdice.battles {
       this.HP = e.HP;
       this.maxHP = e.HP;
       this.ATK = e.ATK;
+      this.EXP = e.EXP;
       this.update();
     }
   }
@@ -244,6 +246,7 @@ module cgdice.battles {
       if (this.enemy.HP <= 0) {
         game.console.log('勝利!');
         this.element.hide();
+        game.gainExp += this.enemy.EXP;
         this.dispatchEvent('battleFinish');
       } else {
         this.shuffleOnboardDice();

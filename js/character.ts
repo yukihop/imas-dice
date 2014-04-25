@@ -31,23 +31,30 @@ module cgdice.characters {
     private _exp: number = 0;
     private _multipliers: Multiplier[];
     private _baseHP: number = 10;
+    private _image: string;
 
     public gainExp(value: number): void {
       this._exp += value;
+      this.redraw();
     }
 
     public setExp(value: number): void {
       this._exp = value;
+      this.redraw();
     }
 
     public level(): number {
-      var lv = Math.floor(Math.sqrt(this._exp)) + 1;
+      var lv = Math.floor(Math.sqrt(this._exp / 10)) + 1;
       return Math.min(50, lv);
     }
 
     public maxHP(): number {
       var lv = this.level();
       return lv * this._baseHP;
+    }
+    
+    get image(): string {
+      return this._image;
     }
 
     public resetHighlight() {
@@ -124,6 +131,7 @@ module cgdice.characters {
         if (c.name == id) {
           this.name = c.name;
           this._baseHP = c.base_hp;
+          this._image = c.image;
           this.element.css('background-image', 'url(images/' + c.image + ')');
           this._multipliers = $.map(c.multipliers, (v) => { return new Multiplier(v); });
         }

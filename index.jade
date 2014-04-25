@@ -40,9 +40,9 @@ html
             #stage_failed
           #game_result
             #stage_clear
-            p RESULT
             p 獲得経験値
-            .gain_exp
+              span.gain_exp
+            #growth
             p
               button#result_ok OK
         #stage_select
@@ -70,6 +70,20 @@ html
             span.hp_max
           div Lv:
             span.lv
+      .character_grow
+        .name
+        .exp_bar
+        .exp_percentage
+        p.changes
+          | LV
+          span.old_level
+          | →
+          span.new_level
+        p.changes
+          | HP
+          span.old_hp
+          | →
+          span.new_hp
       .dice
       .block
       .enemy

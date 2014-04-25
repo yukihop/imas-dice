@@ -5,11 +5,13 @@ chibichihi1:
   HP: 100
   ATK: 20
   defeated_talk: ばいばい！
+  EXP: 20
 chihiro:
   name: 千川ちひろ Lv25
   image: chihiro.png
   HP: 80
   ATK: 10
+  EXP: 30
 ranko:
   name: 闇に飲まれたらんこP
   image: chibichihi.jpg
@@ -17,3 +19,4 @@ ranko:
   HP: 300
   ATK: 10
   defeated_talk: ぐわああああああ
+  EXP: 50
