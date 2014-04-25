@@ -50,6 +50,7 @@ module cgdice.talks {
         width: 400,
         height: 300,
         modal: true,
+        position: { my: 'center', at: 'center', of: $('#gamemode') },
         closeOnEscape: false
       });
       if (fileid in Talk.loaded) {
