@@ -298,6 +298,7 @@ module cgdice {
    * (from start block to boss).
    */
   export class DiceGame extends DomDisplayObject {
+    private _finalized: boolean = false;
     public players: characters.Character[] = [];
     private energyCandies: number = 0;
     private field: fields.Field;
@@ -330,6 +331,10 @@ module cgdice {
       this.battle = new battles.Battle();
       this.battle.on('diceProcess', this.diceProcessed, this);
       this.battle.on('battleFinish', () => {
+        if (this.field.position == this.field.maxPosition) {
+          $('#stage_clear').show();
+          this.finalize();
+        }
       });
 
       this.field = new fields.Field();
@@ -356,6 +361,7 @@ module cgdice {
       this.battle.element.hide();
       $('#stage_failed, #stage_clear').hide();
       this.console.clear();
+      this._finalized = false;
       this.stack.ready();
     }
 
@@ -368,6 +374,7 @@ module cgdice {
     }
 
     private finalize() {
+      this._finalized = true;
       $('#stage_failed, #stage_clear').filter(':visible')
         .css({ y: 0 })
         .transition({
@@ -385,11 +392,6 @@ module cgdice {
         this.finalize();
         return;
       }
-      if (this.field.position == this.field.maxPosition && !this.battle.element.is(':visible')) {
-        $('#stage_clear').show();
-        this.finalize();
-        return;
-      }
       if (this.stack.stock > 0) {
         this.stack.stock--;
         this.stack.draw();
@@ -397,7 +399,7 @@ module cgdice {
       if (this.stack.length == 0) {
         $('#stage_failed').show();
         this.finalize();
-      } else {
+      } else if (!this._finalized) {
         this.stack.ready();
       }
     }
