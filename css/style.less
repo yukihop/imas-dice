@@ -207,7 +207,6 @@ button {
   width: 100px;
   height: 100px;
   margin: 0 3px;
-  cursor: pointer;
   .multipliers {
     position: absolute;
     width: 100px;
@@ -255,18 +254,33 @@ button {
     text-shadow: 2px 2px 1px black;
     text-align: center;
   }
-  .tooltip {
+  .popup {
     position: absolute;
     width: 100px;
-    bottom: 103px;
+    bottom: 100px;
     background-color: rgba(0, 0, 0, 0.8);
     border: 2px solid white;
+    border-radius: 5px;
     box-shadow: 2px 2px 2px black;
     color: white;
     text-align: center;
     display: none;
+    .skills {
+      li.skill {
+        cursor: pointer;
+        color: gray;
+        &.enabled {
+          color: white;
+          cursor: pointer;
+          &:hover {
+            color: yellow;
+            background-color: #550;
+          }
+        }
+      }
+    }
   }
-  &:hover .tooltip { display: block; }
+  &:hover .popup { display: block; }
   &.selected { box-shadow: 0 0 3px 5px red; }
 }
 

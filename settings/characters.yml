@@ -2,19 +2,32 @@
   image: yukiho_p.jpg
   base_hp: 20
   multipliers: ["3>3"]
+  skills: []
 - name: あんずP
   image: anzu_p.jpg
   base_hp: 22
   multipliers: ["1>5"]
+  skills: []
 - name: ことりP
   image: kotori_p.jpg
   base_hp: 30
   multipliers: ["5>2","6>2"]
+  skills: []
 - name: さえP
   image: sae_p.jpg
   base_hp: 25
   multipliers: ["13>5"]
+  skills:
+    - class: AdditionalOnboardSkill
+      name: フィーバータイム
+      desc: 場のダイスが1個増える。
+      cost: 10
+    - class: RedrawSkill
+      name: 確率調整β
+      desc: ダイスを消費せずに、スタックにあるダイスの目をランダムに入れ替える。
+      cost: 5
 - name: らんこP
   image: ranko_p.jpg
   base_hp: 18
   multipliers: ["666>10"]
+  skills: []

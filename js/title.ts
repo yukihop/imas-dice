@@ -42,7 +42,7 @@ module cgdice.titles {
       });
 
       this.element.on('click', '.character', (event) => {
-        var target = $(event.target);
+        var target = $(event.currentTarget);
         target.toggleClass('selected');
         var p = <cgdice.characters.Character>$(event.target).data('self');
       });

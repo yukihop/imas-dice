@@ -1,10 +1,4 @@
 module cgdice.characters {
-  export class Skill extends createjs.EventDispatcher {
-    public name: string;
-    public use(): void {
-    }
-  }
-
   export class Multiplier {
     public dices: number[];
     public scale: number = 2;
@@ -32,6 +26,7 @@ module cgdice.characters {
     private _multipliers: Multiplier[];
     private _baseHP: number = 10;
     private _image: string;
+    private _skills: skills.AbstractSkill[];
 
     public gainExp(value: number): void {
       this._exp += value;
@@ -52,7 +47,7 @@ module cgdice.characters {
       var lv = this.level();
       return lv * this._baseHP;
     }
-    
+
     get image(): string {
       return this._image;
     }
@@ -104,8 +99,17 @@ module cgdice.characters {
       return this._multipliers;
     }
 
-    public availableSkills(): Skill[] {
-      return [];
+    public availableSkills(): skills.AbstractSkill[] {
+      return this._skills;
+    }
+
+    private updateSkillInvokableStatus() {
+      this.element.find('.skill').each((i, elem) => {
+        var e = $(elem);
+        var skill: cgdice.skills.AbstractSkill = e.data('skill');
+        var invokable = skill.skillInvokable();
+        e.toggleClass('enabled', invokable);
+      });
     }
 
     public redraw() {
@@ -114,12 +118,19 @@ module cgdice.characters {
       this.element.find('.lv').text(this.level());
       var muls = this.element.find('.multipliers');
       muls.empty();
-      $.each(this._multipliers, (i, mul) => {
+      this._multipliers.forEach(mul => {
         var m = $('<div>').addClass('multiplier');
-        $.each(mul.dices, (idx, pips) => {
+        mul.dices.forEach(pips => {
           $('<div>').addClass('dice').addClass('dice' + pips).appendTo(m);
         });
         m.append(' x' + mul.scale).appendTo(muls);
+      });
+      var list = $('.skills', this.element);
+      list.empty();
+      this._skills.forEach(skill => {
+        var m = $('<li>').addClass('skill').data('skill', skill);
+        m.text(skill.name);
+        list.append(m);
       });
     }
 
@@ -134,8 +145,21 @@ module cgdice.characters {
           this._image = c.image;
           this.element.css('background-image', 'url(images/' + c.image + ')');
           this._multipliers = $.map(c.multipliers, (v) => { return new Multiplier(v); });
+          this._skills = [];
+          c.skills.forEach(skill => {
+            this._skills.push(skills.AbstractSkill.create(skill));
+          });
         }
       }
+
+      this.element.on('mouseenter', $.proxy(this.updateSkillInvokableStatus, this));
+      game.on('phaseChange', this.updateSkillInvokableStatus, this);
+
+      this.element.on('click', '.skill', (event) => {
+        var skill = <cgdice.skills.AbstractSkill>$(event.currentTarget).data('skill');
+        if (!skill.skillInvokable()) return; // final check for availability
+        this.element.trigger('skillTrigger', skill);
+      });
     }
   }
 

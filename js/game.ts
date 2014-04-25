@@ -4,6 +4,7 @@
 /// <reference path="talkshow.ts" />
 /// <reference path="battle.ts" />
 /// <reference path="game_result.ts" />
+/// <reference path="skill.ts" />
 /// <reference path="character.ts" />
 
 module cgdice {
@@ -294,12 +295,19 @@ module cgdice {
     }
   }
 
+  export enum GamePhase {
+    Inactive, // Game is not in progress
+    InField,
+    InBattle,
+    InResults // showing results
+  }
+
   /**
    * DiceGame is a general manager of one instance of dice game
    * (from start block to boss).
    */
   export class DiceGame extends DomDisplayObject {
-    private _finalized: boolean = false;
+    private _phase: GamePhase = GamePhase.Inactive;
     public players: characters.Character[] = [];
     private energyCandies: number = 0;
     private field: fields.Field;
@@ -310,6 +318,15 @@ module cgdice {
     private _stage: createjs.Stage;
     public console: GameLog;
     public gainExp: number = 0;
+
+    get phase(): GamePhase { return this._phase; }
+
+    private setPhase(value: GamePhase) {
+      if (this._phase != value) {
+        this._phase = value;
+        this.dispatchEvent('phaseChange');
+      }
+    }
 
     public init(): void {
       $('#field_canvas')
@@ -334,11 +351,13 @@ module cgdice {
       this.battle = new battles.Battle();
       this.battle.on('diceProcess', this.diceProcessed, this);
       this.battle.on('battleFinish', () => {
+        this._phase = GamePhase.InField;
         if (this.field.position == this.field.maxPosition) {
           $('#stage_clear').show();
           this.stageCleared();
         }
       });
+      this.battle.on('initialized', () => { this._phase = GamePhase.InBattle; });
 
       this.gameResult = new GameResult();
       this.gameResult.on('gameFinish', () => {
@@ -350,6 +369,11 @@ module cgdice {
       this.field.on('diceProcess', this.diceProcessed, this);
 
       this.console = new GameLog();
+
+      this.element.find('#players')
+        .on('skillTrigger', '.character', (event: JQueryEventObject, skill: skills.AbstractSkill) => {
+          skill.invoke();
+        });
     }
 
     public reset(fieldData: any, players: characters.Character[]) {
@@ -371,7 +395,7 @@ module cgdice {
       this.battle.element.hide();
       $('#stage_failed, #stage_clear').hide();
       this.console.clear();
-      this._finalized = false;
+      this._phase = GamePhase.InField;
       this.stack.ready();
     }
 
@@ -384,12 +408,12 @@ module cgdice {
     }
 
     private stageCleared() {
-      this._finalized = true;
+      this._phase = GamePhase.InResults;
       this.gameResult.start();
     }
 
     private stageFailed() {
-      this._finalized = true;
+      this._phase = GamePhase.InResults;
       $('#stage_failed, #stage_clear').filter(':visible')
         .css({ y: 0 })
         .transition({
@@ -414,7 +438,7 @@ module cgdice {
       if (this.stack.length == 0) {
         $('#stage_failed').show();
         this.stageFailed();
-      } else if (!this._finalized) {
+      } else if (this._phase != GamePhase.InResults) {
         this.stack.ready();
       }
     }
