@@ -3,6 +3,7 @@
 /// <reference path="field.ts" />
 /// <reference path="talkshow.ts" />
 /// <reference path="battle.ts" />
+/// <reference path="game_result.ts" />
 /// <reference path="character.ts" />
 
 module cgdice {
@@ -303,10 +304,12 @@ module cgdice {
     private energyCandies: number = 0;
     private field: fields.Field;
     public battle: battles.Battle;
+    public gameResult: GameResult;
     public hp: HPIndicator;
     public stack: DiceStack;
     private _stage: createjs.Stage;
     public console: GameLog;
+    public gainExp: number = 0;
 
     public init(): void {
       $('#field_canvas')
@@ -333,8 +336,13 @@ module cgdice {
       this.battle.on('battleFinish', () => {
         if (this.field.position == this.field.maxPosition) {
           $('#stage_clear').show();
-          this.finalize();
+          this.stageCleared();
         }
+      });
+
+      this.gameResult = new GameResult();
+      this.gameResult.on('gameFinish', () => {
+        this.dispatchEvent('gameFinish');
       });
 
       this.field = new fields.Field();
@@ -356,6 +364,8 @@ module cgdice {
       this.hp.maxHP = maxHP;
       this.hp.setHP(maxHP);
 
+      this.gainExp = 0;
+
       this.field.reset(fieldData);
       this.stack.reset(10);
       this.battle.element.hide();
@@ -373,7 +383,12 @@ module cgdice {
       }
     }
 
-    private finalize() {
+    private stageCleared() {
+      this._finalized = true;
+      this.gameResult.start();
+    }
+
+    private stageFailed() {
       this._finalized = true;
       $('#stage_failed, #stage_clear').filter(':visible')
         .css({ y: 0 })
@@ -389,7 +404,7 @@ module cgdice {
     private diceProcessed() {
       if (this.hp.HP == 0) {
         $('#stage_failed').show();
-        this.finalize();
+        this.stageFailed();
         return;
       }
       if (this.stack.stock > 0) {
@@ -398,7 +413,7 @@ module cgdice {
       }
       if (this.stack.length == 0) {
         $('#stage_failed').show();
-        this.finalize();
+        this.stageFailed();
       } else if (!this._finalized) {
         this.stack.ready();
       }

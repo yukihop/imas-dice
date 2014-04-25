@@ -73,4 +73,5 @@ module cgdice.titles {
       this.element.show().css({ opacity: 1 });
     }
   }
+
 }
