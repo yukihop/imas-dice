@@ -13,6 +13,8 @@ module cgdice.fields {
     private _box: createjs.Sprite;
     public talk: string;
 
+    static _spriteSheet: createjs.SpriteSheet;
+
     get type(): BlockType { return this._type; }
     set type(value: BlockType) { this._type = value; this.redraw(); }
 
@@ -54,25 +56,26 @@ module cgdice.fields {
 
     constructor() {
       super();
-      var data = {
-        images: ["images/blocks.png"],
-        frames: { width: 48, height: 48 },
-        animations: {
-          Empty: [0],
-          Start: [1],
-          Treasure: [2],
-          Enemy: [3],
-          Heal: [4],
-          Damage: [5],
-          Back: [6],
-          Proceed: [7],
-          Boss: [8]
-        }
-      };
-      var spriteSheet = new createjs.SpriteSheet(data);
-      var animation = new createjs.Sprite(spriteSheet, "run");
 
-      this._box = new createjs.Sprite(spriteSheet, BlockType[this.type]);
+      if (!Block._spriteSheet) {
+        var data = {
+          images: ["images/blocks.png"],
+          frames: { width: 48, height: 48 },
+          animations: {
+            Empty: [0],
+            Start: [1],
+            Treasure: [2],
+            Enemy: [3],
+            Heal: [4],
+            Damage: [5],
+            Back: [6],
+            Proceed: [7],
+            Boss: [8]
+          }
+        };
+        Block._spriteSheet = new createjs.SpriteSheet(data);
+      }
+      this._box = new createjs.Sprite(Block._spriteSheet, BlockType[this.type]);
       this._box.regX = this._box.regY = 24;
       this.addChild(this._box);
     }
