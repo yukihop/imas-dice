@@ -45,8 +45,9 @@ module cgdice.characters {
     }
 
     public maxHP(): number {
+      // +10% per level
       var lv = this.level();
-      return lv * this._baseHP;
+      return Math.floor((9 + lv) * this._baseHP / 10);
     }
 
     get image(): string {
