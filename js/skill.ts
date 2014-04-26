@@ -5,7 +5,7 @@ module cgdice.skills {
     cost: number;
   }
 
-  export class AbstractSkill {
+  export class Skill {
     public name: string;
     public cost: number;
 
@@ -14,7 +14,7 @@ module cgdice.skills {
       alert('This skill is not implemented!');
     }
 
-    static create(param: SkillInfo): AbstractSkill {
+    static create(param: SkillInfo): Skill {
       var className: string = param.class;
       if (className in cgdice.skills) {
         return new cgdice.skills[className](param);
@@ -35,13 +35,13 @@ module cgdice.skills {
     }
   }
 
-  export class RedrawSkill extends AbstractSkill {
+  export class RedrawSkill extends Skill {
     public invoke() {
       cgdice.game.stack.reset(3);
     }
   }
 
-  export class AdditionalOnboardSkill extends AbstractSkill {
+  export class AdditionalOnboardSkill extends Skill {
     public skillInvokable() {
       return cgdice.game.phase == cgdice.GamePhase.InBattle;
     }

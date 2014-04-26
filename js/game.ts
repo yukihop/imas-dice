@@ -371,7 +371,7 @@ module cgdice {
       this.console = new GameLog();
 
       this.element.find('#players')
-        .on('skillTrigger', '.character', (event: JQueryEventObject, skill: skills.AbstractSkill) => {
+        .on('skillTrigger', '.character', (event: JQueryEventObject, skill: skills.Skill) => {
           skill.invoke();
         });
     }

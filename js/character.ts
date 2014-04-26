@@ -27,7 +27,7 @@ module cgdice.characters {
     private _exp: number = 0;
     private _multipliers: Multiplier[];
     private _baseHP: number = 10;
-    private _skills: skills.AbstractSkill[];
+    private _skills: skills.Skill[];
 
     public gainExp(value: number): void {
       this._exp += value;
@@ -101,14 +101,14 @@ module cgdice.characters {
       return this._multipliers;
     }
 
-    public availableSkills(): skills.AbstractSkill[] {
+    public availableSkills(): skills.Skill[] {
       return this._skills;
     }
 
     private updateSkillInvokableStatus(event) {
       this.element.find('.skill').each((i, elem) => {
         var e = $(elem);
-        var skill: cgdice.skills.AbstractSkill = e.data('skill');
+        var skill: cgdice.skills.Skill = e.data('skill');
         var invokable = skill.skillInvokable();
         e.toggleClass('enabled', invokable);
       });
@@ -151,7 +151,7 @@ module cgdice.characters {
           this._multipliers = $.map(c.multipliers, (v) => { return new Multiplier(v); });
           this._skills = [];
           c.skills.forEach(skill => {
-            this._skills.push(skills.AbstractSkill.create(skill));
+            this._skills.push(skills.Skill.create(skill));
           });
         }
       }
@@ -160,7 +160,7 @@ module cgdice.characters {
       game.on('phaseChange', this.updateSkillInvokableStatus, this);
 
       this.element.on('click', '.skill', (event) => {
-        var skill = <cgdice.skills.AbstractSkill>$(event.currentTarget).data('skill');
+        var skill = <cgdice.skills.Skill>$(event.currentTarget).data('skill');
         if (!skill.skillInvokable()) return; // final check for availability
         this.element.trigger('skillTrigger', skill);
       });
