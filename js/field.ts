@@ -104,7 +104,7 @@ module cgdice.fields {
     ymax: number;
   }
 
-  export class Field extends DomDisplayObject {
+  export class Field extends SkillEffectClient {
     private _position: number = 0;
     private _lines: createjs.Shape;
     private _cursor: createjs.Shape;

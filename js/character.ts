@@ -20,7 +20,7 @@ module cgdice.characters {
     }
   }
 
-  export class Character extends cgdice.DomDisplayObject {
+  export class Character extends cgdice.SkillEffectClient {
     public name: string;
     private _image: string;
     public attribute: string;

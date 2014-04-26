@@ -5,7 +5,22 @@ module cgdice.skills {
     cost: number;
   }
 
+  export class SkillEffect {
+    public owner: SkillEffectClient;
+    constructor(public skill: Skill, public turns: number = 1,
+      public clearAfterBattle: boolean = false) {
+    }
+
+    public remove() {
+      if (this.owner) {
+        return this.owner.removeSkillEffect(this);
+      }
+      return null;
+    }
+  }
+
   export class Skill {
+    public className: string;
     public name: string;
     public cost: number;
 
@@ -17,7 +32,9 @@ module cgdice.skills {
     static create(param: SkillInfo): Skill {
       var className: string = param.class;
       if (className in cgdice.skills) {
-        return new cgdice.skills[className](param);
+        var result = new cgdice.skills[className](param);
+        result.className = className;
+        return result;
       }
       throw 'Unimplemented skill class';
     }

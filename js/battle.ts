@@ -109,7 +109,7 @@ module cgdice.battles {
         opt = {
           text: opt
         };
-        $.each(args, (i, arg) => {
+        args.forEach(arg => {
           if (typeof arg == 'function') opt.callback = arg;
           else if (arg instanceof jQuery) opt.parent = arg;
         });
@@ -136,7 +136,7 @@ module cgdice.battles {
     }
   }
 
-  export class Battle extends cgdice.DomDisplayObject {
+  export class Battle extends SkillEffectClient {
     public enemy: Enemy;
     public onboard: number[];
     private _onboard_area: JQuery;
