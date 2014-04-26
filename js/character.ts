@@ -22,10 +22,11 @@ module cgdice.characters {
 
   export class Character extends cgdice.DomDisplayObject {
     public name: string;
+    private _image: string;
+    public attribute: string;
     private _exp: number = 0;
     private _multipliers: Multiplier[];
     private _baseHP: number = 10;
-    private _image: string;
     private _skills: skills.AbstractSkill[];
 
     public gainExp(value: number): void {
@@ -116,6 +117,7 @@ module cgdice.characters {
       this.element.find('.name').text(this.name);
       this.element.find('.hp_max').text(this.maxHP());
       this.element.find('.lv').text(this.level());
+      this.element.find('.attribute').attr('class', 'attribute ' + this.attribute);
       var muls = this.element.find('.multipliers');
       muls.empty();
       this._multipliers.forEach(mul => {
@@ -141,6 +143,7 @@ module cgdice.characters {
         var c = character_data[i];
         if (c.name == id) {
           this.name = c.name;
+          this.attribute = c.attribute;
           this._baseHP = c.base_hp;
           this._image = c.image;
           this.element.css('background-image', 'url(images/' + c.image + ')');

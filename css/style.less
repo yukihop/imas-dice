@@ -288,6 +288,19 @@ button {
         }
       }
     }
+    .attribute {
+      position: absolute;
+      left: -12px;
+      top: -12px;
+      width: 24px;
+      height: 24px;
+      background-image: url('../images/attributes.png');
+      background-size: 24px (24px * 4);
+      &.cute { background-position: 0 0; }
+      &.cool { background-position: 0 -24px; }
+      &.passion { background-position: 0 -48px; }
+      &.non { background-position: 0 -72px; }
+    }
   }
   &:hover .popup { display: block; }
   &.selected { box-shadow: 0 0 3px 5px red; }
