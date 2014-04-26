@@ -315,7 +315,6 @@ module cgdice {
     public gameResult: GameResult;
     public hp: HPIndicator;
     public stack: DiceStack;
-    private _stage: createjs.Stage;
     public console: GameLog;
     public gainExp: number = 0;
 
@@ -329,18 +328,6 @@ module cgdice {
     }
 
     public init(): void {
-      $('#field_canvas')
-        .attr('width', $('#field_canvas').width())
-        .attr('height', $('#field_canvas').height());
-
-      this._stage = new createjs.Stage('field_canvas');
-      createjs.Ticker.addEventListener('tick', () => {
-        this._stage.update();
-      });
-      $(window).on('resize', () => {
-        $('#field_canvas').attr('width', $('#field_canvas').width());
-      });
-
       this.hp = new HPIndicator();
 
       this.stack = new DiceStack();
@@ -365,7 +352,6 @@ module cgdice {
       });
 
       this.field = new fields.Field();
-      this._stage.addChild(this.field);
       this.field.on('diceProcess', this.diceProcessed, this);
 
       this.console = new GameLog();
@@ -400,9 +386,9 @@ module cgdice {
     }
 
     private handleDiceEvent(event: DiceEvent) {
-      if (this.battle.element.is(':visible')) {
+      if (this._phase == GamePhase.InBattle) {
         this.battle.dispatchEvent(event);
-      } else {
+      } else if (this._phase == GamePhase.InField) {
         this.field.dispatchEvent(event);
       }
     }

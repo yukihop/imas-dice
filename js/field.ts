@@ -104,13 +104,15 @@ module cgdice.fields {
     ymax: number;
   }
 
-  export class Field extends createjs.Container {
+  export class Field extends DomDisplayObject {
     private _position: number = 0;
     private _lines: createjs.Shape;
     private _cursor: createjs.Shape;
     public blocks: Block[] = [];
     private _selected_dice: Dice;
     private _blockBounds: Bounds;
+    private _stage: createjs.Stage;
+    private _container: createjs.Container = new createjs.Container();
 
     public currentBlock(): Block {
       if (this._position < 0 || this._position >= this.blocks.length) {
@@ -125,8 +127,8 @@ module cgdice.fields {
 
     private scrollField(block: Block, animation: boolean = true) {
       var b = this._blockBounds;
-      var w = this.getStage().canvas.width;
-      var h = this.getStage().canvas.height;
+      var w = this._stage.canvas.width;
+      var h = this._stage.canvas.height;
       var pad = { left: 50, right: 50, top: 50, bottom: 150 };
       var x = (w / 2) - block.x;
       if (b.xmax - b.xmin < w - pad.left - pad.right) {
@@ -142,9 +144,9 @@ module cgdice.fields {
         y = Math.min(y, b.ymin + pad.top);
         y = Math.max(y, w - b.ymax - pad.bottom);
       }
-      createjs.Tween.removeTweens(this);
+      createjs.Tween.removeTweens(this._container);
       var duration = animation ? 2000 : 0;
-      createjs.Tween.get(this)
+      createjs.Tween.get(this._container)
         .to({ x: x, y: y }, duration, createjs.Ease.quadOut);
     }
 
@@ -260,11 +262,11 @@ module cgdice.fields {
       var blocksData = fieldData.blocks;
       var prev: Block;
 
-      this.removeAllChildren();
+      this._container.removeAllChildren();
       this.blocks = [];
       var lines = new createjs.Shape();
       this._lines = lines;
-      this.addChild(lines);
+      this._container.addChild(lines);
 
       var bn: Bounds;
       var layout_func = FieldLayout.horizontal;
@@ -285,7 +287,7 @@ module cgdice.fields {
         }
         b.x = pos.x;
         b.y = pos.y;
-        this.addChild(b);
+        this._container.addChild(b);
         this.blocks.push(b);
         if (i > 0) {
           lines.graphics.setStrokeStyle(5).beginStroke('#ffff00')
@@ -299,16 +301,31 @@ module cgdice.fields {
       this._cursor = new createjs.Shape();
       this._cursor.graphics.beginFill('red').beginStroke('white')
         .drawRect(-10, -15, 20, 30).endFill().endStroke();
-      this.addChild(this._cursor);
+      this._container.addChild(this._cursor);
 
       this.moveTo(0, true);
       this.scrollField(this.blocks[0], false);
-      this.x = 0;
+      this._container.x = 0;
     }
 
     constructor() {
-      super();
+      super($('#field'));
+
+      $('#field_canvas')
+        .attr('width', $('#field_canvas').width())
+        .attr('height', $('#field_canvas').height());
+      $(window).on('resize', () => {
+        $('#field_canvas').attr('width', $('#field_canvas').width());
+      });
+
+      this._stage = new createjs.Stage('field_canvas');
+      this._stage.addChild(this._container);
       this.on('diceDetermine', this.diceDetermined, this);
+
+      createjs.Ticker.addEventListener('tick', () => {
+        this._stage.update();
+      });
+
     }
   }
 
