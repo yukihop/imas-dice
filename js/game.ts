@@ -213,11 +213,6 @@ module cgdice {
     public init(): void {
       this.hp = new HPIndicator();
 
-      this.stack = new DiceStack();
-      this.stack.on('diceDetermine', $.proxy(this.handleDiceEvent, this));
-      this.stack.on('diceHover', $.proxy(this.handleDiceEvent, this));
-      this.stack.on('diceUnhover', $.proxy(this.handleDiceEvent, this));
-
       this.battle = new battles.Battle();
       this.battle.on('diceProcess', this.diceProcessed, this);
       this.battle.on('battleFinish', () => {
@@ -228,6 +223,11 @@ module cgdice {
         }
       });
       this.battle.on('initialized', () => { this.setPhase(GamePhase.InBattle); });
+
+      this.stack = new DiceStack();
+      this.stack.on('diceDetermine', $.proxy(this.handleDiceEvent, this));
+      this.stack.on('diceHover', $.proxy(this.handleDiceEvent, this));
+      this.stack.on('diceUnhover', $.proxy(this.handleDiceEvent, this));
 
       this.gameResult = new GameResult();
       this.gameResult.on('gameFinish', () => {

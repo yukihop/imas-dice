@@ -1,4 +1,5 @@
 module cgdice {
+
   /**
    * Wraps HTML element as jQuery object
    */
@@ -17,31 +18,79 @@ module cgdice {
     }
   }
 
-  export class SkillEffectClient extends DomDisplayObject {
-    public skillEffects: skills.SkillEffect[] = [];
+  export enum StatusType {
+    AttackMultiply,
+    Stun, // skip one turn
+    Curse, // cannot use skill
+    Poison // reduce HP after each dice use
+  }
 
-    public skillEffectChanged() {
-      // abstract
+  export class Status {
+    public owner: StatusClient;
+    public remainingTurns: number = -1; // never resets
+    public clearAfterBattle: boolean = false;
+    public type: StatusType;
+    public options: any;
+
+    constructor(type: StatusType, options: any = {}) {
+      this.type = type;
+      this.options = options;
     }
 
-    public registerSkillEffect(effect: skills.SkillEffect) {
-      effect.owner = this;
-      this.skillEffects.push(effect);
-      this.skillEffectChanged();
-    }
-
-    public hasSkillEffect(className: string) {
-      return this.skillEffects.some(eff => eff.skill.className == className);
-    }
-
-    public removeSkillEffect(effect: cgdice.skills.SkillEffect): skills.SkillEffect {
-      var idx = this.skillEffects.indexOf(effect);
-      if (idx != -1) {
-        this.skillEffects.splice(idx, 1);
-        this.skillEffectChanged();
-        return effect;
+    public remove() {
+      if (this.owner) {
+        return this.owner.removeStatus(this);
       }
       return null;
     }
+  }
+
+  export class StatusClient extends DomDisplayObject {
+    public status: Status[] = [];
+
+    public statusChanged() {
+      // abstract
+    }
+
+    public registerStatus(status: Status) {
+      status.owner = this;
+      this.status.push(status);
+      this.statusChanged();
+    }
+
+    public findStatus(type: StatusType): Status[] {
+      return this.status.filter(st => st.type == type);
+    }
+
+    public hasStatus(type: StatusType): boolean {
+      return this.status.some(st => st.type == type);
+    }
+
+    public removeStatus(status: Status): Status {
+      var idx = this.status.indexOf(status);
+      if (idx != -1) {
+        this.status.splice(idx, 1);
+        this.statusChanged();
+        return status;
+      }
+      return null;
+    }
+
+    private changeStatusAfterTurn(event) {
+      console.log('turn?');
+      this.status = this.status.filter(status => {
+        return (status.remainingTurns == -1 || status.remainingTurns-- > 1);
+      });
+    }
+
+    constructor(template: string);
+    constructor(element: JQuery);
+    constructor(element: any) {
+      super(element);
+      var listen = (this instanceof battles.Battle) ? this : game.battle;
+      listen.on('turnEnd', this.changeStatusAfterTurn, this);
+    }
+
+
   }
 }

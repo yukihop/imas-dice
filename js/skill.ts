@@ -6,34 +6,21 @@ module cgdice.skills {
     pips?: number;
   }
 
-  export class SkillEffect {
-    public owner: SkillEffectClient;
-    constructor(public skill: Skill, public turns: number = 1,
-      public clearAfterBattle: boolean = false) {
-    }
-
-    public remove() {
-      if (this.owner) {
-        return this.owner.removeSkillEffect(this);
-      }
-      return null;
-    }
-  }
-
   export class Skill {
     public className: string;
     public name: string;
     public cost: number;
+    public owner: cgdice.characters.Character;
 
     public invoke() {
       // abstract class
       alert('This skill is not implemented!');
     }
 
-    static create(param: SkillInfo): Skill {
+    static create(param: SkillInfo, owner: cgdice.characters.Character): Skill {
       var className: string = param.class;
       if (className in cgdice.skills) {
-        var result = new cgdice.skills[className](param);
+        var result = new cgdice.skills[className](param, owner);
         result.className = className;
         return result;
       }
@@ -47,7 +34,8 @@ module cgdice.skills {
         );
     }
 
-    constructor(public param: SkillInfo) {
+    constructor(public param: SkillInfo, owner: cgdice.characters.Character) {
+      this.owner = owner;
       this.name = param.name;
       this.cost = param.cost;
     }
@@ -75,6 +63,9 @@ module cgdice.skills {
     }
 
     public invoke() {
+      var skill = new cgdice.Status(cgdice.StatusType.AttackMultiply, { scale: 2 });
+      skill.remainingTurns = 1;
+      this.owner.registerStatus(skill);
     }
   }
 

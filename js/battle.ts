@@ -62,14 +62,14 @@ module cgdice.battles {
           event.kind = 'physicalAttack';
           event.magnitude = power;
           this.dispatchEvent(event);
-          this.dispatchEvent('turnEnd');
+          this.dispatchEvent('enemyTurnEnd');
         }
         );
     }
 
     private die(): void {
       game.console.log(this.name + 'は倒れた');
-      this.dispatchEvent('turnEnd');
+      this.dispatchEvent('enemyTurnEnd');
     }
 
     constructor(id: string) {
@@ -136,7 +136,7 @@ module cgdice.battles {
     }
   }
 
-  export class Battle extends SkillEffectClient {
+  export class Battle extends StatusClient {
     public enemy: Enemy;
     public onboard: number[];
     private _onboard_area: JQuery;
@@ -147,7 +147,7 @@ module cgdice.battles {
       $('#enemies', this.element).empty();
       this.enemy.element.appendTo('#enemies');
       this.enemy.on('enemyAttack', this.enemyAttacked, this);
-      this.enemy.on('turnEnd', this.enemyTurnEnd, this);
+      this.enemy.on('enemyTurnEnd', this.enemyTurnEnd, this);
       this.dispatchEvent('initialized');
       this.shuffleOnboardDice();
       this.element.show();
@@ -251,6 +251,7 @@ module cgdice.battles {
       } else {
         this.shuffleOnboardDice();
       }
+      this.dispatchEvent('turnEnd');
       this.dispatchEvent('diceProcess');
     }
 

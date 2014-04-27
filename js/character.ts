@@ -20,7 +20,7 @@ module cgdice.characters {
     }
   }
 
-  export class Character extends cgdice.SkillEffectClient {
+  export class Character extends cgdice.StatusClient {
     public name: string;
     private _image: string;
     public attribute: string;
@@ -91,9 +91,14 @@ module cgdice.characters {
       var scale: number = 1;
       pips.forEach(v => { result += v; });
       this._multipliers.forEach((mul) => {
-        if (mul.check(pips)) scale *= mul.scale;
+        if (mul.check(pips)) scale += (mul.scale - 1);
       });
       result *= scale;
+
+      this.findStatus(StatusType.AttackMultiply).forEach(st => {
+        game.console.log(this.name + 'は' + st.options.scale + '倍の攻撃');
+        result *= st.options.scale;
+      });
       return result;
     }
 
@@ -151,7 +156,7 @@ module cgdice.characters {
           this._multipliers = $.map(c.multipliers, (v) => { return new Multiplier(v); });
           this._skills = [];
           c.skills.forEach(skill => {
-            this._skills.push(skills.Skill.create(skill));
+            this._skills.push(skills.Skill.create(skill, this));
           });
         }
       }
