@@ -86,6 +86,14 @@ module cgdice.skills {
   }
 
   export class HealSkill extends Skill {
+    public skillInvokable() {
+      // not invokable when full recovered
+      if (cgdice.game.hp.HP == cgdice.game.hp.maxHP && this.param.ratio > 0) {
+        return false;
+      }
+      return true;
+    }
+
     public invoke(callback: () => void) {
       var value = this.param.ratio * cgdice.game.hp.maxHP;
       cgdice.game.getDamage(-value);
@@ -95,7 +103,13 @@ module cgdice.skills {
 
   export class ProceedSkill extends Skill {
     public skillInvokable() {
-      return cgdice.game.phase == cgdice.GamePhase.InField;
+      if (cgdice.game.phase != cgdice.GamePhase.InField) {
+        return false;
+      }
+      if (this.param.proceed < 0 && cgdice.game.field.position == 0) {
+        return false;
+      }
+      return true;
     }
 
     public invoke(callback: () => void) {
