@@ -261,6 +261,12 @@ canvas {
     text-shadow: 2px 2px 1px black;
     text-align: center;
   }
+  .status_list {
+    position: absolute;
+    font-weight: bold;
+    font-size: 10px;
+    background-color: rgba(0, 0, 0, 0.3);
+  }
   .mp_frame {
     position: absolute;
     left: 3px;
@@ -345,6 +351,21 @@ canvas {
   &.dice5 { .dicebg(5); }
   &.dice6 { .dicebg(6); }
   &.placeholder { background-image: none; }
+}
+
+@status_size: 48px;
+.status_icon(@pos) {
+  background-position: (mod(@pos, 5) * (-@status_size)) (floor(@pos / 5) * (-@status_size));
+}
+.status {
+  background-image: url('../images/status_icons.png');
+  background-size: (@status_size * 5) (@status_size * 5);
+  width: @status_size;
+  height: @status_size;
+  &.atk_up { .status_icon(0); }
+  &.atk_down { .status_icon(1); }
+  &.def_up { .status_icon(5); }
+  &.def_down { .status_icon(6); }
 }
 
 #gamemode {

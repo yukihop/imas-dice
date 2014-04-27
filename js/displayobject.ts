@@ -108,10 +108,13 @@ module cgdice {
     }
 
     private changeStatusAfterTurn(event) {
-      console.log('turn?');
+      if (this.status.length == 0) {
+        return;
+      }
       this.status = this.status.filter(status => {
         return (status.remainingTurns == -1 || status.remainingTurns-- > 1);
       });
+      this.statusChanged();
     }
 
     constructor(template: string);

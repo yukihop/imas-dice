@@ -98,6 +98,16 @@ module cgdice.characters {
       });
     }
 
+    public statusChanged() {
+      var list = this.element.find('.status_list');
+      list.empty();
+      this.status.forEach(st => {
+        var txt = StatusType[st.type] + ' ' + st.remainingTurns + 'T';
+        var div = $('<div>').text(txt);
+        div.appendTo(list);
+      });
+    }
+
     public showCurrentAttackPower(pips: number[]) {
       var atk = this.attackPower(pips);
       this.element.find('.current_attack').text(atk);
