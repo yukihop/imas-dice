@@ -68,6 +68,7 @@ module cgdice.titles {
       application.availableCharacters.forEach((p) => {
         p.resetHighlight();
         $('<li>').append(p.element.addClass('selected')).appendTo(list);
+        p.MP = p.maxMP();
       });
 
       this.element.show().css({ opacity: 1 });

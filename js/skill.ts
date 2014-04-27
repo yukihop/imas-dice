@@ -12,7 +12,7 @@ module cgdice.skills {
     public cost: number;
     public owner: cgdice.characters.Character;
 
-    public invoke() {
+    public invoke(callback: () => void) {
       // abstract class
       alert('This skill is not implemented!');
     }
@@ -42,8 +42,9 @@ module cgdice.skills {
   }
 
   export class RedrawSkill extends Skill {
-    public invoke() {
+    public invoke(callback: () => void) {
       cgdice.game.stack.shuffleExistingDices();
+      callback();
     }
   }
 
@@ -52,8 +53,9 @@ module cgdice.skills {
       return cgdice.game.phase == cgdice.GamePhase.InBattle;
     }
 
-    public invoke() {
+    public invoke(callback: () => void) {
       cgdice.game.battle.addOnboardDice(1);
+      callback();
     }
   }
 
@@ -62,16 +64,18 @@ module cgdice.skills {
       return cgdice.game.phase == cgdice.GamePhase.InBattle;
     }
 
-    public invoke() {
+    public invoke(callback: () => void) {
       var skill = new cgdice.Status(cgdice.StatusType.AttackMultiply, { scale: 2 });
       skill.remainingTurns = 1;
       this.owner.registerStatus(skill);
+      callback();
     }
   }
 
   export class SpecifyNextDiceSkill extends Skill {
-    public invoke() {
+    public invoke(callback: () => void) {
       cgdice.game.stack.specifyNext(this.param.pips);
+      callback();
     }
   }
 }

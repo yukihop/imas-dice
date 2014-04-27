@@ -28,6 +28,7 @@ module cgdice.characters {
     private _multipliers: Multiplier[];
     private _baseHP: number = 10;
     private _skills: skills.Skill[];
+    private _MP: number = 10;
 
     public gainExp(value: number): void {
       this._exp += value;
@@ -52,6 +53,22 @@ module cgdice.characters {
 
     get image(): string {
       return this._image;
+    }
+
+    get MP(): number { return this._MP; }
+
+    set MP(value: number) {
+      var maxMP = this.maxMP();
+      value = Math.max(0, Math.min(maxMP, value));
+      this._MP = value;
+      var frame_width = this.element.find('.mp_frame').width();
+      var newWidth = (value / maxMP) * frame_width;
+      this.element.find('.mp_bar').transition({ width: newWidth }, 300);
+      this.element.find('.mp').text('MP: ' + this._MP + '/' + this.maxMP());
+    }
+
+    public maxMP(): number {
+      return 10;
     }
 
     public resetHighlight() {
@@ -114,7 +131,14 @@ module cgdice.characters {
       this.element.find('.skill').each((i, elem) => {
         var e = $(elem);
         var skill: cgdice.skills.Skill = e.data('skill');
-        var invokable = skill.skillInvokable();
+        var invokable = true;
+        if (skill.cost > this.MP) {
+          invokable = false;
+        }
+        if (this.hasStatus([StatusType.Curse, StatusType.Stun])) {
+          invokable = false;
+        }
+        invokable = invokable && skill.skillInvokable();
         e.toggleClass('enabled', invokable);
       });
     }
@@ -122,6 +146,8 @@ module cgdice.characters {
     public redraw() {
       this.element.find('.name').text(this.name);
       this.element.find('.hp_max').text(this.maxHP());
+      this.element.find('.mp').text('MP: ' + this._MP + '/' + this.maxMP());
+
       this.element.find('.lv').text(this.level());
       this.element.find('.attribute').attr('class', 'attribute ' + this.attribute);
       var muls = this.element.find('.multipliers');
@@ -161,13 +187,12 @@ module cgdice.characters {
         }
       }
 
-      this.element.on('mouseenter', $.proxy(this.updateSkillInvokableStatus, this));
-      game.on('phaseChange', this.updateSkillInvokableStatus, this);
+      game.on('ready', this.updateSkillInvokableStatus, this);
 
-      this.element.on('click', '.skill', (event) => {
+      this.element.on('click', '.skill.enabled', (event) => {
         var skill = <cgdice.skills.Skill>$(event.currentTarget).data('skill');
-        if (!skill.skillInvokable()) return; // final check for availability
         if (!game.ready) return;
+        // if (!skill.skillInvokable()) return; // final check for availability
         this.element.trigger('skillTrigger', skill);
       });
     }

@@ -85,8 +85,16 @@ module cgdice {
       return this.status.filter(st => st.type == type);
     }
 
-    public hasStatus(type: StatusType): boolean {
-      return this.status.some(st => st.type == type);
+    public hasStatus(type: StatusType[]): boolean;
+    public hasStatus(type: StatusType): boolean;
+    public hasStatus(type: any): boolean {
+      var types: StatusType[] = [];
+      if (typeof type == 'number') {
+        types = [type];
+      } else {
+        types = type;
+      }
+      return types.some(typ => this.status.some(st => st.type == typ));
     }
 
     public removeStatus(status: Status): Status {

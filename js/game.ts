@@ -218,6 +218,7 @@ module cgdice {
       }
       this._ready = isReady;
       this.element.toggleClass('ready', isReady);
+      if (isReady) this.dispatchEvent('ready');
     }
 
     public init(): void {
@@ -252,8 +253,12 @@ module cgdice {
       this.element.find('#players')
         .on('skillTrigger', '.character', (event: JQueryEventObject, skill: skills.Skill) => {
           this.setReady(false);
-          skill.invoke();
-          setTimeout(() => this.setReady(true), 300);
+          skill.owner.MP -= skill.cost;
+          setTimeout(() => {
+            skill.invoke(() => {
+              this.setReady(true);
+            });
+          }, 300);
         });
     }
 
@@ -263,6 +268,7 @@ module cgdice {
       this.players.forEach(p => {
         p.element.appendTo($('#players', this.element));
         p.resetHighlight();
+        p.MP = p.maxMP();
       });
 
       this.players.forEach((p) => { maxHP += p.maxHP() });

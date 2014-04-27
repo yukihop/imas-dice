@@ -261,6 +261,23 @@ canvas {
     text-shadow: 2px 2px 1px black;
     text-align: center;
   }
+  .mp_frame {
+    position: absolute;
+    left: 3px;
+    right: 3px;
+    bottom: 2px;
+    height: 9px;
+    border: 1px solid white;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 3px;
+    .mp_bar {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to right, #0ab, #05f);
+      border-radius: 3px;
+    }
+    #stage_select & { display: none; }
+  }
   .popup {
     position: absolute;
     width: 120px;
