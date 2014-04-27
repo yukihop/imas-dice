@@ -111,7 +111,6 @@ module cgdice.fields {
     public blocks: Block[] = [];
     private _selected_dice: Dice;
     private _blockBounds: Bounds;
-    private _stage: createjs.Stage;
     private _container: createjs.Container = new createjs.Container();
 
     public currentBlock(): Block {
@@ -127,8 +126,8 @@ module cgdice.fields {
 
     private scrollField(block: Block, animation: boolean = true) {
       var b = this._blockBounds;
-      var w = this._stage.canvas.width;
-      var h = this._stage.canvas.height;
+      var w = this.stage.canvas.width;
+      var h = this.stage.canvas.height;
       var pad = { left: 50, right: 50, top: 50, bottom: 150 };
       var x = (w / 2) - block.x;
       if (b.xmax - b.xmin < w - pad.left - pad.right) {
@@ -311,19 +310,14 @@ module cgdice.fields {
     constructor() {
       super($('#field'));
 
-      $('#field_canvas')
-        .attr('width', $('#field_canvas').width())
-        .attr('height', $('#field_canvas').height());
-      $(window).on('resize', () => {
-        $('#field_canvas').attr('width', $('#field_canvas').width());
-      });
+      this.useCanvas();
+      $(window).on('resize', () => this.adjustCanvasSize());
 
-      this._stage = new createjs.Stage('field_canvas');
-      this._stage.addChild(this._container);
+      this.stage.addChild(this._container);
       this.on('diceDetermine', this.diceDetermined, this);
 
-      createjs.Ticker.addEventListener('tick', () => {
-        this._stage.update();
+      createjs.Ticker.on('tick', () => {
+        this.stage.update();
       });
 
     }

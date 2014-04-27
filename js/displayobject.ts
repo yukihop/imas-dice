@@ -5,6 +5,24 @@ module cgdice {
    */
   export class DomDisplayObject extends createjs.EventDispatcher {
     public element: JQuery;
+    public canvas: JQuery = null;
+    public stage: createjs.Stage = null;
+
+    public useCanvas(className?: string) {
+      this.canvas = $('<canvas>').appendTo(this.element);
+      if (className) this.canvas.addClass(className);
+      this.adjustCanvasSize();
+      this.stage = new createjs.Stage(this.canvas[0]);
+    }
+
+    public adjustCanvasSize() {
+      if (!this.canvas) {
+        return;
+      }
+      this.canvas
+        .attr('width', this.element.width())
+        .attr('height', this.element.height());
+    }
 
     constructor(template: string);
     constructor(element: JQuery);
@@ -90,7 +108,6 @@ module cgdice {
       var listen = (this instanceof battles.Battle) ? this : game.battle;
       listen.on('turnEnd', this.changeStatusAfterTurn, this);
     }
-
 
   }
 }
