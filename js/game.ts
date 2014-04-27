@@ -240,6 +240,15 @@ module cgdice {
       this.element.toggleClass('ready', isReady);
     }
 
+    public shuffleExistingDices() {
+      this.element.find('>.dice:not(.placeholder)').each((i, elem) => {
+        var dice = <Dice>$(elem).data('self');
+        dice.roll();
+      });
+    }
+
+
+
     public reset(stock: number) {
       this.element.find('.dice').remove();
       for (var i = 0; i <= 2; i++) {
@@ -362,7 +371,7 @@ module cgdice {
         });
     }
 
-    public reset(fieldData: any, players: characters.Character[]) {
+   public reset(fieldData: any, players: characters.Character[]) {
       var maxHP = 0;
       this.players = players;
       this.players.forEach(p => {

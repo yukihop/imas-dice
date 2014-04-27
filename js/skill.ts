@@ -3,6 +3,7 @@ module cgdice.skills {
     class: string;
     name: string;
     cost: number;
+    pips?: number;
   }
 
   export class SkillEffect {
@@ -54,7 +55,7 @@ module cgdice.skills {
 
   export class RedrawSkill extends Skill {
     public invoke() {
-      cgdice.game.stack.reset(3);
+      cgdice.game.stack.shuffleExistingDices();
     }
   }
 
@@ -65,6 +66,21 @@ module cgdice.skills {
 
     public invoke() {
       cgdice.game.battle.addOnboardDice(1);
+    }
+  }
+
+  export class AttackMultiplySkill extends Skill {
+    public skillInvokable() {
+      return cgdice.game.phase == cgdice.GamePhase.InBattle;
+    }
+
+    public invoke() {
+    }
+  }
+
+  export class SpecifyNextDiceSkill extends Skill {
+    public invoke() {
+      cgdice.game.stack.specifyNext(this.param.pips);
     }
   }
 }

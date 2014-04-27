@@ -9,13 +9,26 @@
   attribute: cute
   base_hp: 20
   multipliers: ["1>5"]
-  skills: []
+  skills:
+    - class: SpecifyNextDiceSkill
+      name: 働きたくない
+      desc: 次にスタックに引かれるダイスが必ず1になる。
+      cost: 5
+      pips: 1
 - name: ことりP
   image: kotori_p.jpg
   attribute: non
   base_hp: 30
   multipliers: ["5>2","6>2"]
-  skills: []
+  skills:
+    - class: AttackMultiplySkill
+      name: ぴよパンチ
+      desc: このターンの自分の攻撃力が2倍になる。
+      cost: 5
+    - class: AttackMultiplySkill
+      name: ぴよキック
+      desc: このターンの自分の攻撃力が3倍になる。
+      cost: 10
 - name: さえP
   image: sae_p.jpg
   attribute: cute
