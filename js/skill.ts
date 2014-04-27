@@ -3,6 +3,7 @@ module cgdice.skills {
     class: string;
     name: string;
     cost: number;
+    desc: string;
     pips?: number;
     ratio?: number;
     proceed?: number;
@@ -12,6 +13,7 @@ module cgdice.skills {
     public className: string;
     public name: string;
     public cost: number;
+    public desc: string;
     public owner: cgdice.characters.Character;
 
     public invoke(callback: () => void) {
@@ -40,6 +42,7 @@ module cgdice.skills {
       this.owner = owner;
       this.name = param.name;
       this.cost = param.cost;
+      this.desc = param.desc;
     }
   }
 

@@ -205,6 +205,16 @@ module cgdice.characters {
         // if (!skill.skillInvokable()) return; // final check for availability
         this.element.trigger('skillTrigger', skill);
       });
+
+      this.element.on('mouseenter', '.skill', (event) => {
+        var skill = <cgdice.skills.Skill>$(event.currentTarget).data('skill');
+        $('#tooltip')
+          .text(skill.desc + ' 消費' + skill.cost)
+          .show()
+          .position({ of: event.currentTarget, my: 'left', at: 'right+5' });
+        // $('#tooltip').css({left: '10px', top: '10px'});
+      });
+      this.element.on('mouseleave', '.skill', (event) => { $('#tooltip').hide(); });
     }
   }
 
