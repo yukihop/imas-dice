@@ -110,6 +110,7 @@ module cgdice.fields {
     private _cursor: createjs.Shape;
     public blocks: Block[] = [];
     private _selected_dice: Dice;
+    private _move_callback: () => void;
     private _blockBounds: Bounds;
     private _container: createjs.Container = new createjs.Container();
 
@@ -149,17 +150,22 @@ module cgdice.fields {
         .to({ x: x, y: y }, duration, createjs.Ease.quadOut);
     }
 
-    public moveTo(newPosition: number, immediate: boolean = false) {
+    public moveTo(newPosition: number, immediate: boolean = false, callback?: () => void) {
       var block: Block;
+      if (callback) this._move_callback = callback; else this._move_callback = null;
       if (newPosition >= this.blocks.length) newPosition = this.blocks.length - 1;
       if (newPosition < 0) newPosition = 0;
       if (immediate) {
         block = this.blocks[newPosition];
         this._cursor.setTransform(block.x, block.y - 20);
         this._position = newPosition;
+        callback && callback();
         return;
       }
-      if (this._position == newPosition) return;
+      if (this._position == newPosition) {
+        callback && callback();
+        return;
+      }
 
       var startPosition = this._position;
       this._position = newPosition;
@@ -188,9 +194,9 @@ module cgdice.fields {
       this.scrollField(block);
     }
 
-    public proceed(step: number, immediate: boolean = false) {
+    public proceed(step: number, immediate: boolean = false, callback?: () => void) {
       var newPosition = this._position + step;
-      this.moveTo(newPosition, immediate);
+      this.moveTo(newPosition, immediate, callback);
     }
 
     private diceDetermined(event: DiceEvent) {
@@ -212,15 +218,23 @@ module cgdice.fields {
       var block = this.currentBlock();
       var move_end = true;
 
-      this._selected_dice.element.transition({
-        opacity: 0,
-        complete: () => {
-          if (this._selected_dice) this._selected_dice.element.remove();
-        }
-      }, 300);
+      if (this._selected_dice) {
+        this._selected_dice.element.transition({
+          opacity: 0,
+          complete: () => {
+            if (this._selected_dice) this._selected_dice.element.remove();
+          }
+        }, 300);
+      }
+
+      var dispatch = () => {
+        this._move_callback && this._move_callback();
+        this._selected_dice && this.dispatchEvent('diceProcess');
+        this._selected_dice = null;
+      };
 
       if (game.stack.length == 0 && block.type != BlockType.Back && block.type != BlockType.Proceed) {
-        this.dispatchEvent('diceProcess');
+        dispatch();
         return;
       }
 
@@ -230,7 +244,7 @@ module cgdice.fields {
           move_end = false;
           setTimeout(() => {
             game.battle.start();
-            this.dispatchEvent('diceProcess');
+            dispatch();
           }, 1000);
           break;
         case BlockType.Heal:
@@ -243,17 +257,17 @@ module cgdice.fields {
           game.stack.stock += 5;
           break;
         case BlockType.Back:
-          this.proceed(-3);
+          this.proceed(-3, false, this._move_callback);
           move_end = false;
           break;
         case BlockType.Proceed:
-          this.proceed(3);
+          this.proceed(3, false, this._move_callback);
           move_end = false;
           break;
       }
       if (move_end) {
         if (block.talk) cgdice.talks.Talk.show(block.talk);
-        this.dispatchEvent('diceProcess');
+        dispatch();
       }
     }
 

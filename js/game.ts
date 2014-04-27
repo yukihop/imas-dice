@@ -192,7 +192,7 @@ module cgdice {
   export class DiceGame extends DomDisplayObject {
     private _phase: GamePhase = GamePhase.Inactive;
     public players: characters.Character[] = [];
-    private field: fields.Field;
+    public field: fields.Field;
     public battle: battles.Battle;
     public gameResult: GameResult;
     public hp: HPIndicator;

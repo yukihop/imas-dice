@@ -3,7 +3,17 @@
   attribute: passion
   base_hp: 15
   multipliers: ["3>3"]
-  skills: []
+  skills:
+    - class: HealSkill
+      name: 1/6ドリンク
+      desc: HPを最大値の1/6回復する。
+      cost: 3
+      ratio: 0.16
+    - class: ProceedSkill
+      name: 爆走乙女
+      desc: 8マス進む。ただし強制停止マスでは停止する。
+      cost: 5
+      proceed: 8
 - name: あんずP
   image: anzu_p.jpg
   attribute: cute
@@ -15,6 +25,11 @@
       desc: 次にスタックに引かれるダイスが必ず1になる。
       cost: 5
       pips: 1
+    - class: ProceedSkill
+      name: おうち帰りたい
+      desc: 5マス戻る。
+      cost: 4
+      proceed: -5
 - name: ことりP
   image: kotori_p.jpg
   attribute: non
@@ -24,11 +39,11 @@
     - class: AttackMultiplySkill
       name: ぴよパンチ
       desc: このターンの自分の攻撃力が2倍になる。
-      cost: 5
+      cost: 3
     - class: AttackMultiplySkill
       name: ぴよキック
       desc: このターンの自分の攻撃力が3倍になる。
-      cost: 10
+      cost: 5
 - name: さえP
   image: sae_p.jpg
   attribute: cute

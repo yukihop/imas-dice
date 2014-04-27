@@ -4,6 +4,8 @@ module cgdice.skills {
     name: string;
     cost: number;
     pips?: number;
+    ratio?: number;
+    proceed?: number;
   }
 
   export class Skill {
@@ -65,9 +67,10 @@ module cgdice.skills {
     }
 
     public invoke(callback: () => void) {
-      var skill = new cgdice.Status(cgdice.StatusType.AttackMultiply, { scale: 2 });
-      skill.remainingTurns = 1;
-      this.owner.registerStatus(skill);
+      var status = new cgdice.Status(cgdice.StatusType.AttackMultiply, { scale: 2 });
+      status.remainingTurns = 1;
+      status.clearAfterBattle = true;
+      this.owner.registerStatus(status);
       callback();
     }
   }
@@ -76,6 +79,26 @@ module cgdice.skills {
     public invoke(callback: () => void) {
       cgdice.game.stack.specifyNext(this.param.pips);
       callback();
+    }
+  }
+
+  export class HealSkill extends Skill {
+    public invoke(callback: () => void) {
+      var value = this.param.ratio * cgdice.game.hp.maxHP;
+      cgdice.game.getDamage(-value);
+      setTimeout(callback, 1000);
+    }
+  }
+
+  export class ProceedSkill extends Skill {
+    public skillInvokable() {
+      return cgdice.game.phase == cgdice.GamePhase.InField;
+    }
+
+    public invoke(callback: () => void) {
+      cgdice.game.field.proceed(this.param.proceed, false, () => {
+        callback();
+      });
     }
   }
 }
