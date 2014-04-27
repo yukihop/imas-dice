@@ -167,6 +167,7 @@ module cgdice.characters {
       this.element.on('click', '.skill', (event) => {
         var skill = <cgdice.skills.Skill>$(event.currentTarget).data('skill');
         if (!skill.skillInvokable()) return; // final check for availability
+        if (!game.ready) return;
         this.element.trigger('skillTrigger', skill);
       });
     }

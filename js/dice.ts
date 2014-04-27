@@ -33,7 +33,6 @@ module cgdice {
 
   export class DiceStack extends DomDisplayObject {
     private _stock: number = 0;
-    private _ready: boolean = false;
     private _next: number = 0;
 
     get length(): number {
@@ -71,11 +70,6 @@ module cgdice {
       this.element.prepend(dice.element);
     }
 
-    public ready(isReady: boolean = true) {
-      this._ready = isReady;
-      this.element.toggleClass('ready', isReady);
-    }
-
     public shuffleExistingDices() {
       this.element.find('>.dice:not(.placeholder)').each((i, elem) => {
         var dice = <Dice>$(elem).data('self');
@@ -96,10 +90,10 @@ module cgdice {
     constructor() {
       super($('#stack'));
       this.element.on('click', '.dice', (event) => {
-        if (!this._ready) {
+        if (!game.ready) {
           return;
         }
-        this.ready(false);
+        game.setReady(false);
         var dice = <Dice>$(event.currentTarget).data('self');
         var placeholder = new DicePlaceholder();
         dice.element.replaceWith(placeholder.element);
@@ -110,12 +104,12 @@ module cgdice {
           );
       });
       this.element.on('mouseenter', '.dice:not(.detached)', (event) => {
-        if (!this._ready) return;
+        if (!game.ready) return;
         var dice = <Dice>$(event.currentTarget).data('self');
         this.dispatchEvent(new DiceEvent('diceHover', dice, null));
       });
       this.element.on('mouseleave', '.dice:not(.detached)', (event) => {
-        if (!this._ready) return;
+        if (!game.ready) return;
         var dice = <Dice>$(event.currentTarget).data('self');
         this.dispatchEvent(new DiceEvent('diceUnhover', dice, null));
       });

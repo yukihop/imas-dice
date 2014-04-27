@@ -192,7 +192,6 @@ module cgdice {
   export class DiceGame extends DomDisplayObject {
     private _phase: GamePhase = GamePhase.Inactive;
     public players: characters.Character[] = [];
-    private energyCandies: number = 0;
     private field: fields.Field;
     public battle: battles.Battle;
     public gameResult: GameResult;
@@ -200,6 +199,9 @@ module cgdice {
     public stack: DiceStack;
     public console: GameLog;
     public gainExp: number = 0;
+    private _ready: boolean = false;
+
+    get ready(): boolean { return this._ready; }
 
     get phase(): GamePhase { return this._phase; }
 
@@ -208,6 +210,14 @@ module cgdice {
         this._phase = value;
         this.dispatchEvent('phaseChange');
       }
+    }
+
+    public setReady(isReady: boolean) {
+      if (this._ready == isReady) {
+        return;
+      }
+      this._ready = isReady;
+      this.element.toggleClass('ready', isReady);
     }
 
     public init(): void {
@@ -241,11 +251,13 @@ module cgdice {
 
       this.element.find('#players')
         .on('skillTrigger', '.character', (event: JQueryEventObject, skill: skills.Skill) => {
+          this.setReady(false);
           skill.invoke();
+          setTimeout(() => this.setReady(true), 300);
         });
     }
 
-   public reset(fieldData: any, players: characters.Character[]) {
+    public reset(fieldData: any, players: characters.Character[]) {
       var maxHP = 0;
       this.players = players;
       this.players.forEach(p => {
@@ -265,7 +277,7 @@ module cgdice {
       $('#stage_failed, #stage_clear').hide();
       this.console.clear();
       this.setPhase(GamePhase.InField);
-      this.stack.ready();
+      this.setReady(true);
     }
 
     private handleDiceEvent(event: DiceEvent) {
@@ -308,7 +320,7 @@ module cgdice {
         $('#stage_failed').show();
         this.stageFailed();
       } else if (this._phase != GamePhase.InResults) {
-        this.stack.ready();
+        this.setReady(true);
       }
     }
 

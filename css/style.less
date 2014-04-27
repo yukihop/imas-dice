@@ -137,13 +137,6 @@ canvas {
     .dice {
       margin: 0 2px;
     }
-    &.ready {
-      opacity: 1;
-      border-color: white;
-      .dice {
-        cursor: pointer;
-      }
-    }
     #dice_indicator {
       display: inline-block;
       text-align: center;
@@ -184,6 +177,15 @@ canvas {
     width: 300px;
     margin: 100px auto 0 auto;
     border: 1px solid red;
+  }
+  &.ready {
+    #stack {
+      opacity: 1;
+      border-color: white;
+      .dice {
+        cursor: pointer;
+      }
+    }
   }
 }
 
@@ -307,7 +309,8 @@ canvas {
       &.non { background-position: 0 -72px; }
     }
   }
-  &:hover .popup { display: block; }
+  #dicegame.ready &:hover .popup { display: block; }
+  #stage_select &:hover .popup { display: block; }
   &.selected { box-shadow: 0 0 3px 5px red; }
 }
 

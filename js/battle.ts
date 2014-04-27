@@ -138,6 +138,7 @@ module cgdice.battles {
 
   class AttackEffect extends createjs.Sprite {
     static spriteSheet: createjs.SpriteSheet = new createjs.SpriteSheet({
+      framerate: 10,
       images: ["images/attack_effects.png"],
       frames: { width: 100, height: 100, count: 40, regX: 50, regY: 50 },
       animations: {
