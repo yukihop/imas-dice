@@ -54,3 +54,18 @@
     - Enemy
     - Empty
     - Boss
+- title: テストステージ3（敵だらけ）
+  blocks:
+    - Start
+    - Enemy
+    - Enemy
+    - Treasure
+    - Enemy
+    - Enemy
+    - Treasure
+    - Enemy
+    - Treasure
+    - Enemy
+    - Enemy
+    - Enemy
+    - Boss
