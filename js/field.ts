@@ -315,11 +315,6 @@ module cgdice.fields {
 
       this.stage.addChild(this._container);
       this.on('diceDetermine', this.diceDetermined, this);
-
-      createjs.Ticker.on('tick', () => {
-        this.stage.update();
-      });
-
     }
   }
 

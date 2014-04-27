@@ -136,6 +136,29 @@ module cgdice.battles {
     }
   }
 
+  class AttackEffect extends createjs.Sprite {
+    static spriteSheet: createjs.SpriteSheet = new createjs.SpriteSheet({
+      images: ["images/attack_effects.png"],
+      frames: { width: 100, height: 100, count: 40, regX: 50, regY: 50 },
+      animations: {
+        cute: [0, 9],
+        cool: [10, 19],
+        passion: [20, 29],
+        non: [30, 39]
+      }
+    });
+
+    private animationEnd(event) {
+      this.parent.removeChild(this);
+    }
+
+    constructor() {
+      super(AttackEffect.spriteSheet);
+      this.on('animationend', this.animationEnd, this);
+      this.compositeOperation = 'lighter';
+    }
+  }
+
   export class Battle extends StatusClient {
     public enemy: Enemy;
     public onboard: number[];
@@ -218,6 +241,17 @@ module cgdice.battles {
         p.highlightMultipliers(all_pips, []);
         var attack_power = p.attackPower(all_pips);
         new FlyText(attack_power.toString(), p.element);
+
+        // attack effect animation
+        var ae = new AttackEffect();
+        ae.x = this.enemy.element.offset().left + Math.random() * this.enemy.element.width();
+        ae.y = this.enemy.element.offset().top + Math.random() * this.enemy.element.height();
+        ae.scaleX = ae.scaleY = Math.max(1, attack_power / 10);
+        setTimeout(() => {
+          this.stage.addChild(ae);
+          ae.gotoAndPlay(p.attribute);
+        }, Math.floor(Math.random() * 500));
+
         all_power += attack_power;
       });
       setTimeout(() => {
@@ -266,6 +300,7 @@ module cgdice.battles {
       this.on('diceHover', this.diceHovered, this);
       this.on('diceUnhover', this.diceUnhovered, this);
       this._onboard_area = this.element.find('#onboard');
+      this.useCanvas();
     }
 
   }

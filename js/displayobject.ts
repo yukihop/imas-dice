@@ -13,6 +13,11 @@ module cgdice {
       if (className) this.canvas.addClass(className);
       this.adjustCanvasSize();
       this.stage = new createjs.Stage(this.canvas[0]);
+
+      createjs.Ticker.on('tick', () => {
+        this.stage.update();
+      });
+
     }
 
     public adjustCanvasSize() {
