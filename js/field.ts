@@ -66,7 +66,7 @@ module cgdice.fields {
         };
         Block._spriteSheet = new createjs.SpriteSheet(sprite_data);
       }
-      this._box = new createjs.Sprite(Block._spriteSheet, this.style);
+      this._box = new createjs.Sprite(Block._spriteSheet);
       this._box.regX = this._box.regY = 24;
       this.addChild(this._box);
     }
@@ -137,6 +137,7 @@ module cgdice.fields {
 
   export class DamageBlock extends Block {
     public damageValue: number;
+    private _numtext: createjs.Text;
 
     constructor(type: string, data: any) {
       super(type, data);
@@ -148,11 +149,20 @@ module cgdice.fields {
         this.damageValue = parseInt(data['damage']);
       }
       if (type == 'heal') this.damageValue = -this.damageValue;
+
+      this._numtext = new createjs.Text(
+        Math.abs(this.damageValue).toString(),
+        'bold 16px sans-serif',
+        'white');
+      this._numtext.textAlign = 'right';
+      this._numtext.x = 18;
+      this.addChild(this._numtext);
     }
   }
 
   export class ProceedBlock extends Block {
     public step: number;
+    private _numtext: createjs.Text;
 
     public cursorStop(callback: () => void = $.noop) {
       this.rotate(callback);
@@ -168,6 +178,15 @@ module cgdice.fields {
         this.step = parseInt(data['step']);
       }
       if (type == 'back') this.step = -this.step;
+
+      this._numtext = new createjs.Text(
+        Math.abs(this.step).toString(),
+        'bold 18px sans-serif',
+        'black');
+      this._numtext.textAlign = 'center';
+      this._numtext.x = 5;
+      this._numtext.y = -20;
+      this.addChild(this._numtext);
     }
 
   }

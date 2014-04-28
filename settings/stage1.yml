@@ -29,20 +29,20 @@
     - Empty
     - Proceed
     - Empty
-    - Heal
-    - Damage
+    - Heal 35
+    - Damage 50
     - Empty
     - Empty
     - Proceed
     - Empty
-    - Heal
-    - Damage
+    - Heal 15
+    - Damage 50
     - Empty
     - Empty
     - Proceed
     - Empty
-    - Heal
-    - Damage
+    - Heal 20
+    - Damage 30
     - Empty
     - type: Boss
       enemy: chihiro
