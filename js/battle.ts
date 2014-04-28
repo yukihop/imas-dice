@@ -160,6 +160,11 @@ module cgdice.battles {
     }
   }
 
+  export interface EnemyInfo {
+    id: string;
+    level: number;
+  }
+
   export class Battle extends StatusClient {
     public enemy: Enemy;
     public onboard: number[];

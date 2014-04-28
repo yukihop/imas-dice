@@ -3,12 +3,12 @@
   blocks:
     - Start
     - Proceed
-    - Enemy
-    - Enemy
+    - Enemy chihiro 10
+    - Enemy chihiro 20
     - type: Empty
       talk: sample/empty
-    - Enemy
-    - Enemy
+    - Enemy chihiro 20
+    - Enemy chihiro 20
     - Back
     - Empty
     - Empty
@@ -45,6 +45,8 @@
     - Damage
     - Empty
     - type: Boss
+      enemy: chihiro
+      level: 30
       talk: sample/enemy_appear
 - title: テストステージ2（短）
   blocks:

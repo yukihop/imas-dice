@@ -1,41 +1,31 @@
 module cgdice.fields {
 
-  export enum BlockType {
-    Start, Empty, Enemy, Boss, Treasure, Heal, Damage, Back, Proceed
-  }
-
-  export interface BlockInfo {
-    type: BlockType;
-  }
-
   export class Block extends createjs.Container {
-    private _type: BlockType = BlockType.Empty;
+    private _style: string;
+    public className: string;
     private _box: createjs.Sprite;
     public talk: string;
 
     static _spriteSheet: createjs.SpriteSheet;
 
-    get type(): BlockType { return this._type; }
-    set type(value: BlockType) { this._type = value; this.redraw(); }
+    get style(): string { return this._style; }
+    set style(value: string) { this._style = value; this.redraw(); }
 
+    /**
+     * React animation when cursor steps over this block.
+     */
     public cursorStep(callback: () => void = $.noop) {
       this.bounce(callback);
     }
 
+    /**
+     * React animation when cursor stops at this block.
+     */
     public cursorStop(callback: () => void = $.noop) {
-      switch (this._type) {
-        case BlockType.Back:
-        case BlockType.Proceed:
-          this.rotate(callback);
-          break;
-        case BlockType.Enemy:
-          this.bounce(callback, 2, 1000);
-        default:
-          this.bounce(callback);
-      }
+      this.bounce(callback);
     }
 
-    private bounce(callback: () => void, scale: number = 1.2, duration: number = 600) {
+    public bounce(callback: () => void, scale: number = 1.2, duration: number = 600) {
       var y = this.y;
       createjs.Tween.get(this)
         .to({ y: y - 10, scaleX: scale, scaleY: scale }, duration / 2, createjs.Ease.bounceOut)
@@ -43,7 +33,7 @@ module cgdice.fields {
         .call(callback);
     }
 
-    private rotate(callback: () => void) {
+    public rotate(callback: () => void) {
       createjs.Tween.get(this)
         .to({ rotation: 360 }, 200)
         .set({ rotation: 0 })
@@ -51,46 +41,138 @@ module cgdice.fields {
     }
 
     private redraw() {
-      this._box.gotoAndStop(BlockType[this._type]);
+      if (!this._box) return;
+      this._box.gotoAndStop(this.style);
     }
 
-    constructor() {
+    constructor(type: string, data: any) {
       super();
 
       if (!Block._spriteSheet) {
-        var data = {
+        var sprite_data = {
           images: ["images/blocks.png"],
           frames: { width: 48, height: 48 },
           animations: {
-            Empty: [0],
-            Start: [1],
-            Treasure: [2],
-            Enemy: [3],
-            Heal: [4],
-            Damage: [5],
-            Back: [6],
-            Proceed: [7],
-            Boss: [8]
+            empty: [0],
+            start: [1],
+            treasure: [2],
+            enemy: [3],
+            heal: [4],
+            damage: [5],
+            back: [6],
+            proceed: [7],
+            boss: [8]
           }
         };
-        Block._spriteSheet = new createjs.SpriteSheet(data);
+        Block._spriteSheet = new createjs.SpriteSheet(sprite_data);
       }
-      this._box = new createjs.Sprite(Block._spriteSheet, BlockType[this.type]);
+      this._box = new createjs.Sprite(Block._spriteSheet, this.style);
       this._box.regX = this._box.regY = 24;
       this.addChild(this._box);
     }
 
     static fromObject(blockData: any) {
-      var block = new Block();
+      var classMap = {
+        start: 'EmptyBlock',
+        empty: 'EmptyBlock',
+        treasure: 'TreasureBlock',
+        enemy: 'EnemyBlock',
+        boss: 'EnemyBlock',
+        heal: 'DamageBlock',
+        damage: 'DamageBlock',
+        back: 'ProceedBlock',
+        proceed: 'ProceedBlock'
+      };
+      var type: string;
+      var className: string;
+      var block: Block;
       if (typeof blockData == 'string') {
-        block.type = BlockType[<string>blockData];
+        var params = (<string>blockData).split(/\s+/);
+        type = params[0].toLowerCase();
+        className = classMap[type];
+        block = new (cgdice.fields[className])(type, params);
       } else {
-        block.type = BlockType[<string>(blockData.type)];
+        type = (<string>blockData.type).toLowerCase();
+        className = classMap[type];
+        block = new (cgdice.fields[className])(type, blockData);
         block.talk = ('talk' in blockData) ? blockData.talk : null;
       }
+      block.style = type;
       return block;
     }
   }
+
+  export class EmptyBlock extends Block {
+    constructor(type: string, data: any) {
+      super(type, data);
+      this.className = 'EmptyBlock';
+    }
+  }
+
+  export class EnemyBlock extends Block {
+    public cursorStop(callback: () => void = $.noop) {
+      this.bounce(callback, 2, 1000);
+    }
+
+    constructor(type: string, data: any) {
+      super(type, data);
+      this.className = 'EnemyBlock';
+    }
+  }
+
+  export class TreasureBlock extends Block {
+    public diceNumber: number;
+
+    constructor(type: string, data: any) {
+      super(type, data);
+      this.className = 'TreasureBlock';
+      this.diceNumber = 5;
+      if (data instanceof Array && data.length >= 2) {
+        this.diceNumber = parseInt(data[1]);
+      } else if ('number' in data) {
+        this.diceNumber = parseInt(data['number']);
+      }
+    }
+  }
+
+  export class DamageBlock extends Block {
+    public damageValue: number;
+
+    constructor(type: string, data: any) {
+      super(type, data);
+      this.className = 'DamageBlock';
+      this.damageValue = 10;
+      if (data instanceof Array && data.length >= 2) {
+        this.damageValue = parseInt(data[1]);
+      } else if ('number' in data) {
+        this.damageValue = parseInt(data['damage']);
+      }
+      if (type == 'heal') this.damageValue = -this.damageValue;
+    }
+  }
+
+  export class ProceedBlock extends Block {
+    public step: number;
+
+    public cursorStop(callback: () => void = $.noop) {
+      this.rotate(callback);
+    }
+
+    constructor(type: string, data: any) {
+      super(type, data);
+      this.className = 'ProceedBlock';
+      this.step = 3;
+      if (data instanceof Array && data.length >= 2) {
+        this.step = parseInt(data[1]);
+      } else if ('number' in data) {
+        this.step = parseInt(data['step']);
+      }
+      if (type == 'back') this.step = -this.step;
+    }
+
+  }
+
+  // Enemy, Boss, Treasure, Heal, Damage, Back, Proceed
 
   interface Vector {
     x: number;
@@ -233,35 +315,27 @@ module cgdice.fields {
         this._selected_dice = null;
       };
 
-      if (game.stack.length == 0 && block.type != BlockType.Back && block.type != BlockType.Proceed) {
+      if (game.stack.length == 0 && block.className != 'ProceedBlock') {
         dispatch();
         return;
       }
 
-      switch (block.type) {
-        case BlockType.Enemy:
-        case BlockType.Boss:
+      switch (block.className) {
+        case 'EnemyBlock':
           move_end = false;
           setTimeout(() => {
             game.battle.start();
             dispatch();
           }, 1000);
           break;
-        case BlockType.Heal:
-          game.hp.HP += 10;
+        case 'DamageBlock':
+          game.hp.HP -= (<DamageBlock>block).damageValue;
           break;
-        case BlockType.Damage:
-          game.getDamage(10);
+        case 'TreasureBlock':
+          game.stack.stock += (<TreasureBlock>block).diceNumber;
           break;
-        case BlockType.Treasure:
-          game.stack.stock += 5;
-          break;
-        case BlockType.Back:
-          this.proceed(-3, false, this._move_callback);
-          move_end = false;
-          break;
-        case BlockType.Proceed:
-          this.proceed(3, false, this._move_callback);
+        case 'ProceedBlock':
+          this.proceed((<ProceedBlock>block).step, false, this._move_callback);
           move_end = false;
           break;
       }
