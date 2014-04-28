@@ -189,15 +189,20 @@ canvas {
   }
 }
 
-#stage_clear, #stage_failed {
+#stage_clear, #stage_failed, #stage_failed_dice {
   background-image: url('../images/gameclear.png');
   width: 300px;
-  height: 150px;
+  height: 100px;
   overflow: hidden;
   display: none;
 }
+
 #stage_failed {
-  background-position: 0 -150px;
+  background-position: 0 -100px;
+}
+
+#stage_failed_dice {
+  background-position: 0 -200px;
 }
 
 #dicegame_canvas {

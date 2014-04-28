@@ -280,7 +280,7 @@ module cgdice {
       this.field.reset(fieldData);
       this.stack.reset(10);
       this.battle.element.hide();
-      $('#stage_failed, #stage_clear').hide();
+      $('#stage_failed, #stage_failed_dice, #stage_clear').hide();
       this.console.clear();
       this.setPhase(GamePhase.InField);
       this.setReady(true);
@@ -301,7 +301,7 @@ module cgdice {
 
     private stageFailed() {
       this.setPhase(GamePhase.InResults);
-      $('#stage_failed, #stage_clear').filter(':visible')
+      $('#stage_failed, #stage_failed_dice').filter(':visible')
         .css({ y: 0 })
         .transition({
           y: 30,
@@ -323,7 +323,7 @@ module cgdice {
         this.stack.draw();
       }
       if (this.stack.length == 0) {
-        $('#stage_failed').show();
+        $('#stage_failed_dice').show();
         this.stageFailed();
       } else if (this._phase != GamePhase.InResults) {
         this.setReady(true);

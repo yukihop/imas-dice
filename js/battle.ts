@@ -39,7 +39,7 @@ module cgdice.battles {
           this.die();
         });
       } else {
-        this.myTurn();
+        setTimeout(() => this.myTurn(), 1000);
       }
     }
 
@@ -310,9 +310,7 @@ module cgdice.battles {
         }, 500);
 
         // enemy hit
-        setTimeout(() => {
-          this.enemy.hit(this._attack_all);
-        }, 1000);
+        this.enemy.hit(this._attack_all);
       }
     }
 
