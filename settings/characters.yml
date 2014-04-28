@@ -39,10 +39,12 @@
     - class: AttackMultiplySkill
       name: ぴよパンチ
       desc: このターンの自分の攻撃力が2倍になる。
+      scale: 2
       cost: 3
     - class: AttackMultiplySkill
       name: ぴよキック
       desc: このターンの自分の攻撃力が3倍になる。
+      scale: 3
       cost: 5
 - name: さえP
   image: sae_p.jpg
@@ -63,4 +65,11 @@
   attribute: cool
   base_hp: 15
   multipliers: ["666>10"]
-  skills: []
+  skills:
+    - class: AttackMultiplySkill
+      name: ペイン
+      desc: 3倍の攻撃力で攻撃し、次ターン1回休み。
+      scale: 3
+      stun: true
+      cost: 5
+

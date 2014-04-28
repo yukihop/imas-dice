@@ -278,6 +278,7 @@ module cgdice.battles {
 
     private enemyTurnEnd() {
       game.players.forEach(p => p.resetHighlight());
+      this.dispatchEvent('turnEnd');
       if (this.enemy.HP <= 0) {
         game.console.log('勝利!');
         this.element.hide();
@@ -286,7 +287,6 @@ module cgdice.battles {
       } else {
         this.shuffleOnboardDice();
       }
-      this.dispatchEvent('turnEnd');
       this.dispatchEvent('diceProcess');
     }
 

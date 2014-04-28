@@ -116,6 +116,9 @@ module cgdice.characters {
     public attackPower(pips: number[]): number {
       var result: number = 0;
       var scale: number = 1;
+
+      if (this.hasStatus(StatusType.Stun)) return 0;
+
       pips.forEach(v => { result += v; });
       this._multipliers.forEach((mul) => {
         if (mul.check(pips)) scale += (mul.scale - 1);

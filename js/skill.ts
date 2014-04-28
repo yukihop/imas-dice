@@ -15,6 +15,7 @@ module cgdice.skills {
     public cost: number;
     public desc: string;
     public owner: cgdice.characters.Character;
+    public param: any;
 
     public invoke(callback: () => void) {
       // abstract class
@@ -38,11 +39,12 @@ module cgdice.skills {
         );
     }
 
-    constructor(public param: SkillInfo, owner: cgdice.characters.Character) {
+    constructor(param: SkillInfo, owner: cgdice.characters.Character) {
       this.owner = owner;
       this.name = param.name;
       this.cost = param.cost;
       this.desc = param.desc;
+      this.param = param;
     }
   }
 
@@ -70,10 +72,17 @@ module cgdice.skills {
     }
 
     public invoke(callback: () => void) {
-      var status = new cgdice.Status(cgdice.StatusType.AttackMultiply, { scale: 2 });
-      status.remainingTurns = 1;
-      status.clearAfterBattle = true;
+      var status = new cgdice.Status(cgdice.StatusType.AttackMultiply, 1, true, { scale: this.param.scale });
       this.owner.registerStatus(status);
+      if (this.param.stun) {
+        var stun = new cgdice.Status(
+          cgdice.StatusType.Countdown,
+          1,
+          true,
+          { next: new cgdice.Status(cgdice.StatusType.Stun, 1, true) });
+        this.owner.registerStatus(stun);
+      }
+      this.owner.showCurrentAttackPower(cgdice.game.battle.onboard);
       callback();
     }
   }

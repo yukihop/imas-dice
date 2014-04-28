@@ -45,7 +45,8 @@ module cgdice {
     AttackMultiply,
     Stun, // skip one turn
     Curse, // cannot use skill
-    Poison // reduce HP after each dice use
+    Poison, // reduce HP after each dice use
+    Countdown // add another status after specified turns
   }
 
   export class Status {
@@ -55,8 +56,10 @@ module cgdice {
     public type: StatusType;
     public options: any;
 
-    constructor(type: StatusType, options: any = {}) {
+    constructor(type: StatusType, remainingTurns: number = -1, clearAfterBattle = true, options: any = {}) {
       this.type = type;
+      this.remainingTurns = remainingTurns;
+      this.clearAfterBattle = clearAfterBattle;
       this.options = options;
     }
 
@@ -111,9 +114,21 @@ module cgdice {
       if (this.status.length == 0) {
         return;
       }
-      this.status = this.status.filter(status => {
-        return (status.remainingTurns == -1 || status.remainingTurns-- > 1);
+      var newStatus: Status[] = [];
+      this.status.forEach(status => {
+        if (status.remainingTurns == -1) newStatus.push(status);
+        else if (status.remainingTurns-- > 1) {
+          newStatus.push(status);
+        } else if (status.type == StatusType.Countdown) {
+          newStatus.push(status.options.next);
+        }
       });
+      this.status = newStatus;
+      this.statusChanged();
+    }
+
+    private clearStatusAfterBattle(event) {
+      this.status = this.status.filter(status => !status.clearAfterBattle);
       this.statusChanged();
     }
 
@@ -123,6 +138,7 @@ module cgdice {
       super(element);
       var listen = (this instanceof battles.Battle) ? this : game.battle;
       listen.on('turnEnd', this.changeStatusAfterTurn, this);
+      listen.on('battleFinish', this.clearStatusAfterBattle, this);
     }
 
   }
