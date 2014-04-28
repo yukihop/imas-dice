@@ -20,6 +20,16 @@ module cgdice.characters {
     }
   }
 
+  export interface AttackModifier {
+    caption: string;
+    ATK: number;
+  }
+
+  export interface AttackPowerInfo {
+    ATK: number;
+    modifiers: AttackModifier[];
+  }
+
   export class Character extends cgdice.StatusClient {
     public name: string;
     private _image: string;
@@ -108,27 +118,47 @@ module cgdice.characters {
       });
     }
 
-    public showCurrentAttackPower(pips: number[]) {
-      var atk = this.attackPower(pips);
-      this.element.find('.current_attack').text(atk);
-    }
-
-    public attackPower(pips: number[]): number {
-      var result: number = 0;
+    public attackPower(pips: number[]): AttackPowerInfo {
+      var result: AttackPowerInfo = { ATK: 0, modifiers: [] };
+      var current: number = 0;
       var scale: number = 1;
 
-      if (this.hasStatus(StatusType.Stun)) return 0;
+      if (this.hasStatus(StatusType.Stun)) {
+        result.modifiers.push({
+          caption: 'スタン',
+          ATK: 0
+        });
+        return result;
+      }
 
-      pips.forEach(v => { result += v; });
+      // Calculate sum of dice numbers
+      pips.forEach(v => { current += v; });
+      result.modifiers.push({
+        caption: '',
+        ATK: current
+      });
+
+      // Calculate dice combinations
       this._multipliers.forEach((mul) => {
-        if (mul.check(pips)) scale += (mul.scale - 1);
+        if (mul.check(pips)) {
+          current *= mul.scale;
+          result.modifiers.push({
+            caption: mul.scale + '倍',
+            ATK: current
+          });
+        }
       });
-      result *= scale;
 
+      // Attack multiplie status
       this.findStatus(StatusType.AttackMultiply).forEach(st => {
-        game.console.log(this.name + 'は' + st.options.scale + '倍の攻撃');
-        result *= st.options.scale;
+        current *= st.options.scale;
+        result.modifiers.push({
+          caption: '攻撃力' + st.options.scale + '倍',
+          ATK: current
+        });
       });
+
+      result.ATK = current;
       return result;
     }
 

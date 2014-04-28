@@ -82,7 +82,6 @@ module cgdice.skills {
           { next: new cgdice.Status(cgdice.StatusType.Stun, 1, true) });
         this.owner.registerStatus(stun);
       }
-      this.owner.showCurrentAttackPower(cgdice.game.battle.onboard);
       callback();
     }
   }

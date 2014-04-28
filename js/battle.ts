@@ -165,6 +165,9 @@ module cgdice.battles {
     public onboard: number[];
     private _onboard_area: JQuery;
     private _selected_dice: Dice;
+    private _queue: { modifier: cgdice.characters.AttackModifier; player: cgdice.characters.Character; }[];
+    private _attacks: number[];
+    private _attack_all: number;
 
     public start() {
       this.enemy = new Enemy('chihiro');
@@ -180,7 +183,6 @@ module cgdice.battles {
     public diceChanged() {
       game.players.forEach((c) => {
         c.highlightMultipliers(this.onboard, game.stack.getNumbers());
-        c.showCurrentAttackPower(this.onboard);
       });
     }
 
@@ -233,39 +235,80 @@ module cgdice.battles {
         }, 1000);
 
       var pips = dice.pips;
-      var all_power: number = 0;
       var all_pips: number[] = this.onboard.slice();
       all_pips.push(pips);
 
-      game.players.forEach(p => {
-        p.resetHighlight();
-        p.highlightMultipliers(all_pips, []);
-        var attack_power = p.attackPower(all_pips);
-        new FlyText(attack_power.toString(), p.element);
+      this._attack_all = 0;
+      this._queue = [];
+      this._attacks = [];
 
-        // attack effect animation
-        var ae = new AttackEffect();
-        ae.x = this.enemy.element.offset().left + Math.random() * this.enemy.element.width();
-        ae.y = this.enemy.element.offset().top + Math.random() * this.enemy.element.height();
-        ae.scaleX = ae.scaleY = Math.max(1, attack_power / 10);
-        setTimeout(() => {
-          this.stage.addChild(ae);
-          ae.gotoAndPlay(p.attribute);
-        }, Math.floor(Math.random() * 500));
+      game.players.forEach((player, idx) => {
+        player.resetHighlight();
+        player.highlightMultipliers(all_pips, []);
+        var attack_power = player.attackPower(all_pips);
+        this._attacks[idx] = attack_power.ATK;
 
-        all_power += attack_power;
-      });
-      setTimeout(() => {
-        new FlyText({
-          text: all_power.toString(),
-          parent: this.element,
-          class: 'all_attack'
+        // attack power grand total
+        this._attack_all += attack_power.ATK;
+
+        attack_power.modifiers.forEach((modifier, idx) => {
+          if (idx == 0) {
+            player.element.find('.current_attack')
+              .text(modifier.ATK)
+              .css({ scale: 1.5 })
+              .transition({ scale: 1, duration: 500 });
+          } else {
+            this._queue.push({
+              player: player,
+              modifier: modifier
+            });
+          }
         });
-      }, 500);
-      setTimeout(() => {
-        game.console.log(all_power + 'の攻撃!');
-        this.enemy.hit(all_power);
-      }, 1000);
+      });
+
+      setTimeout(() => this.playAttackAnimation(), 500);
+    }
+
+    private playAttackAnimation() {
+      if (this._queue.length > 0) {
+        var next = this._queue.shift();
+        new FlyText({
+          text: next.modifier.caption,
+          parent: next.player.element,
+          class: 'modify_caption',
+          transition: { y: -30, opacity: 0.8, easing: 'out' }
+        });
+        next.player.element.find('.current_attack')
+          .text(next.modifier.ATK.toString())
+          .css({ scale: 1.5 })
+          .transition({ scale: 1, duration: 500 }, () => this.playAttackAnimation());
+      } else {
+        // attack effect animation
+        game.players.forEach((player, idx) => {
+          var ae = new AttackEffect();
+          ae.x = this.enemy.element.offset().left + Math.random() * this.enemy.element.width();
+          ae.y = this.enemy.element.offset().top + Math.random() * this.enemy.element.height();
+          ae.scaleX = ae.scaleY = Math.min(Math.max(1, this._attacks[idx] / 10), 10);
+          setTimeout(() => {
+            this.stage.addChild(ae);
+            ae.gotoAndPlay(player.attribute);
+          }, Math.floor(Math.random() * 500));
+        });
+
+        // all attack fly text
+        setTimeout(() => {
+          new FlyText({
+            text: this._attack_all.toString(),
+            parent: this.element,
+            class: 'all_attack'
+          });
+        }, 500);
+
+        // enemy hit
+        setTimeout(() => {
+          this.enemy.hit(this._attack_all);
+        }, 1000);
+      }
     }
 
     private diceHovered(event: DiceEvent) {
