@@ -110,6 +110,8 @@ module cgdice.fields {
   }
 
   export class EnemyBlock extends Block {
+    public enemyID: string;
+
     public cursorStop(callback: () => void = $.noop) {
       this.bounce(callback, 2, 1000);
     }
@@ -117,6 +119,12 @@ module cgdice.fields {
     constructor(type: string, data: any) {
       super(type, data);
       this.className = 'EnemyBlock';
+
+      if (data instanceof Array && data.length >= 2) {
+        this.enemyID = data[1];
+      } else if ('enemy' in data) {
+        this.enemyID = data.enemy;
+      }
     }
   }
 
@@ -343,7 +351,7 @@ module cgdice.fields {
         case 'EnemyBlock':
           move_end = false;
           setTimeout(() => {
-            game.battle.start();
+            game.battle.start((<EnemyBlock>block).enemyID);
             dispatch();
           }, 1000);
           break;

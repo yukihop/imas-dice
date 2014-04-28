@@ -174,8 +174,8 @@ module cgdice.battles {
     private _attacks: number[];
     private _attack_all: number;
 
-    public start() {
-      this.enemy = new Enemy('chihiro');
+    public start(enemyID: string) {
+      this.enemy = new Enemy(enemyID);
       $('#enemies', this.element).empty();
       this.enemy.element.appendTo('#enemies');
       this.enemy.on('enemyAttack', this.enemyAttacked, this);

@@ -3,12 +3,12 @@
   blocks:
     - Start
     - Proceed
-    - Enemy chihiro 10
-    - Enemy chihiro 20
+    - Enemy chibichihi
+    - Enemy chibichihi
     - type: Empty
       talk: sample/empty
-    - Enemy chihiro 20
-    - Enemy chihiro 20
+    - Enemy chibichihi
+    - Enemy chibichihi
     - Back
     - Empty
     - Empty
@@ -44,30 +44,30 @@
     - Heal 20
     - Damage 30
     - Empty
-    - type: Boss
+    - type: boss
       enemy: chihiro
       level: 30
       talk: sample/enemy_appear
 - title: テストステージ2（短）
   blocks:
     - Start
-    - Enemy
+    - Enemy chibichihi
     - Empty
-    - Enemy
+    - Enemy chibichihi
     - Empty
-    - Boss
+    - Boss chihiro
 - title: テストステージ3（敵だらけ）
   blocks:
     - Start
-    - Enemy
-    - Enemy
+    - Enemy chibichihi
+    - Enemy chibichihi
     - Treasure
-    - Enemy
-    - Enemy
+    - Enemy chibichihi
+    - Enemy chibichihi
     - Treasure
-    - Enemy
+    - Enemy chibichihi
     - Treasure
-    - Enemy
-    - Enemy
-    - Enemy
-    - Boss
+    - Enemy chibichihi
+    - Enemy chibichihi
+    - Enemy chibichihi
+    - Boss chihiro

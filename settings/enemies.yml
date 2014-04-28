@@ -1,16 +1,16 @@
-chibichihi1:
+chibichihi:
   name: ちびちひ1号
   image: chibichihi.jpg
   start_talk: メダルガチャにマニーを詰める係にはなりたくない……
   HP: 100
-  ATK: 20
+  ATK: 15
   defeated_talk: ばいばい！
   EXP: 20
 chihiro:
   name: 千川ちひろ Lv25
   image: chihiro.png
-  HP: 80
-  ATK: 10
+  HP: 200
+  ATK: 30
   EXP: 30
 ranko:
   name: 闇に飲まれたらんこP
