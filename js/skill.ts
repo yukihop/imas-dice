@@ -105,7 +105,7 @@ module cgdice.skills {
     }
 
     public invoke(callback: () => void) {
-      var value = this.param.ratio * game.hp.maxHP;
+      var value = Math.floor(this.param.ratio * game.hp.maxHP);
       game.getDamage(-value);
       setTimeout(callback, 1000);
     }
