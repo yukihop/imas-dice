@@ -14,7 +14,7 @@ module cgdice.skills {
     public name: string;
     public cost: number;
     public desc: string;
-    public owner: cgdice.characters.Character;
+    public owner: characters.Character;
     public param: any;
 
     public invoke(callback: () => void) {
@@ -22,7 +22,7 @@ module cgdice.skills {
       alert('This skill is not implemented!');
     }
 
-    static create(param: SkillInfo, owner: cgdice.characters.Character): Skill {
+    static create(param: SkillInfo, owner: characters.Character): Skill {
       var className: string = param.class;
       if (className in cgdice.skills) {
         var result = new cgdice.skills[className](param, owner);
@@ -34,12 +34,12 @@ module cgdice.skills {
 
     public skillInvokable(): boolean {
       return (
-        cgdice.game.phase == cgdice.GamePhase.InField ||
-        cgdice.game.phase == cgdice.GamePhase.InBattle
+        game.phase == GamePhase.InField ||
+        game.phase == GamePhase.InBattle
         );
     }
 
-    constructor(param: SkillInfo, owner: cgdice.characters.Character) {
+    constructor(param: SkillInfo, owner: characters.Character) {
       this.owner = owner;
       this.name = param.name;
       this.cost = param.cost;
@@ -50,36 +50,38 @@ module cgdice.skills {
 
   export class RedrawSkill extends Skill {
     public invoke(callback: () => void) {
-      cgdice.game.stack.shuffleExistingDices();
+      game.stack.shuffleExistingDices();
+      game.battle.diceChanged();
       callback();
     }
   }
 
   export class AdditionalOnboardSkill extends Skill {
     public skillInvokable() {
-      return cgdice.game.phase == cgdice.GamePhase.InBattle;
+      return game.phase == GamePhase.InBattle;
     }
 
     public invoke(callback: () => void) {
-      cgdice.game.battle.addOnboardDice(1);
+      game.battle.addOnboardDice(1);
+      game.battle.diceChanged();
       callback();
     }
   }
 
   export class AttackMultiplySkill extends Skill {
     public skillInvokable() {
-      return cgdice.game.phase == cgdice.GamePhase.InBattle;
+      return game.phase == GamePhase.InBattle;
     }
 
     public invoke(callback: () => void) {
-      var status = new cgdice.Status(cgdice.StatusType.AttackMultiply, 1, true, { scale: this.param.scale });
+      var status = new Status(cgdice.StatusType.AttackMultiply, 1, true, { scale: this.param.scale });
       this.owner.registerStatus(status);
       if (this.param.stun) {
-        var stun = new cgdice.Status(
-          cgdice.StatusType.Countdown,
+        var stun = new Status(
+          StatusType.Countdown,
           1,
           true,
-          { next: new cgdice.Status(cgdice.StatusType.Stun, 1, true) });
+          { next: new Status(StatusType.Stun, 1, true) });
         this.owner.registerStatus(stun);
       }
       callback();
@@ -88,7 +90,7 @@ module cgdice.skills {
 
   export class SpecifyNextDiceSkill extends Skill {
     public invoke(callback: () => void) {
-      cgdice.game.stack.specifyNext(this.param.pips);
+      game.stack.specifyNext(this.param.pips);
       callback();
     }
   }
@@ -96,34 +98,83 @@ module cgdice.skills {
   export class HealSkill extends Skill {
     public skillInvokable() {
       // not invokable when full recovered
-      if (cgdice.game.hp.HP == cgdice.game.hp.maxHP && this.param.ratio > 0) {
+      if (game.hp.HP == game.hp.maxHP && this.param.ratio > 0) {
         return false;
       }
       return true;
     }
 
     public invoke(callback: () => void) {
-      var value = this.param.ratio * cgdice.game.hp.maxHP;
-      cgdice.game.getDamage(-value);
+      var value = this.param.ratio * game.hp.maxHP;
+      game.getDamage(-value);
       setTimeout(callback, 1000);
     }
   }
 
   export class ProceedSkill extends Skill {
     public skillInvokable() {
-      if (cgdice.game.phase != cgdice.GamePhase.InField) {
+      if (game.phase != GamePhase.InField) {
         return false;
       }
-      if (this.param.proceed < 0 && cgdice.game.field.position == 0) {
+      if (this.param.proceed < 0 && game.field.position == 0) {
         return false;
       }
       return true;
     }
 
     public invoke(callback: () => void) {
-      cgdice.game.field.proceed(this.param.proceed, false, () => {
+      game.field.proceed(this.param.proceed, false, () => {
         callback();
       });
+    }
+  }
+
+  export class FreeTradeSkill extends Skill {
+    private selectedOnboard: Dice;
+    private selectedStack: Dice;
+    private _callback: () => void;
+
+    public skillInvokable() {
+      return game.phase == GamePhase.InBattle;
+    }
+
+    private bothDetermined() {
+      game.stack.element.off('.freetrade');
+      game.battle.element.find('#onboard').off('.freetrade');
+
+      this.selectedOnboard.element.css('outline', 'none');
+      this.selectedStack.element.css('outline', 'none');
+
+      var stack_pips = this.selectedStack.pips;
+      var onboard_pips = this.selectedOnboard.pips;
+      this.selectedStack.roll();
+      this.selectedStack.pips = onboard_pips;
+      this.selectedOnboard.roll();
+      this.selectedOnboard.pips = stack_pips;
+      game.battle.diceChanged();
+      this._callback();
+    }
+
+    private onboardDiceClick(event) {
+      this.selectedOnboard = <Dice>$(event.target).data('self');
+      game.battle.element.find('#onboard .dice').css('outline', 'none');
+      this.selectedOnboard.element.css('outline', '2px solid red');
+      if (this.selectedOnboard && this.selectedStack) this.bothDetermined();
+    }
+
+    private stackDiceClick(event) {
+      this.selectedStack = <Dice>$(event.target).data('self');
+      game.stack.element.find('.dice').css('outline', 'none');
+      this.selectedStack.element.css('outline', '2px solid red');
+      if (this.selectedOnboard && this.selectedStack) this.bothDetermined();
+    }
+
+    public invoke(callback: () => void) {
+      this._callback = callback;
+      game.stack.element
+        .on('click.freetrade', '.dice', $.proxy(this.stackDiceClick, this));
+      game.battle.element.find('#onboard')
+        .on('click.freetrade', '.dice', $.proxy(this.onboardDiceClick, this));
     }
   }
 }

@@ -25,18 +25,16 @@ module cgdice {
 
   export class DicePlaceholder extends DomDisplayObject {
     constructor() {
-      super('dice');
-      this.element.addClass('placeholder');
+      super('dice_placeholder');
     }
   }
-
 
   export class DiceStack extends DomDisplayObject {
     private _stock: number = 0;
     private _next: number = 0;
 
     get length(): number {
-      return this.element.find('>.dice:not(.placeholder)').length;
+      return this.element.find('>.dice').length;
     }
 
     get stock(): number { return this._stock; }
@@ -71,13 +69,11 @@ module cgdice {
     }
 
     public shuffleExistingDices() {
-      this.element.find('>.dice:not(.placeholder)').each((i, elem) => {
+      this.element.find('>.dice').each((i, elem) => {
         var dice = <Dice>$(elem).data('self');
         dice.roll();
       });
     }
-
-
 
     public reset(stock: number) {
       this.element.find('.dice').remove();
@@ -115,8 +111,6 @@ module cgdice {
       });
     }
   }
-
-
 
   export class DiceEvent extends createjs.Event {
     constructor(type: string, public dice: Dice, public placeholder: DicePlaceholder) {

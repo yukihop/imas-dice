@@ -355,8 +355,14 @@ canvas {
   &.dice4 { .dicebg(4); }
   &.dice5 { .dicebg(5); }
   &.dice6 { .dicebg(6); }
-  &.placeholder { background-image: none; }
 }
+.dice_placeholder {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 48px;
+}
+
 
 @status_size: 48px;
 .status_icon(@pos) {
@@ -438,7 +444,9 @@ canvas {
       }
     }
   }
-  #onboard_container { text-align: center; }
+  #onboard_container {
+    text-align: center;
+  }
   #onboard {
     display: inline-block;
     padding: 3px;

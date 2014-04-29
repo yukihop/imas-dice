@@ -22,7 +22,7 @@
   skills:
     - class: SpecifyNextDiceSkill
       name: 働きたくない
-      desc: 次にスタックに引かれるダイスが必ず1になる。
+      desc: 次に引かれる手持ちのダイスが必ず1になる。
       cost: 5
       pips: 1
     - class: ProceedSkill
@@ -30,6 +30,10 @@
       desc: 5マス戻る。
       cost: 4
       proceed: -5
+    - class: FreeTradeSkill
+      name: フリートレード
+      desc: 場のダイスの任意の1個と手持ちのダイスの任意の1個を交換する。
+      cost: 6
 - name: ことりP
   image: kotori_p.jpg
   attribute: non
@@ -54,11 +58,11 @@
   skills:
     - class: AdditionalOnboardSkill
       name: フィーバータイム
-      desc: 場のダイスが1個増える。
+      desc: 手持ちのダイスを1個増やす。
       cost: 10
     - class: RedrawSkill
       name: 確率調整β
-      desc: ダイスを消費せずに、スタックにあるダイスの目をランダムに入れ替える。
+      desc: ダイスを消費せずに、手持ちのダイスの目をランダムに入れ替える。
       cost: 5
 - name: らんこP
   image: ranko_p.jpg

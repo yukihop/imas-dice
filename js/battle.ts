@@ -167,12 +167,15 @@ module cgdice.battles {
 
   export class Battle extends StatusClient {
     public enemy: Enemy;
-    public onboard: number[];
     private _onboard_area: JQuery;
     private _selected_dice: Dice;
     private _queue: { modifier: cgdice.characters.AttackModifier; player: cgdice.characters.Character; }[];
     private _attacks: number[];
     private _attack_all: number;
+
+    get onboard(): number[] {
+      return $('.dice', this._onboard_area).map((i, d) => (<Dice>$(d).data('self')).pips).get();
+    }
 
     public start(enemyID: string) {
       this.enemy = new Enemy(enemyID);
@@ -181,7 +184,7 @@ module cgdice.battles {
       this.enemy.on('enemyAttack', this.enemyAttacked, this);
       this.enemy.on('enemyTurnEnd', this.enemyTurnEnd, this);
       this.dispatchEvent('initialized');
-      this.shuffleOnboardDice();
+      this.startAlliesTurn();
       this.element.show();
     }
 
@@ -193,29 +196,24 @@ module cgdice.battles {
 
     public shuffleOnboardDice() {
       var i = 0;
-      this.onboard = [];
       this._onboard_area.empty();
       for (i = 0; i <= 1; i++) {
-        var dice = new cgdice.Dice();
+        var dice = new Dice();
         dice.element.appendTo(this._onboard_area);
         dice.roll();
-        this.onboard.push(dice.pips);
       }
       new DicePlaceholder().element.appendTo(this._onboard_area);
-      this.diceChanged();
     }
 
     public addOnboardDice(num: number = 1) {
       for (var i = 0; i < num; i++) {
-        var dice = new cgdice.Dice();
+        var dice = new Dice();
         dice.element.appendTo(this._onboard_area);
         dice.roll();
-        this.onboard.push(dice.pips);
       }
-      this._onboard_area.find('.placeholder')
+      this._onboard_area.find('.dice_placeholder')
         .detach()
         .appendTo(this._onboard_area); // move to last
-      this.diceChanged();
     }
 
     private diceDetermined(event: DiceEvent) {
@@ -223,10 +221,11 @@ module cgdice.battles {
       this._selected_dice = event.dice;
 
       var dice = event.dice;
-      var to = this._onboard_area.find('.placeholder');
+      var to = this._onboard_area.find('.dice_placeholder');
+      dice.element.addClass('detached_dice');
       event.dice.element
         .css({ position: 'absolute' })
-        .appendTo(this._onboard_area)
+        .appendTo(this.element)
         .position({ of: to });
 
       dice.element
@@ -331,9 +330,15 @@ module cgdice.battles {
         game.gainExp += this.enemy.EXP;
         this.dispatchEvent('battleFinish');
       } else {
-        this.shuffleOnboardDice();
+        this.startAlliesTurn();
       }
       this.dispatchEvent('diceProcess');
+    }
+
+    private startAlliesTurn() {
+      this.element.find('.detached_dice').remove();
+      this.shuffleOnboardDice();
+      this.diceChanged();
     }
 
     public enemyAttacked(event: BattleEffectEvent) {
@@ -348,6 +353,7 @@ module cgdice.battles {
       this.on('diceUnhover', this.diceUnhovered, this);
       this._onboard_area = this.element.find('#onboard');
       this.useCanvas();
+      this.element.find('#onboard_container').appendTo(this.element); // move in front of canvas
     }
 
   }
