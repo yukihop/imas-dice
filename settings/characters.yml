@@ -1,5 +1,5 @@
 - name: ゆきほP
-  image: yukiho_p.jpg
+  image: yukiho_p.png
   attribute: passion
   base_hp: 15
   multipliers: ["3>3"]
@@ -51,7 +51,7 @@
       scale: 3
       cost: 5
 - name: さえP
-  image: sae_p.jpg
+  image: sae_p.png
   attribute: cute
   base_hp: 20
   multipliers: ["13>5"]
