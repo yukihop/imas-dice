@@ -71,3 +71,33 @@
     - Enemy chibichihi
     - Enemy chibichihi
     - Boss chihiro
+- title: チャレンジ
+  layout: zigzagHorizontal
+  blocks:
+    - start
+    - back 1
+    - proceed 2
+    - back 3
+    - damage 20
+    - enemy chihiro
+    - treasure
+    - proceed 2
+    - proceed 1
+    - damage 40
+    - treasure
+    - enemy chihiro
+    - enemy chihiro
+    - empty
+    - enemy chihiro
+    - enemy chihiro
+    - empty
+    - heal 40
+    - damage 50
+    - heal 30
+    - damage 100
+    - enemy chihiro
+    - enemy chihiro
+    - enemy chihiro
+    - enemy chihiro
+    - enemy chihiro
+    - boss kirari

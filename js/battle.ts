@@ -8,7 +8,7 @@ module cgdice.battles {
     reflected: boolean; // not in use currently
   }
 
-  export class Enemy extends cgdice.DomDisplayObject {
+  export class Enemy extends DomDisplayObject {
     public name: string;
     public maxHP: number;
     public HP: number;
@@ -44,7 +44,10 @@ module cgdice.battles {
     }
 
     private myTurn(): void {
-      var power: number = Math.floor(Math.random() * this.ATK) + 1;
+      var power_min: number = this.ATK * 0.8;
+      var power_var: number = this.ATK * 0.4;
+      var power: number = Math.floor(Math.random() * power_var + power_min);
+      power = Math.max(1, power);
       game.console.log(this.name + 'から' + power + 'の攻撃!');
 
       new FlyText({
