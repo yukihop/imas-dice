@@ -613,18 +613,17 @@ canvas {
     background-image: none;
     background: rgba(0, 0, 0, 0.8);
     color: white;
-    font-size: 18px;
+    font-size: 130%;
     overflow: hidden;
     p {
       position: relative;
       left: 400px;
-      min-height: 100px;
-      padding-left: 110px;
-      margin-bottom: 3px;
+      margin-bottom: 10px;
       background-repeat: no-repeat;
       .character_talk(@character) {
         &.@{character} {
           padding-left: 110px;
+          min-height: 100px;
           background-image: url('../images/@{character}_p.png');
         }
       }

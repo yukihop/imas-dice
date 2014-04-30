@@ -1,3 +1,39 @@
+- title: チュートリアル1
+  layout: horizontal
+  blocks:
+    - start
+    - empty
+    - empty
+    - type: empty
+      stop: true
+      talk: tutorial/stop
+    - empty
+    - empty
+    - type: damage
+      amount: 15
+      stop: true
+      talk: tutorial/damage
+    - empty
+    - empty
+    - empty
+    - type: heal
+      amount: 15
+      stop: true
+      talk: tutorial/heal
+    - empty
+    - empty
+    - empty
+    - empty
+    - type: treasure
+      stop: true
+      talk: tutorial/treasure
+    - empty
+    - empty
+    - empty
+    - empty
+    - empty
+    - empty
+    - boss chibichihi
 - title: テストステージ
   layout: zigzagHorizontal
   blocks:
