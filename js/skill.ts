@@ -7,6 +7,7 @@ module cgdice.skills {
     pips?: number;
     ratio?: number;
     proceed?: number;
+    removeType?: string;
   }
 
   export class Skill {
@@ -175,6 +176,21 @@ module cgdice.skills {
         .on('click.freetrade', '.dice', $.proxy(this.stackDiceClick, this));
       game.battle.element.find('#onboard')
         .on('click.freetrade', '.dice', $.proxy(this.onboardDiceClick, this));
+    }
+  }
+
+  export class RemoveStatusFromPlayersSkill extends Skill {
+    public skillInvokable() {
+      var remove_type: StatusType = StatusType[<string>this.param.removeType];
+      return game.players.some(player => player.hasStatus(remove_type));
+    }
+
+    public invoke(callback: () => void) {
+      var remove_type: StatusType = StatusType[<string>this.param.removeType];
+      game.players.forEach(player => {
+        player.removeStatusType(remove_type);
+      });
+      callback();
     }
   }
 }

@@ -100,6 +100,13 @@ module cgdice {
       return types.some(typ => this.status.some(st => st.type == typ));
     }
 
+    public removeStatusType(type: StatusType): boolean {
+      var before_length = this.status.length;
+      this.status = this.status.filter(st => st.type != type);
+      this.statusChanged();
+      return (before_length != this.status.length);
+    }
+
     public removeStatus(status: Status): Status {
       var idx = this.status.indexOf(status);
       if (idx != -1) {

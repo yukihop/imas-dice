@@ -9,6 +9,11 @@
       desc: HPを最大値の1/6回復する。
       cost: 3
       ratio: 0.16
+    - class: RemoveStatusFromPlayersSkill
+      name: エナドリ
+      desc: 味方全員のスタン状態を回復する。
+      cost: 3
+      removeType: Stun
     - class: ProceedSkill
       name: 爆走乙女
       desc: 8マス進む。ただし強制停止マスでは停止する。
@@ -58,7 +63,7 @@
   skills:
     - class: AdditionalOnboardSkill
       name: フィーバータイム
-      desc: 手持ちのダイスを1個増やす。
+      desc: あらかじめ場に出ているダイスを2個から3個に増やす。
       cost: 10
     - class: RedrawSkill
       name: 確率調整β
