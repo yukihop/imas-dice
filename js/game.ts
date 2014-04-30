@@ -13,8 +13,6 @@ module cgdice {
   export var game: DiceGame;
 
   export class Application extends createjs.EventDispatcher {
-    private inEffect: boolean = true;
-
     public loader = new createjs.LoadQueue();
 
     private _title: titles.Title;
@@ -25,15 +23,6 @@ module cgdice {
     private compatibilityCheck() {
       if (typeof console !== 'object') return false;
       return true;
-    }
-
-    public setInEffect(inEffect: boolean): void {
-      this.inEffect = inEffect;
-      if (!inEffect) {
-        $('body').removeClass('in_effect');
-      } else {
-        $('body').addClass('in_effect');
-      }
     }
 
     private loadComplete() {

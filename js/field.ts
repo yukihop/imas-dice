@@ -5,11 +5,21 @@ module cgdice.fields {
     public className: string;
     private _box: createjs.Sprite;
     public talk: string;
+    private _stop: boolean = false;
+    private _stopIcon: createjs.Sprite;
 
     static _spriteSheet: createjs.SpriteSheet;
 
     get style(): string { return this._style; }
     set style(value: string) { this._style = value; this.redraw(); }
+
+    get stop(): boolean { return this._stop; }
+    set stop(value: boolean) {
+      if (this._stop != value) {
+        this._stop = value;
+        this.redraw();
+      }
+    }
 
     /**
      * React animation when cursor steps over this block.
@@ -43,6 +53,20 @@ module cgdice.fields {
     private redraw() {
       if (!this._box) return;
       this._box.gotoAndStop(this.style);
+      if (this._stop && !this._stopIcon) {
+        var icon = new createjs.Sprite(Block._spriteSheet, 'stop');
+        icon.regX = 24;
+        icon.regY = 24;
+        icon.x = -24;
+        icon.y = -24;
+        icon.scaleX = 0.5;
+        icon.scaleY = 0.5;
+        this._stopIcon = icon;
+        this.addChild(icon);
+      } else if (!this._stop && this._stopIcon) {
+        this.removeChild(this._stopIcon);
+        this._stopIcon = null;
+      }
     }
 
     constructor(type: string, data: any) {
@@ -61,7 +85,8 @@ module cgdice.fields {
             damage: [5],
             back: [6],
             proceed: [7],
-            boss: [8]
+            boss: [8],
+            stop: [10]
           }
         };
         Block._spriteSheet = new createjs.SpriteSheet(sprite_data);
@@ -96,6 +121,7 @@ module cgdice.fields {
         className = classMap[type];
         block = new (cgdice.fields[className])(type, blockData);
         block.talk = ('talk' in blockData) ? blockData.talk : null;
+        block.stop = 'stop' in blockData && blockData.stop == true;
       }
       block.style = type;
       return block;
@@ -144,22 +170,22 @@ module cgdice.fields {
   }
 
   export class DamageBlock extends Block {
-    public damageValue: number;
+    public amount: number;
     private _numtext: createjs.Text;
 
     constructor(type: string, data: any) {
       super(type, data);
       this.className = 'DamageBlock';
-      this.damageValue = 10;
+      this.amount = 10;
       if (data instanceof Array && data.length >= 2) {
-        this.damageValue = parseInt(data[1]);
+        this.amount = parseInt(data[1]);
       } else if ('number' in data) {
-        this.damageValue = parseInt(data['damage']);
+        this.amount = parseInt(data['amount']);
       }
-      if (type == 'heal') this.damageValue = -this.damageValue;
+      if (type == 'heal') this.amount = -this.amount;
 
       this._numtext = new createjs.Text(
-        Math.abs(this.damageValue).toString(),
+        Math.abs(this.amount).toString(),
         'bold 16px sans-serif',
         'white');
       this._numtext.textAlign = 'right';
@@ -277,19 +303,19 @@ module cgdice.fields {
       }
 
       var startPosition = this._position;
-      this._position = newPosition;
 
-      application.setInEffect(true);
       var tween = createjs.Tween.get(this._cursor);
       var step = newPosition > startPosition ? 1 : -1;
       var p = startPosition;
-      while (newPosition != p) {
+      var stop = false;
+      while (newPosition != p && !stop) {
         p += step;
         block = this.blocks[p];
+        if (step > 0 && block.stop) { stop = true; }
         tween.to({ x: block.x, y: block.y - 20 }, 400, createjs.Ease.quadOut);
         (() => {
           var _block = block;
-          if (newPosition != p) {
+          if (newPosition != p || stop) {
             tween.call(() => { _block.cursorStep(); });
           } else {
             tween.call(() => { _block.cursorStop(); });
@@ -297,7 +323,7 @@ module cgdice.fields {
         })();
       }
       tween.call(() => {
-        application.setInEffect(false);
+        this._position = p;
         this.cursorMoved();
       });
       this.scrollField(block);
@@ -356,7 +382,7 @@ module cgdice.fields {
           }, 1000);
           break;
         case 'DamageBlock':
-          game.hp.HP -= (<DamageBlock>block).damageValue;
+          game.hp.HP -= (<DamageBlock>block).amount;
           break;
         case 'TreasureBlock':
           game.stack.stock += (<TreasureBlock>block).diceNumber;
