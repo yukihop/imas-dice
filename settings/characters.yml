@@ -15,7 +15,7 @@
       cost: 5
       proceed: 8
 - name: あんずP
-  image: anzu_p.jpg
+  image: anzu_p.png
   attribute: cute
   base_hp: 20
   multipliers: ["1>5"]
@@ -35,7 +35,7 @@
       desc: 場のダイスの任意の1個と手持ちのダイスの任意の1個を交換する。
       cost: 6
 - name: ことりP
-  image: kotori_p.jpg
+  image: kotori_p.png
   attribute: non
   base_hp: 30
   multipliers: ["5>2","6>2"]
@@ -65,7 +65,7 @@
       desc: ダイスを消費せずに、手持ちのダイスの目をランダムに入れ替える。
       cost: 5
 - name: らんこP
-  image: ranko_p.jpg
+  image: ranko_p.png
   attribute: cool
   base_hp: 15
   multipliers: ["666>10"]
