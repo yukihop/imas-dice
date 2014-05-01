@@ -59,7 +59,7 @@ module cgdice.skills {
 
   export class AdditionalOnboardSkill extends Skill {
     public skillInvokable() {
-      return game.phase == GamePhase.InBattle;
+      return game.phase == GamePhase.InBattle && game.battle.onboard.length <= 2;
     }
 
     public invoke(callback: () => void) {

@@ -192,6 +192,7 @@ module cgdice.battles {
     }
 
     public diceChanged() {
+      if (game.phase != GamePhase.InBattle) return;
       game.players.forEach((c) => {
         c.highlightMultipliers(this.onboard, game.stack.getNumbers());
       });

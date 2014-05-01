@@ -62,11 +62,11 @@
   multipliers: ["13>5"]
   skills:
     - class: AdditionalOnboardSkill
-      name: フィーバータイム
-      desc: あらかじめ場に出ているダイスを2個から3個に増やす。
+      name: ボルテージMAX
+      desc: このターン、場に出ているダイスを2個から3個に増やす。
       cost: 10
     - class: RedrawSkill
-      name: 確率調整β
+      name: 乱数調整β
       desc: ダイスを消費せずに、手持ちのダイスの目をランダムに入れ替える。
       cost: 5
 - name: らんこP
