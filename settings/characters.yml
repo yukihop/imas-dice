@@ -14,11 +14,6 @@
       desc: 味方全員のスタン状態を回復する。
       cost: 3
       removeType: Stun
-    - class: ProceedSkill
-      name: 爆走乙女
-      desc: 8マス進む。ただし強制停止マスでは停止する。
-      cost: 5
-      proceed: 8
 - name: あんずP
   image: anzu_p.png
   attribute: cute
@@ -81,4 +76,33 @@
       scale: 3
       stun: true
       cost: 5
-
+- name: あかねP
+  image: akane_p.png
+  base_hp: 20
+  multipliers: []
+  skills:
+    - class: ProceedSkill
+      name: 爆走乙女
+      desc: 8マス進む。ただし強制停止マスでは停止する。
+      cost: 5
+      proceed: 8
+- name: はるかP
+  image: haruka_p.png
+  base_hp: 45
+  multipliers: ["44>5"]
+  skills:
+    - class: Skill
+      name: 社長の器
+      desc: 2ターンの間、敵から受けるダメージを半減する。
+      scale: 0.5
+      cost: 3
+- name: かえでP
+  image: kaede_p.png
+  base_hp: 16
+  multipliers: ["246>7"]
+  skills:
+    - class: SpecifyNextDiceSkill
+      name: あんたん
+      desc: 次に引かれる手持ちのダイスが必ず6になる。
+      pips: 6
+      cost: 4

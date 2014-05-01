@@ -21,6 +21,7 @@ module cgdice.skills {
     public invoke(callback: () => void) {
       // abstract class
       alert('This skill is not implemented!');
+      callback();
     }
 
     static create(param: SkillInfo, owner: characters.Character): Skill {

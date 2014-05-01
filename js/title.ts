@@ -15,8 +15,16 @@ module cgdice.titles {
     }
   }
 
+  var previousSelected: characters.Character[] = [];
+
   export class StageSelector extends cgdice.DomDisplayObject {
     private _data: any;
+
+    private updateSelectedCount(): number {
+      var selected_count = $('.character.selected', this.element).length;
+      $('.selected_count', this.element).text(selected_count + '/5');
+      return selected_count;
+    }
 
     constructor() {
       super($('#stage_select'));
@@ -26,6 +34,7 @@ module cgdice.titles {
         players = $('#character_list .selected', this.element).map((i, elem) => {
           return $(elem).data('self');
         }).get();
+        previousSelected = players.slice(0); // duplicate
         $('#character_list .selected', this.element).removeClass('selected');
 
         if (players.length == 0) {
@@ -43,14 +52,26 @@ module cgdice.titles {
 
       this.element.on('click', '.character', (event) => {
         var target = $(event.currentTarget);
-        target.toggleClass('selected');
-        var p = <cgdice.characters.Character>$(event.target).data('self');
+        var selected_count = $('.character.selected', this.element).length;
+        if (target.hasClass('selected')) {
+          if (selected_count <= 1) {
+            return;
+          }
+          target.removeClass('selected');
+          selected_count--;
+        } else {
+          if (selected_count >= 5) {
+            return;
+          }
+          target.addClass('selected');
+          selected_count++;
+        }
+        this.updateSelectedCount();
       });
 
       $('#character_list', this.element).sortable({
         distance: 10
       });
-
     }
 
     public reset() {
@@ -65,11 +86,16 @@ module cgdice.titles {
       // characters
       list = this.element.find('#character_list');
       list.find('.character').detach(); // do not empty
-      application.availableCharacters.forEach((p) => {
-        p.resetHighlight();
-        $('<li>').append(p.element.addClass('selected')).appendTo(list);
-        p.MP = p.maxMP();
+
+      application.availableCharacters.forEach((p, i) => {
+        if (previousSelected.length == 0) {
+          p.element.toggleClass('selected', i < 5);
+        } else {
+          p.element.toggleClass('selected', previousSelected.indexOf(p) >= 0);
+        }
+        $('<li>').append(p.element).appendTo(list);
       });
+      this.updateSelectedCount();
 
       this.element.show().css({ opacity: 1 });
     }

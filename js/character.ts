@@ -194,7 +194,7 @@ module cgdice.characters {
       this.element.find('.lv').text(this.level());
       this.element.find('.attribute').attr('class', 'attribute ' + this.attribute);
       var muls = this.element.find('.multipliers');
-      muls.empty();
+      muls.toggle(this._multipliers.length > 0).empty();
       this._multipliers.forEach(mul => {
         var m = $('<div>').addClass('multiplier');
         mul.dices.forEach(pips => {
