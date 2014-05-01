@@ -60,23 +60,58 @@ module cgdice.talks {
         width: 400,
         maxHeight: Talk.DIALOG_MAX_HEIGHT,
         modal: true,
-        closeOnEscape: false
+        closeOnEscape: false,
       });
-    if(fileid in Talk.loaded) {
-      var item = Talk.loaded[fileid].children('.' + id);
-      this.doShow(item);
+      if (fileid in Talk.loaded) {
+        var item = Talk.loaded[fileid].children('.' + id);
+        this.doShow(item);
       } else {
-    $.ajax({
-      url: 'talks/' + fileid + '.html',
-      method: 'GET',
-      success: (data) => {
-        var result = $('<div>').html(data);
-        Talk.loaded[fileid] = result;
-        this.doShow(result.children('.' + id));
-      },
-      type: 'text'
-    });
+        $.ajax({
+          url: 'talks/' + fileid + '.html',
+          method: 'GET',
+          success: (data) => {
+            var result = $('<div>').html(data);
+            Talk.loaded[fileid] = result;
+            this.doShow(result.children('.' + id));
+          },
+          type: 'text'
+        });
+      }
+    }
   }
+
+  export class Dialog {
+    private _dialog: JQuery;
+
+    static alert(message: string, callback?: () => void);
+    static alert(message: JQuery, callback?: () => void);
+    static alert(message: any, callback?: () => void) {
+      var buttons = {
+        OK: function() { $(this).dialog('close'); callback && callback(); }
+      };
+      new Dialog(message, buttons);
+    }
+
+    static confirm(message: string, callback?: (ok: boolean) => void);
+    static confirm(message: JQuery, callback?: (ok: boolean) => void);
+    static confirm(message: any, callback?: (ok: boolean) => void)  {
+      var buttons = {
+        'キャンセル': function() { $(this).dialog('close'); callback && callback(false); },
+        OK: function() { $(this).dialog('close'); callback && callback(true); },
+      }
+      new Dialog(message, buttons);
+    }
+
+    constructor(message: any, buttons: any) {
+      this._dialog = $('<div>').dialog({
+        dialogClass: 'talkshow',
+        draggable: false,
+        resizable: false,
+        width: 400,
+        modal: true,
+        buttons: buttons
+      });
+      this._dialog.append(message);
     }
   }
 }

@@ -474,6 +474,30 @@ canvas {
   height: 48px;
 }
 
+// Block
+
+.block {
+  display: inline-block;
+  width: 48px;
+  height: 48px;
+  overflow: hidden;
+  background-image: url('../images/blocks.png');
+  .block_type (@type, @pos) {
+    &.@{type} {
+      background-position: (-@pos * 48px) 0;
+    }
+  }
+  .block_type(empty, 0);
+  .block_type(start, 1);
+  .block_type(treasure, 2);
+  .block_type(enemy, 3);
+  .block_type(heal, 4);
+  .block_type(damage, 5);
+  .block_type(back, 6);
+  .block_type(proceed, 7);
+  .block_type(boss, 8);
+  .block_type(stop, 10);
+}
 
 @status_size: 48px;
 .status_icon(@pos) {
@@ -699,12 +723,12 @@ canvas {
 
 // TalkShow
 
-.talkshow {
+.ui-dialog.talkshow {
   .no-user-select;
   background: none;
   .ui-dialog-content {
     background-image: none;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.7);
     color: white;
     font-size: 130%;
     overflow: hidden;
@@ -730,27 +754,13 @@ canvas {
     }
   }
   .ui-dialog-titlebar { display: none; }
+  .ui-dialog-buttonpane {
+    margin-top: 0;
+    background: black;
+    padding: 0;
+    border: none;
+    button { margin: 5px; min-width: 80px; }
+    .ui-button-text { padding: 5px; }
+  }
 }
 
-.block {
-  display: inline-block;
-  width: 48px;
-  height: 48px;
-  overflow: hidden;
-  background-image: url('../images/blocks.png');
-  .block_type (@type, @pos) {
-    &.@{type} {
-      background-position: (-@pos * 48px) 0;
-    }
-  }
-  .block_type(empty, 0);
-  .block_type(start, 1);
-  .block_type(treasure, 2);
-  .block_type(enemy, 3);
-  .block_type(heal, 4);
-  .block_type(damage, 5);
-  .block_type(back, 6);
-  .block_type(proceed, 7);
-  .block_type(boss, 8);
-  .block_type(stop, 10);
-}
