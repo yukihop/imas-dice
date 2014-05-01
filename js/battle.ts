@@ -180,7 +180,7 @@ module cgdice.battles {
       return $('.dice', this._onboard_area).map((i, d) => (<Dice>$(d).data('self')).pips).get();
     }
 
-    public start(enemyID: string) {
+    public start(enemyID: string, talkID?: string) {
       this.enemy = new Enemy(enemyID);
       $('#enemies', this.element).empty();
       this.enemy.element.appendTo('#enemies');
@@ -188,8 +188,12 @@ module cgdice.battles {
       this.enemy.on('enemyTurnEnd', this.enemyTurnEnd, this);
       this.dispatchEvent('initialized');
       this.startAlliesTurn();
-      new GamePhaseMessage('battle_start');
       this.element.show();
+      if (talkID) {
+        talks.Talk.show(talkID, () => new GamePhaseMessage('battle_start'));
+      } else {
+        new GamePhaseMessage('battle_start');
+      }
     }
 
     public diceChanged() {

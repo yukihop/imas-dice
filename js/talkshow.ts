@@ -11,15 +11,9 @@ module cgdice.talks {
 
     static DIALOG_MAX_HEIGHT = 300;
 
-    static show(fullid: string);
-    static show(fileid: string, talkid: string);
-    static show(fileid: string, talkid?: string) {
-      if (talkid) {
-        return new Talk(fileid, talkid);
-      } else {
-        var splitted = fileid.split('/');
-        return new Talk(splitted[0], splitted[1]);
-      }
+    static show(talkID: string, callback?: () => void) {
+      var splitted = talkID.split('/');
+      return new Talk(splitted[0], splitted[1], callback);
     }
 
     private doShow(item: JQuery) {
@@ -33,6 +27,7 @@ module cgdice.talks {
         if (this.talk_index >= this.talks.length) {
           this.dialog.dialog('close');
           this.dialog.remove();
+          this.callback && this.callback();
           this.dialog = null;
         } else {
           var elem = this.talks.eq(this.talk_index++);
@@ -56,7 +51,7 @@ module cgdice.talks {
       this.dialog.click();
     }
 
-    constructor(fileid: string, id: string) {
+    constructor(fileid: string, id: string, public callback?: () => void) {
       super('talkshow');
       this.dialog = $('<div>').dialog({
         dialogClass: 'talkshow',

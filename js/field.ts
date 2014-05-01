@@ -351,7 +351,6 @@ module cgdice.fields {
 
     public cursorMoved() {
       var block = this.currentBlock();
-      var move_end = true;
 
       if (this._selected_dice) {
         this._selected_dice.element.transition({
@@ -362,39 +361,43 @@ module cgdice.fields {
         }, 300);
       }
 
-      var dispatch = () => {
+      var dispatchMoveEndEvents = () => {
         this._move_callback && this._move_callback();
         this._selected_dice && this.dispatchEvent('diceProcess');
         this._selected_dice = null;
       };
 
       if (game.stack.length == 0 && block.className != 'ProceedBlock') {
-        dispatch();
+        // Ran out of dices, stage failed
+        dispatchMoveEndEvents();
         return;
       }
 
       switch (block.className) {
+        case 'EmptyBlock':
+          if (block.talk) cgdice.talks.Talk.show(block.talk);
+          dispatchMoveEndEvents();
+          break;
         case 'EnemyBlock':
-          move_end = false;
           setTimeout(() => {
-            game.battle.start((<EnemyBlock>block).enemyID);
-            dispatch();
+            game.battle.start((<EnemyBlock>block).enemyID, block.talk);
+            dispatchMoveEndEvents();
           }, 1000);
           break;
         case 'DamageBlock':
           game.hp.HP -= (<DamageBlock>block).amount;
+          if (block.talk && game.hp.HP > 0) cgdice.talks.Talk.show(block.talk);
+          dispatchMoveEndEvents();
           break;
         case 'TreasureBlock':
           game.stack.stock += (<TreasureBlock>block).diceNumber;
+          if (block.talk) cgdice.talks.Talk.show(block.talk);
+          dispatchMoveEndEvents();
           break;
         case 'ProceedBlock':
           this.proceed((<ProceedBlock>block).step, false, this._move_callback);
-          move_end = false;
+          if (block.talk) cgdice.talks.Talk.show(block.talk);
           break;
-      }
-      if (block.talk) cgdice.talks.Talk.show(block.talk);
-      if (move_end) {
-        dispatch();
       }
     }
 
