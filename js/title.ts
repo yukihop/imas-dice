@@ -22,6 +22,7 @@ module cgdice.titles {
 
   export class StageSelector extends cgdice.DomDisplayObject {
     private _chap_index: number;
+    public openingTalkID: string;
 
     private updateSelectedCount(): number {
       var selected_count = $('.character.selected', this.element).length;
@@ -131,6 +132,11 @@ module cgdice.titles {
       this.updateSelectedCount();
 
       this.element.show().css({ opacity: 1 });
+
+      if (this.openingTalkID) {
+        talks.Talk.show(this.openingTalkID);
+        this.openingTalkID = null;
+      }
     }
   }
 

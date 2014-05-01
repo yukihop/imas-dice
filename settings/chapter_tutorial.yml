@@ -78,3 +78,4 @@
     - empty
     - type: boss
       enemy: chibichihi
+  talkOnUnlocked: tutorial/unlock_stage

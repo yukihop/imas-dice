@@ -21,6 +21,7 @@ module cgdice {
     layout: string;
     blocks: any;
     unlocked?: boolean;
+    talkOnUnlocked?: string;
   }
 
   export interface ChapterInfo {
@@ -85,6 +86,7 @@ module cgdice {
     }
 
     public unlockNextStage() {
+      var unlockedStage: StageInfo = null;
       this.chapters.forEach((chap, ci) => {
         chap.stages.forEach((stage, si) => {
           if (stage == this.currentStage) {
@@ -94,14 +96,20 @@ module cgdice {
                 // All stages already unlocked.
               } else {
                 this.chapters[ci + 1].unlocked = true;
-                this.chapters[ci + 1].stages[0].unlocked = true;
+                unlockedStage = this.chapters[ci + 1].stages[0];
               }
             } else {
-              chap.stages[si + 1].unlocked = true;
+              unlockedStage = chap.stages[si + 1];
             }
           }
         });
       });
+      if (unlockedStage) {
+        unlockedStage.unlocked = true;
+        if ('talkOnUnlocked' in unlockedStage) {
+          this._stage_selector.openingTalkID = unlockedStage.talkOnUnlocked;
+        }
+      }
     }
 
     private stageDetermined(event) {
