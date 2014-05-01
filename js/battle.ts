@@ -8,6 +8,9 @@ module cgdice.battles {
     reflected: boolean; // not in use currently
   }
 
+  /**
+   * Base class of enemies.
+   */
   export class Enemy extends DomDisplayObject {
     public name: string;
     public maxHP: number;
@@ -139,6 +142,9 @@ module cgdice.battles {
     }
   }
 
+  /**
+   * Attack effect, displayed for a short time and destroied by themselves automatically.
+   */
   class AttackEffect extends createjs.Sprite {
     static spriteSheet: createjs.SpriteSheet = new createjs.SpriteSheet({
       framerate: 10,
@@ -168,6 +174,9 @@ module cgdice.battles {
     level: number;
   }
 
+  /**
+   * Main manager class for battles.
+   */
   export class Battle extends StatusClient {
     public enemy: Enemy;
     private _onboard_area: JQuery;

@@ -1,5 +1,8 @@
 module cgdice {
 
+  /**
+   * Encapsulates one dice.
+   */
   export class Dice extends DomDisplayObject {
     private _pips: number;
 
@@ -29,6 +32,10 @@ module cgdice {
     }
   }
 
+  /**
+   * Encapsulates dice stack. Three dices are shown by default, and
+   * triggers click events.
+   */
   export class DiceStack extends DomDisplayObject {
     private _stock: number = 0;
     private _next: number = 0;

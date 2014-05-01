@@ -29,6 +29,9 @@ module cgdice {
     stages?: StageInfo[];
   }
 
+  /**
+   * Root-level manager of this game.
+   */
   export class Application extends createjs.EventDispatcher {
     public loader = new createjs.LoadQueue();
 
@@ -132,6 +135,9 @@ module cgdice {
     }
   }
 
+  /**
+   * Show and manages hit point of allies.
+   */
   export class HPIndicator extends DomDisplayObject {
     private _maxHP: number = 100;
     private _HP: number = 100;
@@ -217,6 +223,9 @@ module cgdice {
     }
   }
 
+  /**
+   * Encapsulates message texts such as "Game Start" etc.
+   */
   export class GamePhaseMessage extends DomDisplayObject {
     constructor(type: string, duration: number = 1500, callback?: () => void) {
       super('phase_message_frame');
