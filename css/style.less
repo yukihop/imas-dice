@@ -633,7 +633,31 @@ canvas {
       .character_talk(sae);
       .character_talk(anzu);
       &.right { background-position: 240px 0; padding-left: 0; padding-right: 110px; }
+      &.info { color: yellow; }
     }
   }
   .ui-dialog-titlebar { display: none; }
+}
+
+.block {
+  display: inline-block;
+  width: 48px;
+  height: 48px;
+  overflow: hidden;
+  background-image: url('../images/blocks.png');
+  .block_type (@type, @pos) {
+    &.@{type} {
+      background-position: (-@pos * 48px) 0;
+    }
+  }
+  .block_type(empty, 0);
+  .block_type(start, 1);
+  .block_type(treasure, 2);
+  .block_type(enemy, 3);
+  .block_type(heal, 4);
+  .block_type(damage, 5);
+  .block_type(back, 6);
+  .block_type(proceed, 7);
+  .block_type(boss, 8);
+  .block_type(stop, 10);
 }

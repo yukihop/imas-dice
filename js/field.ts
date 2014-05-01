@@ -392,8 +392,8 @@ module cgdice.fields {
           move_end = false;
           break;
       }
+      if (block.talk) cgdice.talks.Talk.show(block.talk);
       if (move_end) {
-        if (block.talk) cgdice.talks.Talk.show(block.talk);
         dispatch();
       }
     }

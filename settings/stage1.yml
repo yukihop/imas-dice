@@ -33,7 +33,9 @@
     - empty
     - empty
     - empty
-    - boss chibichihi
+    - type: boss
+      enemy: chibichihi
+      talk: tutorial/boss
 - title: テストステージ
   layout: zigzagHorizontal
   blocks:
