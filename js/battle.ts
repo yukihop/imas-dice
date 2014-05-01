@@ -188,6 +188,7 @@ module cgdice.battles {
       this.enemy.on('enemyTurnEnd', this.enemyTurnEnd, this);
       this.dispatchEvent('initialized');
       this.startAlliesTurn();
+      new GamePhaseMessage('battle_start');
       this.element.show();
     }
 
@@ -329,14 +330,17 @@ module cgdice.battles {
       game.players.forEach(p => p.resetHighlight());
       this.dispatchEvent('turnEnd');
       if (this.enemy.HP <= 0) {
-        game.console.log('勝利!');
-        this.element.hide();
-        game.gainExp += this.enemy.EXP;
-        this.dispatchEvent('battleFinish');
+        // Win!
+        new GamePhaseMessage('battle_win', 1500, () => {
+          this.element.hide();
+          game.gainExp += this.enemy.EXP;
+          this.dispatchEvent('battleFinish');
+          this.dispatchEvent('diceProcess');
+        });
       } else {
         this.startAlliesTurn();
+        this.dispatchEvent('diceProcess');
       }
-      this.dispatchEvent('diceProcess');
     }
 
     private startAlliesTurn() {

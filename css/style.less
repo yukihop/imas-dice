@@ -91,17 +91,15 @@ canvas {
   #stage_list {
     margin: 0 30px;
     height: 250px;
-    overflow-y: scroll;
+    overflow-y: auto;
     li {
       text-align: center;
-      font-size: 36px;
-      background-color: maroon;
-      border: 2px solid brown;
-      border-radius: 10px;
-      margin: 10px 0;
+      font-size: 30px;
       cursor: pointer;
+      @base: maroon;
+      background: linear-gradient(to bottom, @base, darken(@base, 10%));
       &:hover {
-        background-color: brown;
+        background: linear-gradient(to bottom, lighten(@base, 15%), lighten(@base, 5%));
       }
     }
   }
@@ -208,24 +206,36 @@ canvas {
   }
 }
 
-#stage_clear, #stage_failed, #stage_failed_dice {
+.phase_message {
   background-image: url('../images/gameclear.png');
   width: 300px;
   height: 100px;
   overflow: hidden;
+}
+
+#stage_clear, #stage_failed, #stage_failed_dice {
   display: none;
 }
 
-#stage_failed {
-  background-position: 0 -100px;
-}
-
-#stage_failed_dice {
-  background-position: 0 -200px;
-}
+#stage_failed { background-position: 0 -100px; }
+#stage_failed_dice { background-position: 0 -200px; }
+.battle_start { background-position: 0 -300px; }
+.battle_win { background-position: 0 -400px; }
+.stage_start { background-position: 0 -500px; }
 
 #dicegame_canvas {
   .main_panel;
+}
+
+.phase_message_frame {
+  position: absolute;
+  width: 100%;
+  top: 150px;
+  background: rgba(0, 0, 0, 0.3);
+  .phase_message {
+    display: block;
+    margin: 0 auto;
+  }
 }
 
 .dicebg (@i, @size: 48px) { background-position: (-(@i - 1) * @size) 0; }

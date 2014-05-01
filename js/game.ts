@@ -149,6 +149,18 @@ module cgdice {
     }
   }
 
+  export class GamePhaseMessage extends DomDisplayObject {
+    constructor(type: string, duration: number = 1500, callback?: () => void) {
+      super('phase_message_frame');
+      this.element.children().addClass(type).show();
+      this.element.appendTo('#gamemode');
+      setTimeout(() => {
+        this.element.remove();
+        callback && callback();
+      }, duration);
+    }
+  }
+
   export class GameLog extends DomDisplayObject {
     public log(message: any) {
       if (typeof message == 'object') {
@@ -272,6 +284,7 @@ module cgdice {
       $('#stage_failed, #stage_failed_dice, #stage_clear').hide();
       this.console.clear();
       this.setPhase(GamePhase.InField);
+      new GamePhaseMessage('stage_start');
       this.setReady(true);
     }
 

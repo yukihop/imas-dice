@@ -37,10 +37,10 @@ html
               .hp_bar
               .hp_value
           #stage_end
-            #stage_failed
-            #stage_failed_dice
+            #stage_failed.phase_message
+            #stage_failed_dice.phase_message
           #game_result
-            #stage_clear
+            #stage_clear.phase_message
             p 獲得経験値
               span.gain_exp
             #growth
@@ -103,3 +103,5 @@ html
           .enemy_hp_bar
           .enemy_hp_value
       .flytext
+      .phase_message_frame
+        .phase_message
