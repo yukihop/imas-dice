@@ -89,6 +89,22 @@ module cgdice.titles {
 
       $('#chapter_prev', this.element).on('click', () => this.scrollChapter(-1));
       $('#chapter_next', this.element).on('click', () => this.scrollChapter(1));
+
+      $('#unlock_all_stages', this.element).on('click', () => {
+        application.chapters.forEach(chap => {
+          chap.unlocked = true;
+          chap.stages.forEach(st => st.unlocked = true);
+        });
+        this.reset();
+      });
+
+      $('#unlock_all_characters', this.element).on('click', () => {
+        application.allCharacters.forEach(p => p.unlocked = true);
+        this.reset();
+      });
+      $('#unlock_everything', this.element).on('click', () => {
+        $('#unlock_all_characters, #unlock_all_stages').click();
+      });
     }
 
     public reset() {
