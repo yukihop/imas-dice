@@ -1,3 +1,15 @@
+miku:
+  name: 前川みく
+  image: miku.png
+  HP: 38
+  ATK: 3
+  EXP: 3
+miku2:
+  name: 捨て身の前川みく
+  image: miku.png
+  HP: 15
+  ATK: 20
+  EXP: 5
 chibichihi:
   name: ちびちひ1号
   image: chibichihi.jpg

@@ -17,8 +17,6 @@
     - empty
     - empty
     - empty
-    - empty
-    - empty
     - type: damage
       amount: 15
       stop: true
@@ -33,10 +31,16 @@
     - empty
     - empty
     - empty
+    - type: enemy
+      stop: true
+      enemy: miku
+      talk: tutorial/enemy
+    - empty
+    - empty
     - empty
     - empty
     - type: boss
-      enemy: chibichihi
+      enemy: miku
       talk: tutorial/boss
 - title: ふらふら
   layout: horizontal
@@ -66,10 +70,10 @@
     - back 4
     - treasure 5
     - proceed 1
-    - damage 50
+    - damage 20
     - back 1
     - proceed 1
-    - heal 10
+    - heal 15
     - back 1
     - empty
     - empty
@@ -77,5 +81,43 @@
     - empty
     - empty
     - type: boss
-      enemy: chibichihi
+      enemy: miku
   talkOnUnlocked: tutorial/unlock_stage
+- title: 2倍攻撃で蹴散らそう
+  blocks:
+    - type: start
+      talk: tutorial/need_multiply
+    - empty
+    - treasure
+    - empty
+    - treasure
+    - type: enemy
+      enemy: miku2
+      stop: true
+      talk: tutorial/multiply_hint
+    - empty
+    - empty
+    - empty
+    - type: enemy
+      enemy: miku2
+      stop: true
+    - empty
+    - treasure
+    - empty
+    - type: enemy
+      enemy: miku2
+      stop: true
+    - empty
+    - empty
+    - heal 30
+    - empty
+    - empty
+    - type: enemy
+      enemy: miku2
+      stop: true
+    - empty
+    - empty
+    - empty
+    - treasure
+    - empty
+    - boss miku2
