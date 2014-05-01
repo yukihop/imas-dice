@@ -20,6 +20,7 @@ module cgdice {
     title: string;
     layout: string;
     blocks: any;
+    unlocked?: boolean;
   }
 
   export interface ChapterInfo {
@@ -27,6 +28,7 @@ module cgdice {
     data: string;
     desc: string;
     stages?: StageInfo[];
+    unlocked?: boolean;
   }
 
   /**
@@ -39,8 +41,9 @@ module cgdice {
     private _stage_selector: titles.StageSelector;
 
     public chapters: ChapterInfo[];
-
     public availableCharacters: characters.Character[];
+
+    public currentStage: StageInfo;
 
     private compatibilityCheck() {
       if (typeof console !== 'object') return false;
@@ -81,6 +84,31 @@ module cgdice {
       });
     }
 
+    public unlockNextStage() {
+      this.chapters.forEach((chap, ci) => {
+        chap.stages.forEach((stage, si) => {
+          if (stage == this.currentStage) {
+            if (si == chap.stages.length - 1) {
+              // Last stage of a chapter. Unlock next chapter.
+              if (ci == chap.stages.length - 1) {
+                // All stages already unlocked.
+              } else {
+                this.chapters[ci + 1].unlocked = true;
+                this.chapters[ci + 1].stages[0].unlocked = true;
+              }
+            } else {
+              chap.stages[si + 1].unlocked = true;
+            }
+          }
+        });
+      });
+    }
+
+    private stageDetermined(event) {
+      this.currentStage = event.data.stage;
+      game.reset(event.data.stage, event.data.players);
+    }
+
     private preloadComplete() {
       game = new DiceGame();
       game.init();
@@ -95,11 +123,21 @@ module cgdice {
       });
 
       this._stage_selector = new cgdice.titles.StageSelector();
+      this._stage_selector.addEventListener('stageDetermine', (event) => this.stageDetermined(event));
 
       // prepare chapter data
       this.chapters.forEach(chap => {
         chap.stages = <StageInfo[]>this.loader.getResult(chap.data);
+        // for debug use
+        if (chap.title.match(/テスト/)) {
+          chap.unlocked = true;
+          chap.stages.forEach(stage => stage.unlocked = true);
+        }
       });
+
+      // unlock first chapter and first stage
+      this.chapters[0].unlocked = true;
+      this.chapters[0].stages[0].unlocked = true;
 
       // initialize character data from settings file
       this.availableCharacters = [];
@@ -382,6 +420,7 @@ module cgdice {
 
     private stageCleared() {
       this.setPhase(GamePhase.InResults);
+      application.unlockNextStage();
       this.gameResult.start();
     }
 

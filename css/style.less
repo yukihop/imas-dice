@@ -161,6 +161,12 @@ canvas {
               &:hover {
                 .linear-gradient(to bottom, lighten(@base, 15%), lighten(@base, 5%););
               }
+              &.locked {
+                background: none;
+                background-color: gray;
+                color: silver;
+                cursor: default;
+              }
             }
           }
         }
