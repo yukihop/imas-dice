@@ -92,8 +92,8 @@ module cgdice {
 
     public unlockNextStage() {
       var unlockedStage: StageInfo = null;
-      this.chapters.forEach((chap, ci) => {
-        chap.stages.forEach((stage, si) => {
+      this.chapters.some((chap, ci) => {
+        chap.stages.some((stage, si) => {
           if (stage == this.currentStage) {
             if (si == chap.stages.length - 1) {
               // Last stage of a chapter. Unlock next chapter.
@@ -102,12 +102,15 @@ module cgdice {
               } else {
                 this.chapters[ci + 1].unlocked = true;
                 unlockedStage = this.chapters[ci + 1].stages[0];
+                return true;
               }
             } else {
               unlockedStage = chap.stages[si + 1];
+              return true;
             }
           }
         });
+        if (unlockedStage) return true;
       });
       if (unlockedStage) {
         unlockedStage.unlocked = true;
@@ -379,6 +382,7 @@ module cgdice {
 
       this.gameResult = new GameResult();
       this.gameResult.on('gameFinish', () => {
+        this.phase = GamePhase.Inactive;
         this.dispatchEvent('gameFinish');
       });
 
@@ -460,6 +464,7 @@ module cgdice {
           y: 30,
           duration: 3000,
           complete: () => {
+            this.phase = GamePhase.Inactive;
             this.dispatchEvent('gameFinish');
           }
         });

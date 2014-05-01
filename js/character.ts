@@ -112,12 +112,13 @@ module cgdice.characters {
             .css({ scale: 2 })
             .transition({ scale: 1 }, 700);
         } else {
-          selectable.forEach((choice) => {
+          selectable.some((choice) => {
             var tmp = pips.slice();
             tmp.push(choice);
             if (mul.check(tmp)) {
               // invokable
               elem.eq(mul_idx).addClass('invokable');
+              return true;
             }
           });
         }
@@ -186,11 +187,14 @@ module cgdice.characters {
       return this._skills;
     }
 
-    private updateSkillInvokableStatus(event) {
+    public updateSkillInvokableStatus() {
       this.element.find('.skill').each((i, elem) => {
         var e = $(elem);
-        var skill: cgdice.skills.Skill = e.data('skill');
+        var skill = <skills.Skill>e.data('skill');
         var invokable = true;
+        if (game.phase == GamePhase.Inactive) {
+          invokable = false;
+        }
         if (skill.cost > this.MP) {
           invokable = false;
         }

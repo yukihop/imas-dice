@@ -141,6 +141,7 @@ module cgdice.titles {
           return;
         }
         p.resetHighlight();
+        p.updateSkillInvokableStatus();
         if (previousSelected.length == 0) {
           p.element.toggleClass('selected', i < 5);
         } else {
