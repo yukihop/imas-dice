@@ -10,6 +10,15 @@
       talk: tutorial/stop
     - empty
     - empty
+    - type: treasure
+      stop: true
+      talk: tutorial/treasure
+      number: 10
+    - empty
+    - empty
+    - empty
+    - empty
+    - empty
     - type: damage
       amount: 15
       stop: true
@@ -25,10 +34,43 @@
     - empty
     - empty
     - empty
+    - empty
+    - type: boss
+      enemy: chibichihi
+      talk: tutorial/boss
+- title: ふらふら
+  layout: horizontal
+  blocks:
+    - start
+    - proceed 6
+    - proceed 5
+    - proceed 4
+    - proceed 3
+    - proceed 2
+    - proceed 1
+    - type: empty
+      talk: tutorial/furafura
+    - back 1
+    - back 2
+    - back 3
     - type: treasure
       stop: true
-      talk: tutorial/treasure
-    - empty
+      number: 5
+    - type: empty
+      stop: true
+    - proceed 4
+    - back 2
+    - proceed 4
+    - back 3
+    - proceed 1
+    - back 4
+    - treasure 5
+    - proceed 1
+    - damage 50
+    - back 1
+    - proceed 1
+    - heal 10
+    - back 1
     - empty
     - empty
     - empty
@@ -36,4 +78,3 @@
     - empty
     - type: boss
       enemy: chibichihi
-      talk: tutorial/boss
