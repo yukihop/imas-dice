@@ -23,10 +23,13 @@ module cgdice.titles {
   export class StageSelector extends cgdice.DomDisplayObject {
     private _chap_index: number;
     public openingTalkID: string;
+    private _select_max: number;
+
+    public static MAX_PLAYERS = 5;
 
     private updateSelectedCount(): number {
       var selected_count = $('.character.selected', this.element).length;
-      $('.selected_count', this.element).text(selected_count + '/5');
+      $('.selected_count', this.element).text(selected_count + '/' + this._select_max);
       return selected_count;
     }
 
@@ -37,15 +40,7 @@ module cgdice.titles {
       $('#chapter_list', this.element).animate({ left: - w * this._chap_index });
     }
 
-    private stageClicked(event) {
-      var stage: StageInfo = $(event.target).data('stage');
-      if (!stage.unlocked) {
-        return;
-      }
-      var players: cgdice.characters.Character[];
-      players = $('#character_list .selected', this.element).map((i, elem) => {
-        return $(elem).data('self');
-      }).get();
+    private stageDetermined(stage: StageInfo, players: characters.Character[]) {
       previousSelected = players.slice(0); // duplicate
       $('#character_list .selected', this.element).removeClass('selected');
 
@@ -57,6 +52,25 @@ module cgdice.titles {
         duration: 300,
         complete: () => { this.element.hide(); }
       });
+    }
+
+    private stageClicked(event) {
+      var stage: StageInfo = $(event.target).data('stage');
+      if (!stage.unlocked) {
+        return;
+      }
+      var players: characters.Character[];
+      players = $('#character_list .selected', this.element).map((i, elem) => {
+        return $(elem).data('self');
+      }).get();
+
+      if (players.length < this._select_max) {
+        talks.Dialog.confirm('最大参加人数以下で進みますか?', (ok) => {
+          if (ok) this.stageDetermined(stage, players);
+        });
+      } else {
+        this.stageDetermined(stage, players);
+      }
     }
 
     constructor() {
@@ -74,7 +88,7 @@ module cgdice.titles {
           target.removeClass('selected');
           selected_count--;
         } else {
-          if (selected_count >= 5) {
+          if (selected_count >= this._select_max) {
             return;
           }
           target.addClass('selected');
@@ -136,19 +150,22 @@ module cgdice.titles {
       var character_list = this.element.find('#character_list');
       character_list.find('.character').detach(); // do not empty
 
+      var unlock_count = 0;
       application.allCharacters.forEach((p, i) => {
         if (!p.unlocked) {
           return;
         }
+        unlock_count++;
         p.resetHighlight();
         p.updateSkillInvokableStatus();
         if (previousSelected.length == 0) {
-          p.element.toggleClass('selected', i < 5);
+          p.element.toggleClass('selected', i < StageSelector.MAX_PLAYERS);
         } else {
           p.element.toggleClass('selected', previousSelected.indexOf(p) >= 0);
         }
         $('<li>').append(p.element).appendTo(character_list);
       });
+      this._select_max = Math.min(unlock_count, StageSelector.MAX_PLAYERS);
       this.updateSelectedCount();
 
       this.element.show().css({ opacity: 1 });
