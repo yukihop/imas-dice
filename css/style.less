@@ -89,20 +89,66 @@ canvas {
     font-size: 30px;
     text-shadow: 1px 1px white;
   }
-  #stage_list {
-    margin: 0 30px;
-    max-width: 400px;
-    margin: 0 auto;
-    height: 250px;
-    overflow-y: auto;
-    li {
-      text-align: center;
-      font-size: 28px;
+  #chapter_selector {
+    text-align: center;
+    @chap_width: 400px;
+    @chap_height: 250px;
+    height: @chap_height;
+    #chapter_prev, #chapter_next {
+      display: inline-block;
+      vertical-align: top;
+      width: 30px;
+      height: @chap_height;
+      background-color: gray;
       cursor: pointer;
-      @base: maroon;
-      background: linear-gradient(to bottom, @base, darken(@base, 10%));
-      &:hover {
-        background: linear-gradient(to bottom, lighten(@base, 15%), lighten(@base, 5%));
+    }
+    #chapter_list_container {
+      display: inline-block;
+      vertical-align: top;
+      position: relative;
+      width: @chap_width;
+      height: @chap_height;
+      overflow: hidden;
+      #chapter_list {
+        position: absolute;
+        width: 9999px;
+        height: @chap_height;
+        text-align: left;
+        li.chapter {
+          display: inline-block;
+          vertical-align: top;
+          position: relative;
+          width: @chap_width;
+          height: @chap_height;
+          background: linear-gradient(to right bottom, silver, white);
+          .title {
+            color: navy;
+            margin: 10px 10px 0 10px;
+            font-size: 130%;
+          }
+          .desc {
+            margin: 0 10px;
+            color: navy;
+          }
+          ul.stage_list {
+            position: absolute;
+            width: 300px;
+            max-height: 300px;
+            overflow-y: auto;
+            right: 10px;
+            bottom: 10px;
+            li.stage {
+              text-align: center;
+              font-size: 20px;
+              cursor: pointer;
+              @base: maroon;
+              background: linear-gradient(to bottom, @base, darken(@base, 10%));
+              &:hover {
+                background: linear-gradient(to bottom, lighten(@base, 15%), lighten(@base, 5%));
+              }
+            }
+          }
+        }
       }
     }
   }

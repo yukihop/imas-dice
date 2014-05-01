@@ -12,11 +12,30 @@ module cgdice {
   export var application: Application;
   export var game: DiceGame;
 
+  export function minMax(value: number, min: number, max: number): number {
+    return Math.max(min, Math.min(max, value));
+  }
+
+  export interface StageInfo {
+    title: string;
+    layout: string;
+    blocks: any;
+  }
+
+  export interface ChapterInfo {
+    title: string;
+    data: string;
+    desc: string;
+    stages?: StageInfo[];
+  }
+
   export class Application extends createjs.EventDispatcher {
     public loader = new createjs.LoadQueue();
 
     private _title: titles.Title;
     private _stage_selector: titles.StageSelector;
+
+    public chapters: ChapterInfo[];
 
     public availableCharacters: characters.Character[];
 
@@ -59,7 +78,7 @@ module cgdice {
       });
     }
 
-    private loadComplete() {
+    private preloadComplete() {
       game = new DiceGame();
       game.init();
       game.on('gameFinish', () => {
@@ -73,7 +92,10 @@ module cgdice {
       });
 
       this._stage_selector = new cgdice.titles.StageSelector();
-      this._stage_selector.on('stageSelect', () => {
+
+      // prepare chapter data
+      this.chapters.forEach(chap => {
+        chap.stages = <StageInfo[]>this.loader.getResult(chap.data);
       });
 
       // initialize character data from settings file
@@ -87,12 +109,24 @@ module cgdice {
       });
     }
 
+    private chapterLoadComplete() {
+      this.loader.removeAllEventListeners('complete');
+      this.loader.on('complete', this.preloadComplete, this);
+      this.chapters = <ChapterInfo[]>this.loader.getResult('chapterData');
+      this.chapters.forEach(chap => {
+        this.loader.loadFile(
+          { id: chap.data, src: 'settings/' + chap.data + '.json' },
+          false);
+      });
+      this.loader.load();
+    }
+
     public run(): void {
       createjs.Ticker.setFPS(30);
-      this.loader.on('complete', this.loadComplete, this);
+      this.loader.on('complete', this.chapterLoadComplete, this);
       this.loader.loadManifest([
         { id: 'characters', src: 'settings/characters.json' },
-        { id: 'fieldData', src: 'settings/stage1.json' },
+        { id: 'chapterData', src: 'settings/chapters.json' },
         { id: 'enemies', src: 'settings/enemies.json' }
       ]);
     }
@@ -297,7 +331,7 @@ module cgdice {
         });
     }
 
-    public reset(fieldData: any, players: characters.Character[]) {
+    public reset(fieldData: StageInfo, players: characters.Character[]) {
       var maxHP = 0;
       this.players = players;
       this.players.forEach(p => {

@@ -21,7 +21,7 @@ module cgdice.titles {
   var previousSelected: characters.Character[] = [];
 
   export class StageSelector extends cgdice.DomDisplayObject {
-    private _data: any;
+    private _chap_index: number;
 
     private updateSelectedCount(): number {
       var selected_count = $('.character.selected', this.element).length;
@@ -29,11 +29,17 @@ module cgdice.titles {
       return selected_count;
     }
 
+    private scrollChapter(delta: number) {
+      this._chap_index = minMax(this._chap_index + delta, 0, application.chapters.length - 1);
+      var w = $('#chapter_list_container', this.element).width();
+      $('#chapter_list', this.element).animate({ left: - w * this._chap_index });
+    }
+
     constructor() {
       super($('#stage_select'));
 
       this.element.on('click', 'li.stage', (event) => {
-        var idx = $(event.target).index();
+        var stage: StageInfo = $(event.target).data('stage');
         var players: cgdice.characters.Character[];
         players = $('#character_list .selected', this.element).map((i, elem) => {
           return $(elem).data('self');
@@ -41,12 +47,7 @@ module cgdice.titles {
         previousSelected = players.slice(0); // duplicate
         $('#character_list .selected', this.element).removeClass('selected');
 
-        if (players.length == 0) {
-          alert('select someone');
-          return;
-        }
-
-        game.reset(this._data[idx], players);
+        game.reset(stage, players);
         this.element.transition({
           opacity: 0,
           duration: 300,
@@ -76,28 +77,43 @@ module cgdice.titles {
       $('#character_list', this.element).sortable({
         distance: 10
       });
+
+      $('#chapter_prev', this.element).on('click', () => this.scrollChapter(-1));
+      $('#chapter_next', this.element).on('click', () => this.scrollChapter(1));
+
     }
 
     public reset() {
       // stages
-      var list = this.element.find('#stage_list');
-      list.empty();
-      this._data = <Array<any>>application.loader.getResult('fieldData');
-      this._data.forEach((stage) => {
-        $('<li>').addClass('stage').text(stage.title).appendTo(list);
+      var chapter_list = this.element.find('#chapter_list').css('left', '0');
+      chapter_list.empty();
+      application.chapters.forEach(chap => {
+        var chapli = $('#templates .chapter').clone().appendTo(chapter_list);
+        var stage_list = chapli.find('.stage_list');
+        chapli.find('.title').text(chap.title);
+        chapli.find('.desc').text(chap.desc);
+        chap.stages.forEach(stage => {
+          var stageli = $('<li>')
+            .addClass('stage')
+            .text(stage.title)
+            .data('stage', stage)
+            .appendTo(stage_list);
+        });
       });
+      this._chap_index = 0;
 
       // characters
-      list = this.element.find('#character_list');
-      list.find('.character').detach(); // do not empty
+      var character_list = this.element.find('#character_list');
+      character_list.find('.character').detach(); // do not empty
 
       application.availableCharacters.forEach((p, i) => {
+        p.resetHighlight();
         if (previousSelected.length == 0) {
           p.element.toggleClass('selected', i < 5);
         } else {
           p.element.toggleClass('selected', previousSelected.indexOf(p) >= 0);
         }
-        $('<li>').append(p.element).appendTo(list);
+        $('<li>').append(p.element).appendTo(character_list);
       });
       this.updateSelectedCount();
 

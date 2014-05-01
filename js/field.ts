@@ -401,7 +401,7 @@ module cgdice.fields {
       }
     }
 
-    public reset(fieldData: any) {
+    public reset(fieldData: StageInfo) {
       var blocksData = fieldData.blocks;
       var prev: Block;
 

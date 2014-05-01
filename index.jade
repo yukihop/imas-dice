@@ -48,7 +48,11 @@ html
               button#result_ok OK
         #stage_select
           p ステージ選択
-          ul#stage_list
+          #chapter_selector
+            #chapter_prev ←
+            #chapter_list_container
+              ul#chapter_list
+            #chapter_next →
           p ユニット編成
             |(
             span.selected_count
@@ -115,3 +119,7 @@ html
       .flytext
       .phase_message_frame
         .phase_message
+      li.chapter
+        .title
+        .desc
+        ul.stage_list
