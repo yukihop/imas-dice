@@ -13,6 +13,11 @@ li { list-style-type: none; }
   transform: @param;
 }
 
+.linear-gradient(@param) {
+  background: -webkit-linear-gradient(@param);
+  background: linear-gradient(@param);
+}
+
 .no-user-select() {
   user-select: none;
   -webkit-user-select: none;
@@ -71,7 +76,7 @@ canvas {
 
 #title {
   .main_panel;
-  background: linear-gradient(to right bottom, salmon, purple);
+  .linear-gradient(to right bottom, salmon, purple;);
   text-align: center;
   .main_menu {
     font-size: 18px;
@@ -82,7 +87,7 @@ canvas {
 
 #stage_select {
   .main_panel;
-  background: linear-gradient(to right bottom, salmon, white);
+  .linear-gradient(to right bottom, salmon, white;);
   >p {
     color: brown;
     text-align: center;
@@ -120,7 +125,7 @@ canvas {
           position: relative;
           width: @chap_width;
           height: @chap_height;
-          background: linear-gradient(to right bottom, silver, white);
+          .linear-gradient(to right bottom, silver, white;);
           .title {
             color: navy;
             margin: 10px 10px 0 10px;
@@ -142,9 +147,9 @@ canvas {
               font-size: 20px;
               cursor: pointer;
               @base: maroon;
-              background: linear-gradient(to bottom, @base, darken(@base, 10%));
+              .linear-gradient(to bottom, @base, darken(@base, 10%););
               &:hover {
-                background: linear-gradient(to bottom, lighten(@base, 15%), lighten(@base, 5%));
+                .linear-gradient(to bottom, lighten(@base, 15%), lighten(@base, 5%););
               }
             }
           }
@@ -324,12 +329,12 @@ canvas {
       border-radius: 5px;
       transition: background 0.3s;
       &.invoked {
-        background: linear-gradient(to bottom, #800, #f00, #700);
+        .linear-gradient(to bottom, #800, #f00, #700;);
         color: white;
         text-shadow: 1px 1px 1px red;
       }
       &.invokable {
-        background: linear-gradient(to bottom, yellow, white, yellow);
+        .linear-gradient(to bottom, yellow, white, yellow;);
       }
     }
   }
@@ -362,7 +367,7 @@ canvas {
     .mp_bar {
       width: 100%;
       height: 100%;
-      background: linear-gradient(to right, #0ab, #05f);
+      .linear-gradient(to right, #0ab, #05f;);
       border-radius: 3px;
     }
     #stage_select & { display: none; }
@@ -598,7 +603,7 @@ canvas {
     position: absolute;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to bottom, #fa0, #f30, #850);
+    .linear-gradient(to bottom, #fa0, #f30, #850;);
   }
   .hp_healbar {
     position: absolute;
@@ -610,7 +615,7 @@ canvas {
     position: absolute;
     width: 0;
     height: 100%;
-    background: linear-gradient(to bottom, #800, #000);
+    .linear-gradient(to bottom, #800, #000;);
   }
   &.healing {
     border: 1px solid yellow;
@@ -643,7 +648,7 @@ canvas {
     min-width: 150px;
     padding: 0 15px;
     font-size: 60px;
-    background: linear-gradient(to bottom, red, salmon, red);
+    .linear-gradient(to bottom, red, salmon, red;);
     color: white;
   }
   &.all_attack {
