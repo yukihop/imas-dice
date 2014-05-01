@@ -221,7 +221,7 @@ module cgdice.characters {
           this.attribute = c.attribute;
           this._baseHP = c.base_hp;
           this._image = c.image;
-          this.element.css('background-image', 'url(images/' + c.image + ')');
+          this.element.css('background-image', 'url(images/characters/' + c.image + ')');
           this._multipliers = $.map(c.multipliers, (v) => { return new Multiplier(v); });
           this._skills = [];
           c.skills.forEach(skill => {

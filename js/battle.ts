@@ -80,7 +80,7 @@ module cgdice.battles {
       var data = application.loader.getResult('enemies');
       if (!(id in data)) { alert('Runtime Error: no such enemy ID'); }
       var e = data[id];
-      this.element.find('.enemy_image').attr('src', 'images/' + e.image);
+      this.element.find('.enemy_image').attr('src', 'images/enemies/' + e.image);
       this.name = e.name;
       this.HP = e.HP;
       this.maxHP = e.HP;

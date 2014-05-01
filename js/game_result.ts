@@ -7,8 +7,7 @@ module cgdice {
       this.player.gainExp(exp);
       var e = this.element;
       $('.name', e)
-        .text(p.name)
-        .css('background-image', 'url(images/' + p.image + ')');
+        .css('background-image', 'url(images/characters/' + p.image + ')');
       $('.old_level', e).text(old_level.toString());
       $('.new_level', e).text(p.level().toString());
       $('.old_hp', e).text(old_hp.toString());
