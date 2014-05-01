@@ -9,6 +9,8 @@ module cgdice.talks {
     private talk_index: number;
     private talks: JQuery;
 
+    static DIALOG_MAX_HEIGHT = 300;
+
     static show(fullid: string);
     static show(fileid: string, talkid: string);
     static show(fileid: string, talkid?: string) {
@@ -21,22 +23,35 @@ module cgdice.talks {
     }
 
     private doShow(item: JQuery) {
-      item = item.clone();
       if (!item || item.length == 0) {
         alert('Internal error: No matching dialog ID');
       }
+      item = item.clone().appendTo(this.dialog);
       this.talks = item.children();
       this.talk_index = 0;
       this.dialog.on('click', () => {
         if (this.talk_index >= this.talks.length) {
           this.dialog.dialog('close');
+          this.dialog.remove();
           this.dialog = null;
         } else {
           var elem = this.talks.eq(this.talk_index++);
-          this.dialog.append(elem);
           elem.animate({ left: 0 }, 200);
-          $('.ui-dialog-content').scrollTop(9999);
+          if (elem.position().top + elem.height() > Talk.DIALOG_MAX_HEIGHT) {
+            var scroll = elem.position().top + elem.height() - Talk.DIALOG_MAX_HEIGHT;
+            $(this.dialog).scrollTop(scroll);
+          }
         }
+      });
+      $(this.dialog).css({
+        'max-height': Talk.DIALOG_MAX_HEIGHT + 'px',
+        'top': '0',
+        'color': 'pink'
+      });
+      $(this.dialog).closest('.ui-dialog').position({
+        my: 'center',
+        at: 'center',
+        of: $('#gamemode')
       });
       this.dialog.click();
     }
@@ -48,26 +63,25 @@ module cgdice.talks {
         draggable: false,
         resizable: false,
         width: 400,
-        height: 300,
+        maxHeight: Talk.DIALOG_MAX_HEIGHT,
         modal: true,
-        position: { my: 'center', at: 'center', of: $('#gamemode') },
         closeOnEscape: false
       });
-      if (fileid in Talk.loaded) {
-        var item = Talk.loaded[fileid].find('.' + id);
-        this.doShow(item);
+    if(fileid in Talk.loaded) {
+      var item = Talk.loaded[fileid].children('.' + id);
+      this.doShow(item);
       } else {
-        $.ajax({
-          url: 'talks/' + fileid + '.html',
-          method: 'GET',
-          success: (data) => {
-            var result = $('<div>').html(data);
-            Talk.loaded[fileid] = result;
-            this.doShow(result.find('.' + id));
-          },
-          type: 'text'
-        });
-      }
+    $.ajax({
+      url: 'talks/' + fileid + '.html',
+      method: 'GET',
+      success: (data) => {
+        var result = $('<div>').html(data);
+        Talk.loaded[fileid] = result;
+        this.doShow(result.children('.' + id));
+      },
+      type: 'text'
+    });
+  }
     }
   }
 }
