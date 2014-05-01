@@ -1,7 +1,8 @@
 - title: ここはどこだろう
   layout: horizontal
   blocks:
-    - start
+    - type: start
+      talk: tutorial/start
     - empty
     - empty
     - type: empty

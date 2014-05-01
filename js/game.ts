@@ -352,7 +352,14 @@ module cgdice {
       $('#stage_failed, #stage_failed_dice, #stage_clear').hide();
       this.console.clear();
       this.setPhase(GamePhase.InField);
-      new GamePhaseMessage('stage_start');
+
+      if (this.field.blocks[0].talk) {
+        talks.Talk.show(this.field.blocks[0].talk, () => {
+          new GamePhaseMessage('stage_start');
+        });
+      } else {
+        new GamePhaseMessage('stage_start');
+      }
       this.setReady(true);
     }
 
