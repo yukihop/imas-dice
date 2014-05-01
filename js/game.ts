@@ -22,6 +22,7 @@ module cgdice {
     blocks: any;
     unlocked?: boolean;
     talkOnUnlocked?: string;
+    unlockPlayer?: any;
   }
 
   export interface ChapterInfo {
@@ -42,7 +43,11 @@ module cgdice {
     private _stage_selector: titles.StageSelector;
 
     public chapters: ChapterInfo[];
-    public availableCharacters: characters.Character[];
+    public allCharacters: characters.Character[] = [];
+
+    public unlockedCharacters(): characters.Character[] {
+      return this.allCharacters.filter(c => c.unlocked);
+    }
 
     public currentStage: StageInfo;
 
@@ -53,7 +58,7 @@ module cgdice {
 
     public save() {
       var data: any = { characters: {} };
-      this.availableCharacters.forEach(c => {
+      this.allCharacters.forEach(c => {
         data.characters[c.name] = c.saveJSON();
       });
       prompt('これを保存', JSON.stringify(data));
@@ -70,7 +75,7 @@ module cgdice {
       }
 
       this.wipe();
-      this.availableCharacters.forEach(c => {
+      this.allCharacters.forEach(c => {
         if (c.name in data.characters) {
           c.loadJSON(data.characters[c.name]);
         }
@@ -79,7 +84,7 @@ module cgdice {
     }
 
     public wipe() {
-      this.availableCharacters.forEach(c => {
+      this.allCharacters.forEach(c => {
         c.initializeParameters();
         c.redraw();
       });
@@ -110,6 +115,12 @@ module cgdice {
           this._stage_selector.openingTalkID = unlockedStage.talkOnUnlocked;
         }
       }
+    }
+
+    public unlockCharacter(name: string) {
+      this.allCharacters.forEach(c => {
+        if (c.name == name) c.unlocked = true;
+      });
     }
 
     private stageDetermined(event) {
@@ -148,11 +159,13 @@ module cgdice {
       this.chapters[0].stages[0].unlocked = true;
 
       // initialize character data from settings file
-      this.availableCharacters = [];
       var data = this.loader.getResult('characters');
       $.each(data, (i, cdata) => {
         var p = new characters.Character(cdata.name);
-        this.availableCharacters.push(p);
+        this.allCharacters.push(p);
+        if (cdata.unlockedFromStart) {
+          p.unlocked = true;
+        }
         p.element.data('self', p);
         p.redraw();
       });
@@ -429,6 +442,13 @@ module cgdice {
     private stageCleared() {
       this.setPhase(GamePhase.InResults);
       application.unlockNextStage();
+      var unlockPlayer = application.currentStage.unlockPlayer;
+      if (unlockPlayer) {
+        if (typeof unlockPlayer == 'string') {
+          unlockPlayer = [unlockPlayer];
+        }
+        unlockPlayer.forEach(p => application.unlockCharacter(p));
+      }
       this.gameResult.start();
     }
 

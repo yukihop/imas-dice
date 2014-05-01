@@ -31,6 +31,7 @@ module cgdice.characters {
   }
 
   export class Character extends cgdice.StatusClient {
+    public unlocked: boolean = false;
     public name: string;
     private _image: string;
     public attribute: string;

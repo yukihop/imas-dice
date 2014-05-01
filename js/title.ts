@@ -120,7 +120,10 @@ module cgdice.titles {
       var character_list = this.element.find('#character_list');
       character_list.find('.character').detach(); // do not empty
 
-      application.availableCharacters.forEach((p, i) => {
+      application.allCharacters.forEach((p, i) => {
+        if (!p.unlocked) {
+          return;
+        }
         p.resetHighlight();
         if (previousSelected.length == 0) {
           p.element.toggleClass('selected', i < 5);
