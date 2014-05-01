@@ -25,6 +25,40 @@ module cgdice {
       return true;
     }
 
+    public save() {
+      var data: any = { characters: {} };
+      this.availableCharacters.forEach(c => {
+        data.characters[c.name] = c.saveJSON();
+      });
+      prompt('これを保存', JSON.stringify(data));
+    }
+
+    public load() {
+      var data_string = prompt('セーブデータ?');
+      var data: any;
+      try {
+        data = JSON.parse(data_string);
+      } catch (e) {
+        alert('構文エラーです');
+        return;
+      }
+
+      this.wipe();
+      this.availableCharacters.forEach(c => {
+        if (c.name in data.characters) {
+          c.loadJSON(data.characters[c.name]);
+        }
+        c.redraw();
+      });
+    }
+
+    public wipe() {
+      this.availableCharacters.forEach(c => {
+        c.initializeParameters();
+        c.redraw();
+      });
+    }
+
     private loadComplete() {
       game = new DiceGame();
       game.init();

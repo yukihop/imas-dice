@@ -1,17 +1,20 @@
 module cgdice.titles {
 
   export class Title extends cgdice.DomDisplayObject {
-    private menuClicked(event: JQueryMouseEventObject) {
+    private menuClicked() {
       this.dispatchEvent('titleClose');
     }
 
     constructor() {
       super($('#title'));
-      this.element.on(
-        'click',
-        '.main_menu',
-        $.proxy(this.menuClicked, this)
-        );
+      this.element.on('click', '#game_start', () => this.menuClicked());
+      this.element.on('click', '#save', () => application.save());
+      this.element.on('click', '#load', () => application.load());
+      this.element.on('click', '#wipe', () => {
+        if (confirm('セーブを初期化しますか?')) {
+          application.wipe();
+        }
+      });
     }
   }
 
@@ -28,6 +31,7 @@ module cgdice.titles {
 
     constructor() {
       super($('#stage_select'));
+
       this.element.on('click', 'li.stage', (event) => {
         var idx = $(event.target).index();
         var players: cgdice.characters.Character[];

@@ -81,6 +81,21 @@ module cgdice.characters {
       return 10;
     }
 
+    public initializeParameters() {
+      this._exp = 0;
+    }
+
+    public saveJSON(): any {
+      var result: any = {};
+      result.exp = this._exp;
+      return result;
+    }
+
+    public loadJSON(data: any) {
+      this.initializeParameters();
+      this._exp = data.exp;
+    }
+
     public resetHighlight() {
       this.element.find('.multiplier').removeClass('invoked invokable');
       this.element.find('.current_attack').text('');
@@ -229,6 +244,7 @@ module cgdice.characters {
           });
         }
       }
+      this.initializeParameters();
 
       game.on('ready', this.updateSkillInvokableStatus, this);
 

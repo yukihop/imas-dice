@@ -90,11 +90,13 @@ canvas {
   }
   #stage_list {
     margin: 0 30px;
+    max-width: 400px;
+    margin: 0 auto;
     height: 250px;
     overflow-y: auto;
     li {
       text-align: center;
-      font-size: 30px;
+      font-size: 28px;
       cursor: pointer;
       @base: maroon;
       background: linear-gradient(to bottom, @base, darken(@base, 10%));
@@ -125,7 +127,7 @@ canvas {
     bottom: 10px;
     left: 10px;
     border: 1px solid black;
-    padding: 5px;
+    padding: 5px 10px;
   }
   #stack {
     position: absolute;
@@ -320,9 +322,9 @@ canvas {
   }
   .popup {
     position: absolute;
-    width: 120px;
+    width: 140px;
     bottom: 100px;
-    left: -10px;
+    left: -20px;
     z-index: 10;
     background-color: rgba(0, 0, 50, 0.7);
     border: 2px solid white;
