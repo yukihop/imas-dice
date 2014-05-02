@@ -1,76 +1,69 @@
 - title: テストステージ
   layout: zigzagHorizontal
   blocks:
-    - Start
-    - Proceed
-    - Enemy chibichihi
-    - Enemy chibichihi
-    - type: Empty
-      talk: sample/empty
-    - Enemy chibichihi
-    - Enemy chibichihi
+    - start
+    - proceed
+    - enemy chibichihi
+    - enemy chibichihi
+    - empty sample/empty
+    - enemy chibichihi
+    - enemy chibichihi
     - Back
-    - Empty
-    - Empty
-    - Proceed
-    - Empty
-    - type: Heal
-      talk: sample/heal
-    - type: Damage
-      talk: sample/damage
-    - Empty
-    - type: Treasure
-      talk: sample/treasure
-    - Proceed
-    - Empty
-    - Heal
-    - Damage
-    - Empty
-    - Empty
-    - Proceed
-    - Empty
-    - Heal 35
-    - Damage 50
-    - Empty
-    - Empty
-    - Proceed
-    - Empty
-    - Heal 15
-    - Damage 50
-    - Empty
-    - Empty
-    - Proceed
-    - Empty
-    - Heal 20
-    - Damage 30
-    - Empty
-    - type: boss
-      enemy: chihiro
-      level: 30
-      talk: sample/enemy_appear
+    - empty
+    - empty
+    - proceed
+    - empty
+    - heal sample/heal
+    - damage sample/damage
+    - empty
+    - treasure sample/treasure
+    - proceed
+    - empty
+    - heal
+    - damage
+    - empty
+    - empty
+    - proceed
+    - empty
+    - heal 35
+    - damage 50
+    - empty
+    - empty
+    - proceed
+    - empty
+    - heal 15
+    - damage 50
+    - empty
+    - empty
+    - proceed
+    - empty
+    - heal 20
+    - damage 30
+    - empty
+    - boss chihiro sample/enemy_appear
 - title: テストステージ2（短）
   blocks:
-    - Start
-    - Enemy chibichihi
-    - Empty
-    - Enemy chibichihi
-    - Empty
-    - Boss chihiro
+    - start
+    - enemy chibichihi
+    - empty
+    - enemy chibichihi
+    - empty
+    - boss chihiro
 - title: テストステージ3（敵だらけ）
   blocks:
-    - Start
-    - Enemy chibichihi
-    - Enemy chibichihi
-    - Treasure
-    - Enemy chibichihi
-    - Enemy chibichihi
-    - Treasure
-    - Enemy chibichihi
-    - Treasure
-    - Enemy chibichihi
-    - Enemy chibichihi
-    - Enemy chibichihi
-    - Boss chihiro
+    - start
+    - enemy chibichihi
+    - enemy chibichihi
+    - treasure
+    - enemy chibichihi
+    - enemy chibichihi
+    - treasure
+    - enemy chibichihi
+    - treasure
+    - enemy chibichihi
+    - enemy chibichihi
+    - enemy chibichihi
+    - boss chihiro
 - title: チャレンジ
   layout: zigzagHorizontal
   blocks:

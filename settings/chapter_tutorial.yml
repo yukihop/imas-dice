@@ -1,47 +1,30 @@
 - title: ここはどこだろう
   layout: horizontal
   blocks:
-    - type: start
-      talk: tutorial/start
+    - start tutorial/start
     - empty
     - empty
-    - type: empty
-      stop: true
-      talk: tutorial/stop
+    - empty stop tutorial/stop
     - empty
     - empty
-    - type: treasure
-      stop: true
-      talk: tutorial/treasure
-      number: 10
+    - treasure 10 stop tutorial/treasure
     - empty
     - empty
     - empty
-    - type: damage
-      amount: 15
-      stop: true
-      talk: tutorial/damage
+    - damage 15 stop tutorial/damage
     - empty
     - empty
     - empty
-    - type: heal
-      amount: 15
-      stop: true
-      talk: tutorial/heal
+    - heal 15 stop tutorial/heal
     - empty
     - empty
     - empty
-    - type: enemy
-      stop: true
-      enemy: miku
-      talk: tutorial/enemy
+    - enemy miku stop tutorial/enemy
     - empty
     - empty
     - empty
     - empty
-    - type: boss
-      enemy: miku
-      talk: tutorial/boss
+    - boss miku tutorial/boss
 - title: ふらふら
   layout: horizontal
   blocks:
@@ -52,16 +35,12 @@
     - proceed 3
     - proceed 2
     - proceed 1
-    - type: empty
-      talk: tutorial/furafura
+    - empty tutorial/furafura
     - back 1
     - back 2
     - back 3
-    - type: treasure
-      stop: true
-      number: 5
-    - type: empty
-      stop: true
+    - treasure 5 stop
+    - empty stop
     - proceed 4
     - back 2
     - proceed 4
@@ -80,44 +59,33 @@
     - empty
     - empty
     - empty
-    - type: boss
-      enemy: miku
+    - boss miku
   talkOnUnlocked: tutorial/unlock_stage
 - title: 2倍攻撃で蹴散らそう
   blocks:
-    - type: start
-      talk: tutorial/need_multiply
+    - start tutorial/need_multiply
     - empty
-    - treasure
+    - treasure 5
     - empty
-    - treasure
-    - type: enemy
-      enemy: miku2
-      stop: true
-      talk: tutorial/multiply_hint
+    - treasure 5
+    - enemy miku2 stop tutorial/multiply_hint
     - empty
     - empty
     - empty
-    - type: enemy
-      enemy: miku2
-      stop: true
+    - enemy miku2 stop
     - empty
-    - treasure
+    - treasure 5
     - empty
-    - type: enemy
-      enemy: miku2
-      stop: true
+    - enemy miku2 stop
     - empty
     - empty
     - heal 30
     - empty
     - empty
-    - type: enemy
-      enemy: miku2
-      stop: true
+    - enemy miku2 stop
     - empty
     - empty
     - empty
-    - treasure
+    - treasure 5
     - empty
     - boss miku2

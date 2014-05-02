@@ -69,7 +69,7 @@ module cgdice.fields {
       }
     }
 
-    constructor(type: string, data: any) {
+    constructor(type: string) {
       super();
 
       if (!Block._spriteSheet) {
@@ -96,6 +96,10 @@ module cgdice.fields {
       this.addChild(this._box);
     }
 
+    public processToken(tok: string) {
+      // abstract 
+    }
+
     static fromObject(blockData: any) {
       var classMap = {
         start: 'EmptyBlock',
@@ -111,26 +115,27 @@ module cgdice.fields {
       var type: string;
       var className: string;
       var block: Block;
-      if (typeof blockData == 'string') {
-        var params = (<string>blockData).split(/\s+/);
-        type = params[0].toLowerCase();
-        className = classMap[type];
-        block = new (cgdice.fields[className])(type, params);
-      } else {
-        type = (<string>blockData.type).toLowerCase();
-        className = classMap[type];
-        block = new (cgdice.fields[className])(type, blockData);
-        block.talk = ('talk' in blockData) ? blockData.talk : null;
-        block.stop = 'stop' in blockData && blockData.stop == true;
-      }
+      var tokens = (<string>blockData).split(/\s+/);
+      type = tokens.shift().toLowerCase();
+      className = classMap[type];
+      block = new (cgdice.fields[className])(type);
+      tokens.forEach((tok) => {
+        if (tok == 'stop') {
+          block.stop = true;
+        } else if (tok.match(/\//)) {
+          block.talk = tok;
+        } else {
+          block.processToken(tok);
+        }
+      });
       block.style = type;
       return block;
     }
   }
 
   export class EmptyBlock extends Block {
-    constructor(type: string, data: any) {
-      super(type, data);
+    constructor(type: string) {
+      super(type);
       this.className = 'EmptyBlock';
     }
   }
@@ -142,47 +147,45 @@ module cgdice.fields {
       this.bounce(callback, 2, 1000);
     }
 
-    constructor(type: string, data: any) {
-      super(type, data);
+    constructor(type: string) {
+      super(type);
       this.className = 'EnemyBlock';
+    }
 
-      if (data instanceof Array && data.length >= 2) {
-        this.enemyID = data[1];
-      } else if ('enemy' in data) {
-        this.enemyID = data.enemy;
-      }
+    public processToken(token: string) {
+      this.enemyID = token;
     }
   }
 
   export class TreasureBlock extends Block {
-    public diceNumber: number;
+    public diceNumber: number = 5;
 
-    constructor(type: string, data: any) {
-      super(type, data);
+    constructor(type: string) {
+      super(type);
       this.className = 'TreasureBlock';
-      this.diceNumber = 5;
-      if (data instanceof Array && data.length >= 2) {
-        this.diceNumber = parseInt(data[1]);
-      } else if ('number' in data) {
-        this.diceNumber = parseInt(data['number']);
-      }
+    }
+
+    public processToken(token: string) {
+      var tmp = parseInt(token);
+      if (tmp != 0) this.diceNumber = tmp;
     }
   }
 
   export class DamageBlock extends Block {
-    public amount: number;
+    private _amount: number = 10;
     private _numtext: createjs.Text;
+    private _heal: boolean = false;
 
-    constructor(type: string, data: any) {
-      super(type, data);
+    set amount(value: number) {
+      this._amount = value;
+      if (this._numtext) this._numtext.text = Math.abs(value).toString();
+    }
+    get amount(): number { return this._amount; }
+
+    constructor(type: string) {
+      super(type);
       this.className = 'DamageBlock';
-      this.amount = 10;
-      if (data instanceof Array && data.length >= 2) {
-        this.amount = parseInt(data[1]);
-      } else if ('number' in data) {
-        this.amount = parseInt(data['amount']);
-      }
-      if (type == 'heal') this.amount = -this.amount;
+      this._heal = (type == 'heal');
 
       this._numtext = new createjs.Text(
         Math.abs(this.amount).toString(),
@@ -192,26 +195,35 @@ module cgdice.fields {
       this._numtext.x = 18;
       this.addChild(this._numtext);
     }
+
+    public processToken(token: string) {
+      var tmp = parseInt(token);
+      if (tmp != 0) {
+        if (this._heal) tmp = -tmp;
+        this.amount = tmp;
+      }
+    }
   }
 
   export class ProceedBlock extends Block {
-    public step: number;
+    private _step: number = 3;
     private _numtext: createjs.Text;
+    private _back: boolean;
+
+    get step(): number { return this._step; }
+    set step(value: number) {
+      this._step = value;
+      if (this._numtext) this._numtext.text = Math.abs(value).toString();
+    }
 
     public cursorStop(callback: () => void = $.noop) {
       this.rotate(callback);
     }
 
-    constructor(type: string, data: any) {
-      super(type, data);
+    constructor(type: string) {
+      super(type);
       this.className = 'ProceedBlock';
-      this.step = 3;
-      if (data instanceof Array && data.length >= 2) {
-        this.step = parseInt(data[1]);
-      } else if ('number' in data) {
-        this.step = parseInt(data['step']);
-      }
-      if (type == 'back') this.step = -this.step;
+      this._back = (type == 'back');
 
       this._numtext = new createjs.Text(
         Math.abs(this.step).toString(),
@@ -221,6 +233,14 @@ module cgdice.fields {
       this._numtext.x = 5;
       this._numtext.y = -20;
       this.addChild(this._numtext);
+    }
+
+    public processToken(token: string) {
+      var tmp = parseInt(token);
+      if (tmp != 0) {
+        if (this._back) tmp = -tmp;
+        this.step = tmp;
+      }
     }
 
   }
