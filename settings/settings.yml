@@ -1,0 +1,3 @@
+characters: !include settings/characters.yml
+chapters: !include settings/chapters.yml
+enemies: !include settings/enemies.yml

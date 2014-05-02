@@ -233,7 +233,8 @@ module cgdice.characters {
 
     constructor(id: string) {
       super('character');
-      var character_data = <Array<any>>application.loader.getResult('characters');
+      this.element.data('self', this);
+      var character_data = application.settings.characters;
       for (var i = 0; i < character_data.length; i++) {
         var c = character_data[i];
         if (c.name == id) {

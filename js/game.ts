@@ -16,6 +16,12 @@ module cgdice {
     return Math.max(min, Math.min(max, value));
   }
 
+  export interface Settings {
+    chapters: ChapterInfo[];
+    enemies: {[key: string]: EnemyInfo};
+    characters: any[];
+  }
+
   export interface StageInfo {
     title: string;
     layout: string;
@@ -33,16 +39,27 @@ module cgdice {
     unlocked?: boolean;
   }
 
+  export interface EnemyInfo {
+    name: string;
+    image: string;
+    HP: number;
+    ATK: number;
+    EXP: number;
+    start_talk?: string;
+    defeated_talk?: string;
+  }
+
   /**
    * Root-level manager of this game.
    */
   export class Application extends createjs.EventDispatcher {
-    public loader = new createjs.LoadQueue();
+    public _loader = new createjs.LoadQueue();
 
     private _title: titles.Title;
     private _stage_selector: titles.StageSelector;
 
-    public chapters: ChapterInfo[];
+    public settings: Settings;
+
     public allCharacters: characters.Character[] = [];
 
     public unlockedCharacters(): characters.Character[] {
@@ -92,7 +109,8 @@ module cgdice {
 
     public unlockNextStage() {
       var unlockedStage: StageInfo = null;
-      this.chapters.some((chap, ci) => {
+      var chapters = this.settings.chapters;
+      chapters.some((chap, ci) => {
         chap.stages.some((stage, si) => {
           if (stage == this.currentStage) {
             if (si == chap.stages.length - 1) {
@@ -100,8 +118,8 @@ module cgdice {
               if (ci == chap.stages.length - 1) {
                 // All stages already unlocked.
               } else {
-                this.chapters[ci + 1].unlocked = true;
-                unlockedStage = this.chapters[ci + 1].stages[0];
+                chapters[ci + 1].unlocked = true;
+                unlockedStage = chapters[ci + 1].stages[0];
                 return true;
               }
             } else {
@@ -138,6 +156,8 @@ module cgdice {
         this._title.element.show();
       });
 
+      this.settings = <Settings>this._loader.getResult('settings');
+
       this._title = new cgdice.titles.Title();
       this._title.on('titleClose', () => {
         this._title.element.hide();
@@ -148,8 +168,7 @@ module cgdice {
       this._stage_selector.addEventListener('stageDetermine', (event) => this.stageDetermined(event));
 
       // prepare chapter data
-      this.chapters.forEach(chap => {
-        chap.stages = <StageInfo[]>this.loader.getResult(chap.data);
+      this.settings.chapters.forEach(chap => {
         // for debug use
         if (chap.title.match(/テスト/)) {
           chap.unlocked = true;
@@ -158,41 +177,25 @@ module cgdice {
       });
 
       // unlock first chapter and first stage
-      this.chapters[0].unlocked = true;
-      this.chapters[0].stages[0].unlocked = true;
+      this.settings.chapters[0].unlocked = true;
+      this.settings.chapters[0].stages[0].unlocked = true;
 
       // initialize character data from settings file
-      var data = this.loader.getResult('characters');
-      $.each(data, (i, cdata) => {
+      this.settings.characters.forEach(cdata => {
         var p = new characters.Character(cdata.name);
         this.allCharacters.push(p);
         if (cdata.unlockedFromStart) {
           p.unlocked = true;
         }
-        p.element.data('self', p);
         p.redraw();
       });
     }
 
-    private chapterLoadComplete() {
-      this.loader.removeAllEventListeners('complete');
-      this.loader.on('complete', this.preloadComplete, this);
-      this.chapters = <ChapterInfo[]>this.loader.getResult('chapterData');
-      this.chapters.forEach(chap => {
-        this.loader.loadFile(
-          { id: chap.data, src: 'settings/' + chap.data + '.json' },
-          false);
-      });
-      this.loader.load();
-    }
-
     public run(): void {
       createjs.Ticker.setFPS(30);
-      this.loader.on('complete', this.chapterLoadComplete, this);
-      this.loader.loadManifest([
-        { id: 'characters', src: 'settings/characters.json' },
-        { id: 'chapterData', src: 'settings/chapters.json' },
-        { id: 'enemies', src: 'settings/enemies.json' }
+      this._loader.on('complete', this.preloadComplete, this);
+      this._loader.loadManifest([
+        { id: 'settings', src: 'settings/settings.json' },
       ]);
     }
   }

@@ -1,6 +1,6 @@
 - title: ことりPの冒険
   desc: 目が覚めたら変な世界に迷いこんでいたことりPの冒険がはじまる!
-  data: chapter_tutorial
+  stages: !include settings/chapter_tutorial.yml
 - title: テスト用ステージたち
   desc: とりあえず作ってみた雑多なステージたちです。いずれ消えます。
-  data: chapter_sample
+  stages: !include settings/chapter_sample.yml

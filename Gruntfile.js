@@ -29,12 +29,19 @@ module.exports = function(grunt) {
       }
     },
     yaml: {
-      options: { space: 0 },
+      options: {
+        space: 0,
+        customTypes: {
+          '!include scalar': function(value, yamlLoader) {
+            return yamlLoader(value);
+          }
+        }
+      },
       all: {
         files: [
           {
             expand: true,
-            src: ['settings/*.yml'],
+            src: ['settings/settings.yml'],
             dest: '',
             ext: '.json'
           }

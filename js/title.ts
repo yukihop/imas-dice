@@ -105,7 +105,7 @@ module cgdice.titles {
       $('#chapter_next', this.element).on('click', () => this.scrollChapter(1));
 
       $('#unlock_all_stages', this.element).on('click', () => {
-        application.chapters.forEach(chap => {
+        application.settings.chapters.forEach(chap => {
           chap.unlocked = true;
           chap.stages.forEach(st => st.unlocked = true);
         });
@@ -125,7 +125,7 @@ module cgdice.titles {
       // stages
       var chapter_list = this.element.find('#chapter_list').css('left', '0');
       chapter_list.empty();
-      application.chapters.forEach(chap => {
+      application.settings.chapters.forEach(chap => {
         if (!chap.unlocked) {
           return;
         }
