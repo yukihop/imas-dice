@@ -24,6 +24,7 @@ module cgdice {
     private _chap_index: number;
     public openingTalkID: string;
     private _select_max: number;
+    private _skill_selector: SkillSelector;
 
     public static MAX_PLAYERS = 5;
 
@@ -75,6 +76,7 @@ module cgdice {
 
     constructor() {
       super($('#stage_select'));
+      this._skill_selector = new SkillSelector();
 
       this.element.on('click', 'li.stage', (event) => this.stageClicked(event));
 
@@ -110,6 +112,10 @@ module cgdice {
           chap.stages.forEach(st => st.unlocked = true);
         });
         this.reset();
+      });
+
+      $('#open_skill_selector', this.element).on('click', () => {
+        this._skill_selector.start();
       });
 
       $('#unlock_all_characters', this.element).on('click', () => {

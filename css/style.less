@@ -36,7 +36,16 @@ header {
 
 button {
   padding: 3px 8px;
+  border: 1px solid gray;
   border-radius: 5px;
+  background-color: #ddd;
+  box-shadow: inset -1px -1px 1px #888;
+  &:hover {
+    background-color: #eee;
+  }
+  &:active {
+    background-color: #edd;
+  }
 }
 
 canvas {
@@ -685,6 +694,34 @@ canvas {
   margin: 10px;
   height: 5em;
   overflow-y: scroll;
+}
+
+// Skill Selectors
+#skill_selector {
+  .main_panel;
+  background: linear-gradient(to right bottom, #fb7, #ea6);
+  display: none;
+  img#skill_selector_bg {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  #skill_selector_container {
+    background-color: rgba(0, 0, 0, 0.3);
+    position: absolute;
+    left: 400px;
+    top: 20px;
+    right: 10px;
+    bottom: 20px;
+    padding: 15px;
+  }
+  #skill_selector_close {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    min-width: 150px;
+  }
 }
 
 // FlyText

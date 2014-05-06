@@ -57,6 +57,7 @@ html
             |(
             span.selected_count
             |)
+            button#open_skill_selector スキル解放
           ul#character_list
           #cheat_menu
             #unlock_all_stages 全ステージ解放
@@ -75,6 +76,12 @@ html
             li
               button#wipe.main_menu 初期化
           p 最新のデスクトップブラウザ(IE10+, Firefox, Chrome)でプレイしてください。古いブラウザでは動作しません。
+        #skill_selector
+          img#skill_selector_bg
+          #skill_selector_container
+            p スキル選択
+            p <span style="color: red; font-size: 200%">準備中です</span>
+            button#skill_selector_close 完了
         #tooltip
       #gamelog
     #templates

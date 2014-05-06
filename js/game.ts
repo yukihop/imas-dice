@@ -1,5 +1,6 @@
 /// <reference path="displayobject.ts" />
 /// <reference path="title.ts" />
+/// <reference path="skill_selector.ts" />
 /// <reference path="dice.ts" />
 /// <reference path="field.ts" />
 /// <reference path="talkshow.ts" />
