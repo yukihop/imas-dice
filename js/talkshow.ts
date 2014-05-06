@@ -1,4 +1,4 @@
-module cgdice.talks {
+module cgdice {
   /**
    * Talkクラスはダイアログとして表示される会話イベントを制御します。
    */

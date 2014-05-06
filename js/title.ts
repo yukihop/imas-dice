@@ -1,4 +1,4 @@
-module cgdice.titles {
+module cgdice {
 
   export class Title extends cgdice.DomDisplayObject {
     private menuClicked() {
@@ -65,7 +65,7 @@ module cgdice.titles {
       }).get();
 
       if (players.length < this._select_max) {
-        talks.Dialog.confirm('最大参加人数以下で進みますか?', (ok) => {
+        Dialog.confirm('最大参加人数以下で進みますか?', (ok) => {
           if (ok) this.stageDetermined(stage, players);
         });
       } else {
@@ -171,7 +171,7 @@ module cgdice.titles {
       this.element.show().css({ opacity: 1 });
 
       if (this.openingTalkID) {
-        talks.Talk.show(this.openingTalkID);
+        Talk.show(this.openingTalkID);
         this.openingTalkID = null;
       }
     }

@@ -97,7 +97,7 @@ module cgdice.fields {
     }
 
     public processToken(tok: string) {
-      // abstract 
+      // abstract
     }
 
     static fromObject(blockData: any) {
@@ -395,7 +395,7 @@ module cgdice.fields {
 
       switch (block.className) {
         case 'EmptyBlock':
-          if (block.talk) cgdice.talks.Talk.show(block.talk);
+          if (block.talk) Talk.show(block.talk);
           dispatchMoveEndEvents();
           break;
         case 'EnemyBlock':
@@ -406,17 +406,17 @@ module cgdice.fields {
           break;
         case 'DamageBlock':
           game.hp.HP -= (<DamageBlock>block).amount;
-          if (block.talk && game.hp.HP > 0) cgdice.talks.Talk.show(block.talk);
+          if (block.talk && game.hp.HP > 0) Talk.show(block.talk);
           dispatchMoveEndEvents();
           break;
         case 'TreasureBlock':
           game.stack.stock += (<TreasureBlock>block).diceNumber;
-          if (block.talk) cgdice.talks.Talk.show(block.talk);
+          if (block.talk) Talk.show(block.talk);
           dispatchMoveEndEvents();
           break;
         case 'ProceedBlock':
           this.proceed((<ProceedBlock>block).step, false, this._move_callback);
-          if (block.talk) cgdice.talks.Talk.show(block.talk);
+          if (block.talk) Talk.show(block.talk);
           break;
       }
     }

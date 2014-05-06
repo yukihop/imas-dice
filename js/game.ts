@@ -55,8 +55,8 @@ module cgdice {
   export class Application extends createjs.EventDispatcher {
     public _loader = new createjs.LoadQueue();
 
-    private _title: titles.Title;
-    private _stage_selector: titles.StageSelector;
+    private _title: Title;
+    private _stage_selector: StageSelector;
 
     public settings: Settings;
 
@@ -158,13 +158,13 @@ module cgdice {
 
       this.settings = <Settings>this._loader.getResult('settings');
 
-      this._title = new cgdice.titles.Title();
+      this._title = new Title();
       this._title.on('titleClose', () => {
         this._title.element.hide();
         this._stage_selector.reset();
       });
 
-      this._stage_selector = new cgdice.titles.StageSelector();
+      this._stage_selector = new StageSelector();
       this._stage_selector.addEventListener('stageDetermine', (event) => this.stageDetermined(event));
 
       // prepare chapter data
@@ -429,7 +429,7 @@ module cgdice {
       this.setPhase(GamePhase.InField);
 
       if (this.field.blocks[0].talk) {
-        talks.Talk.show(this.field.blocks[0].talk, () => {
+        Talk.show(this.field.blocks[0].talk, () => {
           new GamePhaseMessage('stage_start');
         });
       } else {

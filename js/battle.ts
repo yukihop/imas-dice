@@ -199,7 +199,7 @@ module cgdice.battles {
       this.startAlliesTurn();
       this.element.show();
       if (talkID) {
-        talks.Talk.show(talkID, () => new GamePhaseMessage('battle_start'));
+        Talk.show(talkID, () => new GamePhaseMessage('battle_start'));
       } else {
         new GamePhaseMessage('battle_start');
       }
