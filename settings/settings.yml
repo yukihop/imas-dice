@@ -1,3 +1,15 @@
+# ゲームの設定ファイルです。
+# プログラムのソースコードで記述する必要のないファイルはここで記述します。
+# これらのファイルは、YAML形式で記述します。
+# カスタム型として !include のみ使用可能です（使用方法は以下のファイル内容の通り）。
+
+
+# キャラクターデータです。
 characters: !include settings/characters.yml
+
+# ステージデータです。chapters.ymlは章のリストを保持し、それぞれの章の内容（ステージは）
+# 別ファイルから読み込ませます。
 chapters: !include settings/chapters.yml
+
+# 敵の一覧です。
 enemies: !include settings/enemies.yml

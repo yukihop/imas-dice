@@ -1,3 +1,10 @@
+# キャラクターデータです。
+# それぞれの意味はほぼ自明だと思いますが一部のみ解説。
+#
+# attribute: cu, co, pa, non(無属性)の4つから選んでください。
+# base_hp: Lv1での体力。Lv1毎にbase_hpの10%分だけ上昇(Lv11でbase_hpの2倍)。
+# unlockedFromStart: ニューゲーム時に初期解放されているかどうかのフラグ。
+
 - name: ことりP
   image: kotori_p.png
   attribute: non
