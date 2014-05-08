@@ -190,7 +190,7 @@ module cgdice.characters {
     public updateSkillInvokableStatus() {
       this.element.find('.skill').each((i, elem) => {
         var e = $(elem);
-        var skill = <skills.Skill>e.data('skill');
+        var skill = <skills.CommandSkill>e.data('skill');
         var invokable = true;
         if (game.phase == GamePhase.Inactive) {
           invokable = false;
@@ -225,6 +225,9 @@ module cgdice.characters {
       var list = $('.skills', this.element);
       list.empty();
       this._skills.forEach(skill => {
+        if (!(skill instanceof skills.CommandSkill)) {
+          return;
+        }
         var m = $('<li>').addClass('skill').data('skill', skill);
         m.text(skill.name);
         list.append(m);
@@ -243,10 +246,20 @@ module cgdice.characters {
           this._baseHP = c.base_hp;
           this._image = c.image;
           this.element.css('background-image', 'url(images/characters/' + c.image + ')');
-          this._multipliers = $.map(c.multipliers, (v) => { return new Multiplier(v); });
+
+          // this._multipliers = $.map(c.multipliers, (v) => { return new Multiplier(v); });
+
           this._skills = [];
           c.skills.forEach(skill => {
             this._skills.push(skills.Skill.create(skill, this));
+          });
+
+          this._multipliers = [];
+          this._skills.forEach(skill => {
+            if (skill instanceof skills.MultiplierSkill) {
+              this._multipliers = (<string[]>skill.param.multipliers).map(c => new Multiplier(c));
+              return true;
+            }
           });
         }
       }

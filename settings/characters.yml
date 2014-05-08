@@ -9,9 +9,16 @@
   image: kotori_p.png
   attribute: non
   base_hp: 30
-  multipliers: ["5>2","6>2"]
   unlockedFromStart: true
   skills:
+    - class: MultiplierSkill
+      name: 攻撃強化I
+      desc: ＊＊ダイスを解放する。
+      multipliers: ["5>2"]
+    - class: MultiplierSkill
+      name: 攻撃強化II
+      desc: ＊＊ダイスを強化する。
+      multipliers: ["5>2","6>2"]
     - class: AttackMultiplySkill
       name: ぴよパンチ
       desc: このターンの自分の攻撃力が2倍になる。
@@ -22,12 +29,17 @@
       desc: このターンの自分の攻撃力が3倍になる。
       scale: 3
       cost: 5
+
 - name: ゆきほP
   image: yukiho_p.png
   attribute: passion
   base_hp: 15
   multipliers: ["3>3"]
   skills:
+    - class: MultiplierSkill
+      name: 攻撃強化I
+      desc: ＊＊ダイスを解放する。
+      multipliers: ["3>3"]
     - class: HealSkill
       name: 1/6ドリンク
       desc: HPを最大値の1/6回復する。
@@ -38,12 +50,16 @@
       desc: 味方全員のスタン状態を回復する。
       cost: 3
       removeType: Stun
+
 - name: あんずP
   image: anzu_p.png
   attribute: cute
   base_hp: 20
-  multipliers: ["1>5"]
   skills:
+    - class: MultiplierSkill
+      name: 攻撃強化I
+      desc: ＊＊ダイスを解放する。
+      multipliers: ["1>5"]
     - class: SpecifyNextDiceSkill
       name: 働きたくない
       desc: 次に引かれる手持ちのダイスが必ず1になる。
@@ -58,12 +74,16 @@
       name: フリートレード
       desc: 場のダイスの任意の1個と手持ちのダイスの任意の1個を交換する。
       cost: 6
+
 - name: さえP
   image: sae_p.png
   attribute: cute
   base_hp: 20
-  multipliers: ["13>5"]
   skills:
+    - class: MultiplierSkill
+      name: 攻撃強化I
+      desc: ＊＊ダイスを解放する。
+      multipliers: ["13>5"]
     - class: AdditionalOnboardSkill
       name: ボルテージMAX
       desc: このターン、場に出ているダイスを2個から3個に増やす。
@@ -72,18 +92,23 @@
       name: 乱数調整β
       desc: ダイスを消費せずに、手持ちのダイスの目をランダムに入れ替える。
       cost: 5
+
 - name: らんこP
   image: ranko_p.png
   attribute: cool
   base_hp: 15
-  multipliers: ["666>10"]
   skills:
+    - class: MultiplierSkill
+      name: 攻撃強化I
+      desc: ＊＊ダイスを解放する。
+      multipliers: ["666>10"]
     - class: AttackMultiplySkill
       name: ペイン
       desc: 3倍の攻撃力で攻撃し、次ターン1回休み。
       scale: 3
       stun: true
       cost: 5
+
 - name: あかねP
   image: akane_p.png
   base_hp: 20
@@ -94,21 +119,29 @@
       desc: 8マス進む。ただし強制停止マスでは停止する。
       cost: 5
       proceed: 8
+
 - name: はるかP
   image: haruka_p.png
   base_hp: 45
-  multipliers: ["44>5"]
   skills:
+    - class: MultiplierSkill
+      name: 攻撃強化I
+      desc: ＊＊ダイスを解放する。
+      multipliers: ["44>5"]
     - class: Skill
       name: 社長の器
       desc: 2ターンの間、敵から受けるダメージを半減する。
       scale: 0.5
       cost: 3
+
 - name: かえでP
   image: kaede_p.png
   base_hp: 16
-  multipliers: ["246>7"]
   skills:
+    - class: MultiplierSkill
+      name: 攻撃強化I
+      desc: ＊＊ダイスを解放する。
+      multipliers: ["246>7"]
     - class: SpecifyNextDiceSkill
       name: あんたん
       desc: 次に引かれる手持ちのダイスが必ず6になる。

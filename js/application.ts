@@ -76,7 +76,9 @@ module cgdice {
     }
 
     public save() {
-      var data: any = { characters: {} };
+      var data: any = {
+        characters: {}
+      };
       this.allCharacters.forEach(c => {
         data.characters[c.name] = c.saveJSON();
       });
