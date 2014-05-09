@@ -717,6 +717,42 @@ canvas {
     right: 10px;
     bottom: 20px;
     padding: 15px;
+    .skill_list {
+      li {
+        background-color: rgba(0, 0, 0, 0.3);
+        &:hover {
+          background-color: rgba(100, 100, 100, 0.3);
+        }
+        &.unlocked {
+          background-color: rgba(255, 255, 0, 0.3);
+        }
+        transition: background 0.3s linear;
+        cursor: pointer;
+        margin-bottom: 2px;
+        height: 50px;
+        padding-left: 50px;
+        .skill_icon {
+          width: 48px;
+          height: 48px;
+          background-image: url('../images/skills.png');
+          margin: 0 0 -48px -48px;
+          .mixin(@name, @pos) {
+            &.@{name} {
+              background: url('../images/skills.png') (-48px * @pos) 0px no-repeat;
+              &.locked {
+                background: url('../images/skills.png') (-48px * 3) 0px no-repeat,
+                  url('../images/skills.png') (-48px * @pos) 0px no-repeat;
+              }
+            }
+          }
+          .mixin(dice_skill, 0);
+          .mixin(passive_skill, 1);
+          .mixin(command_skill, 2);
+        }
+        .skill_name { line-height: 25px; font-weight: bold; }
+        .skill_desc { line-height: 25px; font-size: 80%; }
+      }
+    }
   }
   #skill_selector_close {
     position: absolute;

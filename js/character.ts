@@ -183,7 +183,11 @@ module cgdice.characters {
       return this._multipliers;
     }
 
-    public availableSkills(): skills.Skill[] {
+    public unlockedSkills(): skills.Skill[] {
+      return this._skills.filter(s => s.unlocked);
+    }
+
+    public allSkills(): skills.Skill[] {
       return this._skills;
     }
 
@@ -224,7 +228,7 @@ module cgdice.characters {
       });
       var list = $('.skills', this.element);
       list.empty();
-      this._skills.forEach(skill => {
+      this.unlockedSkills().forEach(skill => {
         if (!(skill instanceof skills.CommandSkill)) {
           return;
         }
@@ -276,8 +280,10 @@ module cgdice.characters {
 
       this.element.on('mouseenter', '.skill', (event) => {
         var skill = <cgdice.skills.Skill>$(event.currentTarget).data('skill');
+        var desc = skill.desc;
+        if (skill.cost > 0) desc += ' 消費' + skill.cost;
         $('#tooltip')
-          .text(skill.desc + ' 消費' + skill.cost)
+          .text(desc)
           .show()
           .position({ of: event.currentTarget, my: 'left', at: 'right+5' });
         // $('#tooltip').css({left: '10px', top: '10px'});

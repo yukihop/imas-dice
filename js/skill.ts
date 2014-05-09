@@ -13,6 +13,7 @@ module cgdice.skills {
 
   export class Skill {
     public className: string;
+    public unlocked: boolean = false;
     public name: string;
     public desc: string;
     public owner: characters.Character;

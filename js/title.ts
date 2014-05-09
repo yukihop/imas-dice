@@ -118,12 +118,20 @@ module cgdice {
         this._skill_selector.start();
       });
 
+      this._skill_selector.on('skillSelectorClose', () => this.reset());
+
       $('#unlock_all_characters', this.element).on('click', () => {
         application.allCharacters.forEach(p => p.unlocked = true);
         this.reset();
       });
+      $('#unlock_all_skills', this.element).on('click', () => {
+        application.allCharacters.forEach(p => {
+          p.allSkills().forEach(s => s.unlocked = true);
+        });
+        this.reset();
+      });
       $('#unlock_everything', this.element).on('click', () => {
-        $('#unlock_all_characters, #unlock_all_stages').click();
+        $('#unlock_all_characters, #unlock_all_stages, #unlock_all_skills').click();
       });
     }
 
@@ -162,7 +170,7 @@ module cgdice {
           return;
         }
         unlock_count++;
-        p.resetHighlight();
+        p.redraw();
         p.updateSkillInvokableStatus();
         if (previousSelected.length == 0) {
           p.element.toggleClass('selected', i < StageSelector.MAX_PLAYERS);
