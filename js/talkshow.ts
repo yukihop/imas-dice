@@ -6,7 +6,6 @@ module cgdice {
     static loaded: { [file_id: string]: JQuery } = {};
 
     private dialog: JQuery;
-    private talk_index: number;
     private talks: JQuery;
 
     static DIALOG_MAX_HEIGHT = 300;
@@ -22,20 +21,22 @@ module cgdice {
       }
       item = item.clone().appendTo(this.dialog);
       this.talks = item.children();
-      this.talk_index = 0;
+      var talk_index = 0;
+      var top = 0;
       this.dialog.on('click', () => {
-        if (this.talk_index >= this.talks.length) {
+        if (talk_index >= this.talks.length) {
           this.dialog.dialog('close');
           this.dialog.remove();
           this.callback && this.callback();
           this.dialog = null;
         } else {
-          var elem = this.talks.eq(this.talk_index++);
+          var elem = this.talks.eq(talk_index++);
           elem.animate({ left: 0 }, 200);
-          if (elem.position().top + elem.height() > Talk.DIALOG_MAX_HEIGHT) {
-            var scroll = elem.position().top + elem.height() - Talk.DIALOG_MAX_HEIGHT;
+          if (top + elem.outerHeight() > Talk.DIALOG_MAX_HEIGHT) {
+            var scroll = top + elem.outerHeight() - Talk.DIALOG_MAX_HEIGHT;
             $(this.dialog).scrollTop(scroll);
           }
+          top += elem.outerHeight();
         }
       });
       $(this.dialog).css({
