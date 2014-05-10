@@ -64,7 +64,6 @@ module cgdice.skills {
   }
 
   export class MultiplierSkill extends PassiveSkill {
-    public multipliers: characters.Multiplier[];
   }
 
   export class RedrawSkill extends CommandSkill {

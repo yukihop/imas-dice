@@ -36,7 +36,7 @@ module cgdice.characters {
     private _image: string;
     public attribute: string;
     private _exp: number = 0;
-    private _multipliers: Multiplier[];
+    private _multipliers: Multiplier[] = [];
     private _baseHP: number = 10;
     private _skills: skills.Skill[];
     private _MP: number = 10;
@@ -202,10 +202,21 @@ module cgdice.characters {
       return result;
     }
 
+    private updateUnlockedMultipliers() {
+      this.unlockedSkills().forEach(skill => {
+        if (skill instanceof skills.MultiplierSkill) {
+          this._multipliers = (<string[]>skill.param.multipliers).map(c => new Multiplier(c));
+        }
+      });
+    }
+
     public unlockSkill(skillNameOrID: string): boolean {
       var skill: skills.Skill;
       if (skill = this.findSkill(skillNameOrID)) {
         skill.unlocked = true;
+        if (skill instanceof skills.MultiplierSkill) {
+          this.updateUnlockedMultipliers();
+        }
         this.redraw();
       }
       return skill !== null;
@@ -289,16 +300,13 @@ module cgdice.characters {
             this._skills.push(skills.Skill.create(skill, this));
           });
 
-          this._multipliers = [];
-          this._skills.forEach(skill => {
-            if (skill instanceof skills.MultiplierSkill) {
-              this._multipliers = (<string[]>skill.param.multipliers).map(c => new Multiplier(c));
-              return true;
-            }
-          });
+          this.updateUnlockedMultipliers();
         }
       }
       this.initializeParameters();
+      if (!this.name) {
+        throw 'Character ID not found';
+      }
 
       game.on('ready', this.updateSkillInvokableStatus, this);
 
