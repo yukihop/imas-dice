@@ -8,10 +8,16 @@ module cgdice {
       character.allSkills().forEach(skill => {
         var li = $('<li>').data('skill', skill).toggleClass('unlocked', skill.unlocked);
         var cls = (skill instanceof skills.CommandSkill) ? 'command_skill' : 'passive_skill';
-        if (skill instanceof skills.MultiplierSkill) cls = 'dice_skill';
+        if (skill instanceof skills.MultiplierSkill) {
+          cls = 'dice_skill';
+        }
+        var desc = skill.desc.replace(/\[(\d+)\>(\d+)\]/g, (str, pips, mul) => {
+          var dices = pips.split('').map((c) => '<span class="dice small dice' + c + '"></span>').join('');
+          return '<span class="multiplier">' + dices + 'x' + mul + '</span>';
+        });
         $('<div>').addClass('skill_icon').addClass(cls).appendTo(li);
         $('<div>').addClass('skill_name').text(skill.name).appendTo(li);
-        $('<div>').addClass('skill_desc').text(skill.desc).appendTo(li);
+        $('<div>').addClass('skill_desc').html(desc).appendTo(li);
         li.appendTo(list);
       });
     }
@@ -24,8 +30,12 @@ module cgdice {
     private skillClicked(event: JQueryMouseEventObject) {
       var li = $(event.currentTarget);
       var skill = <skills.Skill>li.data('skill');
-      skill.unlocked = true;
-      li.addClass('unlocked');
+      Dialog.confirm(skill.name + 'を解放しますか?', (ok) => {
+        if (ok) {
+          skill.unlocked = true;
+          li.addClass('unlocked');
+        }
+      });
     }
 
     constructor() {

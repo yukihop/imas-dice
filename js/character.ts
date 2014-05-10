@@ -222,7 +222,7 @@ module cgdice.characters {
       this._multipliers.forEach(mul => {
         var m = $('<div>').addClass('multiplier');
         mul.dices.forEach(pips => {
-          $('<div>').addClass('dice').addClass('dice' + pips).appendTo(m);
+          $('<div>').addClass('dice small').addClass('dice' + pips).appendTo(m);
         });
         m.append(' x' + mul.scale).appendTo(muls);
       });

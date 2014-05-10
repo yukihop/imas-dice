@@ -14,12 +14,12 @@
     - class: MultiplierSkill
       name: 攻撃強化I
       id: 3e27d0b9
-      desc: 当たり目[5>2]を解放する。
+      desc: 倍率ダイス目[5>2]を解放する。
       multipliers: ["5>2"]
     - class: MultiplierSkill
       name: 攻撃強化II
       id: 0ba4a4fd
-      desc: 当たり目を[5>2][6>2]に強化する。
+      desc: 倍率ダイス目を[5>2][6>2]に強化する。
       multipliers: ["5>2","6>2"]
     - class: AttackMultiplySkill
       name: ぴよパンチ
@@ -43,7 +43,7 @@
     - class: MultiplierSkill
       name: 攻撃強化I
       id: 3e27d0b9
-      desc: 当たり目[3>3]を解放する。
+      desc: 倍率ダイス目[3>3]を解放する。
       multipliers: ["3>3"]
     - class: HealSkill
       name: 1/6ドリンク
@@ -66,7 +66,7 @@
     - class: MultiplierSkill
       name: 攻撃強化I
       id: 3e27d0b9
-      desc: 当たり目[1>5]を解放する。
+      desc: 倍率ダイス目[1>5]を解放する。
       multipliers: ["1>5"]
     - class: SpecifyNextDiceSkill
       name: 働きたくない
@@ -94,7 +94,7 @@
     - class: MultiplierSkill
       name: 攻撃強化I
       id: 3e27d0b9
-      desc: 当たり目[13>5]を解放する。
+      desc: 倍率ダイス目[13>5]を解放する。
       multipliers: ["13>5"]
     - class: AdditionalOnboardSkill
       name: ボルテージMAX
@@ -115,7 +115,7 @@
     - class: MultiplierSkill
       name: 攻撃強化I
       id: 3e27d0b9
-      desc: 当たり目[666x10]を解放する。
+      desc: 倍率ダイス目[666x10]を解放する。
       multipliers: ["666>10"]
     - class: AttackMultiplySkill
       name: ペイン
@@ -143,7 +143,7 @@
     - class: MultiplierSkill
       name: 攻撃強化I
       id: 3e27d0b9
-      desc: 当たり目[44>5]を解放する。
+      desc: 倍率ダイス目[44>5]を解放する。
       multipliers: ["44>5"]
     - class: Skill
       name: 社長の器
@@ -159,7 +159,7 @@
     - class: MultiplierSkill
       name: 攻撃強化I
       id: 3e27d0b9
-      desc: 当たり目[246>7]を解放する。
+      desc: 倍率ダイス目[246>7]を解放する。
       multipliers: ["246>7"]
     - class: SpecifyNextDiceSkill
       name: あんたん

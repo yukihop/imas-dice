@@ -328,8 +328,6 @@ canvas {
   }
 }
 
-.dicebg (@i, @size: 48px) { background-position: (-(@i - 1) * @size) 0; }
-
 // Character
 
 .character {
@@ -350,18 +348,6 @@ canvas {
     border: 1px solid white;
     border-radius: 5px;
     text-align: center;
-    .dice {
-      @size: 18px;
-      width: @size;
-      height: @size;
-      background-size: (@size * 8) @size;
-      &.dice1 { .dicebg(1, @size); }
-      &.dice2 { .dicebg(2, @size); }
-      &.dice3 { .dicebg(3, @size); }
-      &.dice4 { .dicebg(4, @size); }
-      &.dice5 { .dicebg(5, @size); }
-      &.dice6 { .dicebg(6, @size); }
-    }
     .multiplier {
       border-radius: 5px;
       transition: background 0.3s;
@@ -462,13 +448,18 @@ canvas {
   &.selected { box-shadow: 0 0 3px 5px red; }
 }
 
+// Dices
+
+.dicebg (@i, @size: 48px) { background-position: (-(@i - 1) * @size) 0; }
+
 .dice {
+  @size: 48px;
   position: relative;
   display: inline-block;
-  width: 48px;
-  height: 48px;
+  width: @size;
+  height: @size;
   background-image: url('../images/dices.png');
-  background-size: (48px * 8) 48px;
+  background-size: (@size * 8) @size;
   &.dice1 { .dicebg(1); }
   &.dice2 { .dicebg(2); }
   &.dice3 { .dicebg(3); }
@@ -483,6 +474,18 @@ canvas {
   display: inline-block;
   width: 48px;
   height: 48px;
+}
+.dice.small {
+  @size: 18px;
+  width: @size;
+  height: @size;
+  background-size: (@size * 8) @size;
+  &.dice1 { .dicebg(1, @size); }
+  &.dice2 { .dicebg(2, @size); }
+  &.dice3 { .dicebg(3, @size); }
+  &.dice4 { .dicebg(4, @size); }
+  &.dice5 { .dicebg(5, @size); }
+  &.dice6 { .dicebg(6, @size); }
 }
 
 // Block
@@ -750,7 +753,18 @@ canvas {
           .mixin(command_skill, 2);
         }
         .skill_name { line-height: 25px; font-weight: bold; }
-        .skill_desc { line-height: 25px; font-size: 80%; }
+        .skill_desc {
+          line-height: 25px;
+          vertical-align: center;
+          .multiplier {
+            font-weight: bold;
+            background-color: rgba(255, 255, 255, 0.8);
+            color: navy;
+            border: 1px solid white;
+            padding: 0 3px;
+            margin: 0 3px;
+          }
+        }
       }
     }
   }
