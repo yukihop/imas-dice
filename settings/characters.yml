@@ -3,7 +3,7 @@
 #
 # attribute: cu, co, pa, non(無属性)の4つから選んでください。
 # base_hp: Lv1での体力。Lv1毎にbase_hpの10%分だけ上昇(Lv11でbase_hpの2倍)。
-# unlockedFromStart: ニューゲーム時に初期解放されているかどうかのフラグ。
+# unlockedFromStart: ニューゲーム時にキャラクタが初期解放されているかどうかのフラグ。
 
 - name: ことりP
   image: kotori_p.png
@@ -13,19 +13,23 @@
   skills:
     - class: MultiplierSkill
       name: 攻撃強化I
-      desc: ＊＊ダイスを解放する。
+      id: 3e27d0b9
+      desc: 当たり目[5>2]を解放する。
       multipliers: ["5>2"]
     - class: MultiplierSkill
       name: 攻撃強化II
-      desc: ＊＊ダイスを強化する。
+      id: 0ba4a4fd
+      desc: 当たり目を[5>2][6>2]に強化する。
       multipliers: ["5>2","6>2"]
     - class: AttackMultiplySkill
       name: ぴよパンチ
+      id: e77b3b30
       desc: このターンの自分の攻撃力が2倍になる。
       scale: 2
       cost: 3
     - class: AttackMultiplySkill
       name: ぴよキック
+      id: c02bffea
       desc: このターンの自分の攻撃力が3倍になる。
       scale: 3
       cost: 5
@@ -38,15 +42,18 @@
   skills:
     - class: MultiplierSkill
       name: 攻撃強化I
-      desc: ＊＊ダイスを解放する。
+      id: 3e27d0b9
+      desc: 当たり目[3>3]を解放する。
       multipliers: ["3>3"]
     - class: HealSkill
       name: 1/6ドリンク
+      id: 48c187de
       desc: HPを最大値の1/6回復する。
       cost: 3
       ratio: 0.16
     - class: RemoveStatusFromPlayersSkill
       name: エナドリ
+      id: 382f5cfc
       desc: 味方全員のスタン状態を回復する。
       cost: 3
       removeType: Stun
@@ -58,20 +65,24 @@
   skills:
     - class: MultiplierSkill
       name: 攻撃強化I
-      desc: ＊＊ダイスを解放する。
+      id: 3e27d0b9
+      desc: 当たり目[1>5]を解放する。
       multipliers: ["1>5"]
     - class: SpecifyNextDiceSkill
       name: 働きたくない
+      id: 9450ba26
       desc: 次に引かれる手持ちのダイスが必ず1になる。
       cost: 5
       pips: 1
     - class: ProceedSkill
       name: おうち帰りたい
+      id: 4516a91e
       desc: 5マス戻る。
       cost: 4
       proceed: -5
     - class: FreeTradeSkill
       name: フリートレード
+      id: 42608782
       desc: 場のダイスの任意の1個と手持ちのダイスの任意の1個を交換する。
       cost: 6
 
@@ -82,14 +93,17 @@
   skills:
     - class: MultiplierSkill
       name: 攻撃強化I
-      desc: ＊＊ダイスを解放する。
+      id: 3e27d0b9
+      desc: 当たり目[13>5]を解放する。
       multipliers: ["13>5"]
     - class: AdditionalOnboardSkill
       name: ボルテージMAX
+      id: aa8052cb
       desc: このターン、場に出ているダイスを2個から3個に増やす。
       cost: 10
     - class: RedrawSkill
       name: 乱数調整β
+      id: da0b1480
       desc: ダイスを消費せずに、手持ちのダイスの目をランダムに入れ替える。
       cost: 5
 
@@ -100,10 +114,12 @@
   skills:
     - class: MultiplierSkill
       name: 攻撃強化I
-      desc: ＊＊ダイスを解放する。
+      id: 3e27d0b9
+      desc: 当たり目[666x10]を解放する。
       multipliers: ["666>10"]
     - class: AttackMultiplySkill
       name: ペイン
+      id: 288b6e7b
       desc: 3倍の攻撃力で攻撃し、次ターン1回休み。
       scale: 3
       stun: true
@@ -112,10 +128,10 @@
 - name: あかねP
   image: akane_p.png
   base_hp: 20
-  multipliers: []
   skills:
     - class: ProceedSkill
       name: 爆走乙女
+      id: baabec8b
       desc: 8マス進む。ただし強制停止マスでは停止する。
       cost: 5
       proceed: 8
@@ -126,10 +142,12 @@
   skills:
     - class: MultiplierSkill
       name: 攻撃強化I
-      desc: ＊＊ダイスを解放する。
+      id: 3e27d0b9
+      desc: 当たり目[44>5]を解放する。
       multipliers: ["44>5"]
     - class: Skill
       name: 社長の器
+      id: 0f610844
       desc: 2ターンの間、敵から受けるダメージを半減する。
       scale: 0.5
       cost: 3
@@ -140,10 +158,12 @@
   skills:
     - class: MultiplierSkill
       name: 攻撃強化I
-      desc: ＊＊ダイスを解放する。
+      id: 3e27d0b9
+      desc: 当たり目[246>7]を解放する。
       multipliers: ["246>7"]
     - class: SpecifyNextDiceSkill
       name: あんたん
+      id: f07c4bf9
       desc: 次に引かれる手持ちのダイスが必ず6になる。
       pips: 6
       cost: 4
