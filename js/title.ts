@@ -126,7 +126,7 @@ module cgdice {
       });
       $('#unlock_all_skills', this.element).on('click', () => {
         application.allCharacters.forEach(p => {
-          p.allSkills().forEach(s => s.unlocked = true);
+          p.allSkills().forEach(s => p.unlockSkill(s.id));
         });
         this.reset();
       });
