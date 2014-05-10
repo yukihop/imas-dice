@@ -133,6 +133,7 @@ module cgdice {
    */
   export class DiceGame extends DomDisplayObject {
     private _phase: GamePhase = GamePhase.Inactive;
+    private _fieldData: StageInfo;
     public players: characters.Character[] = [];
     public field: fields.Field;
     public battle: battles.Battle;
@@ -206,11 +207,12 @@ module cgdice {
     }
 
     public reset(fieldData: StageInfo, players: characters.Character[]) {
+      this._fieldData = fieldData;
       var maxHP = 0;
       this.players = players;
       this.players.forEach(p => {
         p.element.appendTo($('#players', this.element));
-        p.resetHighlight();
+        p.redraw();
         p.MP = p.maxMP();
       });
 
@@ -245,6 +247,14 @@ module cgdice {
       }
     }
 
+    private talkOrCall(talk: string, call: () => void) {
+      if (talk !== null && talk !== undefined) {
+        Talk.show(talk, call);
+      } else {
+        call();
+      }
+    }
+
     private stageCleared() {
       this.setPhase(GamePhase.InResults);
       application.unlockNextStage();
@@ -255,7 +265,7 @@ module cgdice {
         }
         unlockPlayer.forEach(p => application.unlockCharacter(p));
       }
-      this.gameResult.start();
+      this.talkOrCall(this._fieldData.talkOnClear, () => this.gameResult.start());
     }
 
     private stageFailed() {
@@ -265,10 +275,10 @@ module cgdice {
         .transition({
           y: 30,
           duration: 3000,
-          complete: () => {
-            this.phase = GamePhase.Inactive;
-            this.dispatchEvent('gameFinish');
-          }
+          complete: () => this.talkOrCall(this._fieldData.talkOnFailed, () => {
+              this.phase = GamePhase.Inactive;
+              this.dispatchEvent('gameFinish');
+          })
         });
     }
 

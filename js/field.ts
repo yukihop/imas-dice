@@ -469,6 +469,10 @@ module cgdice.fields {
       this.moveTo(0, true);
       this.scrollField(this.blocks[0], false);
       this._container.x = 0;
+
+      if (typeof fieldData.initialization == 'string') {
+        eval(fieldData.initialization);
+      }
     }
 
     constructor() {

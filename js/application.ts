@@ -28,8 +28,11 @@ module cgdice {
     title: string;
     layout: string;
     blocks: any;
+    initialization?: string;
     unlocked?: boolean;
     talkOnUnlocked?: string;
+    talkOnClear?: string;
+    talkOnFailed?: string;
     unlockPlayer?: any;
   }
 
@@ -146,6 +149,17 @@ module cgdice {
       this.allCharacters.forEach(c => {
         if (c.name == name) c.unlocked = true;
       });
+    }
+
+    public findCharacter(name: string): characters.Character {
+      var result: characters.Character = null;
+      this.allCharacters.some(c => {
+        if (c.name == name) {
+          result = c;
+          return true;
+        }
+      });
+      return result;
     }
 
     private stageDetermined(event) {

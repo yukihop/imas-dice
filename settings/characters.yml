@@ -14,14 +14,14 @@
     - class: MultiplierSkill
       name: 攻撃強化I
       id: 3e27d0b9
-      desc: 倍率ダイス目[5>2]を解放する。
-      multipliers: ["5>2"]
+      desc: 倍率ダイス目[5>2][6>2]を解放する。
+      multipliers: ["5>2","6>2"]
     - class: MultiplierSkill
       name: 攻撃強化II
       id: 0ba4a4fd
       requires: 3e27d0b9
-      desc: 倍率ダイス目を[5>2][6>2]に強化する。
-      multipliers: ["5>2","6>2"]
+      desc: 倍率ダイス目を[5>3][6>2]に強化する。
+      multipliers: ["5>3","6>2"]
     - class: AttackMultiplySkill
       name: ぴよパンチ
       id: e77b3b30

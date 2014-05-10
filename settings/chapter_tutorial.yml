@@ -81,6 +81,7 @@
     - boss miku
   talkOnUnlocked: tutorial/unlock_stage
 - title: 2倍攻撃で蹴散らそう
+  initialization: cgdice.application.findCharacter('ことりP').unlockSkill('攻撃強化I');
   blocks:
     - start tutorial/need_multiply
     - empty
@@ -108,3 +109,4 @@
     - treasure 5
     - empty
     - boss miku2
+  talkOnClear: tutorial/skill_item
