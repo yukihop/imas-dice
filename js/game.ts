@@ -96,7 +96,9 @@ module cgdice {
       this.element.children().addClass(type).show();
       this.element.appendTo('#gamemode');
       setTimeout(() => {
-        this.element.remove();
+        this.element.transition({ opacity: 0, duration: 200 }, () => {
+          this.element.remove();
+        });
         callback && callback();
       }, duration);
     }
@@ -276,8 +278,8 @@ module cgdice {
           y: 30,
           duration: 3000,
           complete: () => this.talkOrCall(this._fieldData.talkOnFailed, () => {
-              this.phase = GamePhase.Inactive;
-              this.dispatchEvent('gameFinish');
+            this.phase = GamePhase.Inactive;
+            this.dispatchEvent('gameFinish');
           })
         });
     }
