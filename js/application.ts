@@ -171,7 +171,7 @@ module cgdice {
       game = new DiceGame();
       game.init();
       game.on('gameFinish', () => {
-        this._title.element.show();
+        this._stage_selector.reset();
       });
 
       this.settings = <Settings>this._loader.getResult('settings');
