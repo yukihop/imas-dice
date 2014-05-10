@@ -260,7 +260,7 @@ module cgdice {
     private stageCleared() {
       this.setPhase(GamePhase.InResults);
       application.unlockNextStage();
-      var unlockPlayer = application.currentStage.unlockPlayer;
+      var unlockPlayer = application.currentStage.unlockPlayerOnClear;
       if (unlockPlayer) {
         if (typeof unlockPlayer == 'string') {
           unlockPlayer = [unlockPlayer];

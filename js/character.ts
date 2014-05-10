@@ -84,17 +84,24 @@ module cgdice.characters {
 
     public initializeParameters() {
       this._exp = 0;
+      this._skills.forEach(s => s.unlocked = false);
+      this._multipliers = [];
     }
 
     public saveJSON(): any {
       var result: any = {};
       result.exp = this._exp;
+      result.unlockedSkills = this.unlockedSkills().map(s => s.id);
       return result;
     }
 
-    public loadJSON(data: any) {
+    public loadJSON(data: CharacterSaveData) {
       this.initializeParameters();
+      if (data === null || data === undefined) {
+        return;
+      }
       this._exp = data.exp;
+      data.unlockedSkills.forEach(id => this.findSkill(id).unlocked = true);
     }
 
     public resetHighlight() {

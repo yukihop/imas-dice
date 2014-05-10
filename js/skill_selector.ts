@@ -81,6 +81,7 @@ module cgdice {
       super($('#skill_selector'));
 
       $('#skill_selector_close', this.element).on('click', () => {
+        application.save();
         this.element.hide();
         this.dispatchEvent('skillSelectorClose');
       });

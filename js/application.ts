@@ -33,7 +33,7 @@ module cgdice {
     talkOnUnlocked?: string;
     talkOnClear?: string;
     talkOnFailed?: string;
-    unlockPlayer?: any;
+    unlockPlayerOnClear?: any;
   }
 
   export interface ChapterInfo {
@@ -52,6 +52,18 @@ module cgdice {
     EXP: number;
     start_talk?: string;
     defeated_talk?: string;
+  }
+
+  export interface CharacterSaveData {
+    exp: number;
+    unlockedSkills: string[];
+  }
+
+  export interface SaveData {
+    characters: { [name: string]: CharacterSaveData };
+    skillBadges: number;
+    lastUnlockedChapter: number;
+    lastUnlockedStage: number;
   }
 
   /**
@@ -79,39 +91,74 @@ module cgdice {
     }
 
     public save() {
-      var data: any = {
-        characters: {}
+      var data: SaveData = {
+        characters: {},
+        skillBadges: 0,
+        lastUnlockedChapter: 0,
+        lastUnlockedStage: 0
       };
-      this.allCharacters.forEach(c => {
+      this.unlockedCharacters().forEach(c => {
         data.characters[c.name] = c.saveJSON();
       });
-      prompt('これを保存', JSON.stringify(data));
+
+      var ci: number = 0, si: number = 0;
+      this.settings.chapters.some((chap, ci) => {
+        if (chap.unlocked) {
+          data.lastUnlockedChapter = ci;
+        } else {
+          return true;
+        }
+      });
+      this.settings.chapters[data.lastUnlockedChapter].stages.some((stage, si) => {
+        if (stage.unlocked) {
+          data.lastUnlockedStage = si;
+        } else {
+          return true;
+        }
+      });
+
+      localStorage.setItem('saveData1', JSON.stringify(data));
+      // prompt('これを保存', JSON.stringify(data));
     }
 
     public load() {
-      var data_string = prompt('セーブデータ?');
-      var data: any;
+      var data_string = <string>localStorage.getItem('saveData1');
+      this.wipe();
       try {
-        data = JSON.parse(data_string);
+        var data = <SaveData>JSON.parse(data_string);
       } catch (e) {
         alert('構文エラーです');
         return;
       }
 
-      this.wipe();
       this.allCharacters.forEach(c => {
         if (c.name in data.characters) {
+          c.unlocked = true;
           c.loadJSON(data.characters[c.name]);
+        } else {
+          c.initializeParameters();
         }
         c.redraw();
       });
+
+      this.resetChapterUnlockStatus(data.lastUnlockedChapter, data.lastUnlockedStage);
+
+      this.dispatchEvent('gameLoad');
     }
 
     public wipe() {
       this.allCharacters.forEach(c => {
         c.initializeParameters();
+        c.unlocked = false;
         c.redraw();
       });
+      this.settings.characters.forEach(cdata => {
+        if (cdata.unlockedFromStart) this.findCharacter(cdata.name).unlocked = true;
+      });
+
+      this.resetChapterUnlockStatus(0, 0);
+      this.save();
+      this.dispatchEvent('gameLoad');
     }
 
     public unlockNextStage() {
@@ -167,10 +214,26 @@ module cgdice {
       game.reset(event.data.stage, event.data.players);
     }
 
+    private resetChapterUnlockStatus(lastUnlockedChapter: number, lastUnlockedStage: number) {
+      this.settings.chapters.forEach((chap, ci) => {
+        if (ci < lastUnlockedChapter || chap.title.match(/テスト/)) {
+          chap.unlocked = true;
+          chap.stages.forEach(stage => stage.unlocked = true);
+        } else if (ci == lastUnlockedChapter) {
+          chap.unlocked = true;
+          chap.stages.forEach((stage, si) => stage.unlocked = si <= lastUnlockedStage);
+        } else {
+          chap.unlocked = false;
+          chap.stages.forEach(stage => stage.unlocked = false);
+        }
+      });
+    }
+
     private preloadComplete() {
       game = new DiceGame();
       game.init();
       game.on('gameFinish', () => {
+        this.save();
         this._stage_selector.reset();
       });
 
@@ -185,18 +248,7 @@ module cgdice {
       this._stage_selector = new StageSelector();
       this._stage_selector.addEventListener('stageDetermine', (event) => this.stageDetermined(event));
 
-      // prepare chapter data
-      this.settings.chapters.forEach(chap => {
-        // for debug use
-        if (chap.title.match(/テスト/)) {
-          chap.unlocked = true;
-          chap.stages.forEach(stage => stage.unlocked = true);
-        }
-      });
-
-      // unlock first chapter and first stage
-      this.settings.chapters[0].unlocked = true;
-      this.settings.chapters[0].stages[0].unlocked = true;
+      this.resetChapterUnlockStatus(0, 0); // unlock only first stage
 
       // initialize character data from settings file
       this.settings.characters.forEach(cdata => {
@@ -207,6 +259,9 @@ module cgdice {
         }
         p.redraw();
       });
+
+      // load save
+      this.load();
     }
 
     public run(): void {
