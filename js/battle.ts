@@ -351,8 +351,8 @@ module cgdice.battles {
           this.dispatchEvent('diceProcess');
         });
       } else {
-        this.startAlliesTurn();
         this.dispatchEvent('diceProcess');
+        this.startAlliesTurn();
       }
     }
 

@@ -400,8 +400,8 @@ module cgdice.fields {
           break;
         case 'EnemyBlock':
           setTimeout(() => {
-            game.battle.start((<EnemyBlock>block).enemyID, block.talk);
             dispatchMoveEndEvents();
+            game.battle.start((<EnemyBlock>block).enemyID, block.talk);
           }, 1000);
           break;
         case 'DamageBlock':
