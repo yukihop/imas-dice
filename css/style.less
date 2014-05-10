@@ -722,12 +722,25 @@ canvas {
     padding: 15px;
     .skill_list {
       li {
-        background-color: rgba(0, 0, 0, 0.3);
+        color: black;
+        position: relative;
+        background-color: rgba(255, 255, 255, 0.5);
         &:hover {
-          background-color: rgba(100, 100, 100, 0.3);
+          left: 1px;
+          top: 1px;
         }
         &.unlocked {
-          background-color: rgba(255, 255, 0, 0.3);
+          left: 0;
+          top: 0;
+          background-color: rgba(255, 200, 0, 0.7);
+        }
+        &.locked {
+          left: 0;
+          top: 0;
+          background-color: rgba(0, 0, 0, 0.3);
+          color: silver;
+          cursor: default;
+          opacity: 0.5;
         }
         transition: background 0.3s linear;
         cursor: pointer;

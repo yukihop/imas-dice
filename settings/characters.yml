@@ -19,6 +19,7 @@
     - class: MultiplierSkill
       name: 攻撃強化II
       id: 0ba4a4fd
+      requires: 3e27d0b9
       desc: 倍率ダイス目を[5>2][6>2]に強化する。
       multipliers: ["5>2","6>2"]
     - class: AttackMultiplySkill
@@ -30,6 +31,7 @@
     - class: AttackMultiplySkill
       name: ぴよキック
       id: c02bffea
+      requires: e77b3b30
       desc: このターンの自分の攻撃力が3倍になる。
       scale: 3
       cost: 5

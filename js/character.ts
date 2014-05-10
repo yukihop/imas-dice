@@ -179,7 +179,7 @@ module cgdice.characters {
       return result;
     }
 
-    public availableMultipliers(): Multiplier[] {
+    public unlockedMultipliers(): Multiplier[] {
       return this._multipliers;
     }
 
@@ -189,6 +189,37 @@ module cgdice.characters {
 
     public allSkills(): skills.Skill[] {
       return this._skills;
+    }
+
+    public findSkill(skillNameOrID: string): skills.Skill {
+      var result: skills.Skill = null;
+      this._skills.some(skill => {
+        if (skill.name == skillNameOrID || skill.id == skillNameOrID) {
+          result = skill;
+          return true;
+        }
+      });
+      return result;
+    }
+
+    public unlockSkill(skillNameOrID: string): boolean {
+      var skill: skills.Skill;
+      if (skill = this.findSkill(skillNameOrID)) {
+        skill.unlocked = true;
+        this.redraw();
+      }
+      return skill !== null;
+    }
+
+    public skillUnlockable(skill: skills.Skill): boolean {
+      var cur = skill;
+      while (cur.requires) {
+        cur = this.findSkill(cur.requires);
+        if (cur && !cur.unlocked) {
+          return false;
+        }
+      }
+      return true;
     }
 
     public updateSkillInvokableStatus() {

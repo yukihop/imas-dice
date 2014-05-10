@@ -4,7 +4,7 @@
 # ステージファイルの記述方法については、 chapter_tutorial.yml を参照してください。
 
 - title: ことりPの冒険
-  desc: 目が覚めたら変な世界に迷いこんでいたことりPの冒険がはじまる!
+  desc: 目が覚めたら変な世界に迷いこんでいたことりP！冒険がはじまる!
   stages: !include settings/chapter_tutorial.yml
 - title: テスト用ステージたち
   desc: とりあえず作ってみた雑多なステージたちです。いずれ消えます。

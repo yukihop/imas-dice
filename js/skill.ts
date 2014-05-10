@@ -2,6 +2,8 @@ module cgdice.skills {
   export interface SkillInfo {
     class: string;
     name: string;
+    id: string;
+    requires: string;
     cost: number;
     desc: string;
     pips?: number;
@@ -14,7 +16,9 @@ module cgdice.skills {
   export class Skill {
     public className: string;
     public unlocked: boolean = false;
+    public id: string;
     public name: string;
+    public requires: string;
     public desc: string;
     public owner: characters.Character;
     public cost: number;
@@ -39,8 +43,10 @@ module cgdice.skills {
     constructor(param: SkillInfo, owner: characters.Character) {
       this.owner = owner;
       this.name = param.name;
+      this.id = param.id;
       this.cost = param.cost;
       this.desc = param.desc;
+      this.requires = param.requires;
       this.param = param;
     }
   }
