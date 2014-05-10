@@ -712,6 +712,21 @@ canvas {
     left: 0;
     top: 0;
   }
+  .prev_character, .next_character {
+    position: absolute;
+    bottom: 30px;
+    width: 50px;
+    height: 50px;
+    background-color: black;
+    color: white;
+    line-height: 50px;
+    font-size: 50px;
+    border: 1px solid white;
+    box-shadow: 0 0 3px 3px white;
+    &:hover { background-color: gray; }
+  }
+  .prev_character { left: 250px; }
+  .next_character { left: 310px; }
   #skill_selector_container {
     background-color: rgba(0, 0, 0, 0.3);
     position: absolute;
@@ -721,28 +736,27 @@ canvas {
     bottom: 20px;
     padding: 15px;
     .skill_list {
+      max-height: 370px;
+      overflow-y: auto;
       li {
         color: black;
         position: relative;
         background-color: rgba(255, 255, 255, 0.5);
+        margin-right: 3px;
         &:hover {
-          left: 1px;
-          top: 1px;
+          background-color: rgba(255, 100, 0, 0.6);
         }
         &.unlocked {
-          left: 0;
-          top: 0;
           background-color: rgba(255, 200, 0, 0.7);
+          background: linear-gradient(to bottom, rgba(255, 200, 0, 0.7), rgba(235, 180, 0, 0.5));
         }
         &.locked {
-          left: 0;
-          top: 0;
           background-color: rgba(0, 0, 0, 0.3);
           color: silver;
           cursor: default;
           opacity: 0.5;
         }
-        transition: background 0.3s linear;
+        transition: background 0.2s linear;
         cursor: pointer;
         margin-bottom: 2px;
         height: 50px;

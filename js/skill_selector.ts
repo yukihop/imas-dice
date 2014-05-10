@@ -3,10 +3,14 @@ module cgdice {
 
     private _currentCharacter: characters.Character;
 
-    private resetToCharacter(character: characters.Character) {
+    private resetToCharacter(character: characters.Character, prevAnimation: boolean = false) {
       this._currentCharacter = character;
       var src = 'images/characters/' + character.image.replace('.png', '_large.png');
-      $('#skill_selector_bg', this.element).attr('src', src);
+      $('#skill_selector_bg', this.element)
+        .attr('src', src)
+        .stop(true, true)
+        .css({ x: prevAnimation ? -50 : 50, opacity: 0 })
+        .transition({ x: 0, opacity: 1, duration: 500 });
       this.updateSkillTree();
     }
 
@@ -39,6 +43,22 @@ module cgdice {
       this.element.show();
     }
 
+    private prevCharacter() {
+      var characters = application.unlockedCharacters();
+      var idx = characters.indexOf(this._currentCharacter);
+      idx--;
+      if (idx < 0) idx = characters.length - 1;
+      this.resetToCharacter(characters[idx], true);
+    }
+
+    private nextCharacter() {
+      var characters = application.unlockedCharacters();
+      var idx = characters.indexOf(this._currentCharacter);
+      idx++;
+      if (idx > characters.length - 1) idx = 0;
+      this.resetToCharacter(characters[idx]);
+    }
+
     private skillClicked(event: JQueryMouseEventObject) {
       var li = $(event.currentTarget);
       var skill = <skills.Skill>li.data('skill');
@@ -62,6 +82,9 @@ module cgdice {
       });
 
       $('.skill_list', this.element).on('click', 'li', (e) => this.skillClicked(e));
+
+      $('.prev_character', this.element).on('click', () => this.prevCharacter());
+      $('.next_character', this.element).on('click', () => this.nextCharacter());
     }
   }
 }
