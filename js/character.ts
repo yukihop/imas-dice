@@ -211,15 +211,15 @@ module cgdice.characters {
       return skill !== null;
     }
 
-    public skillUnlockable(skill: skills.Skill): boolean {
+    public blockingSkill(skill: skills.Skill): skills.Skill {
       var cur = skill;
       while (cur.requires) {
         cur = this.findSkill(cur.requires);
         if (cur && !cur.unlocked) {
-          return false;
+          return cur;
         }
       }
-      return true;
+      return null;
     }
 
     public updateSkillInvokableStatus() {

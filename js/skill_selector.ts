@@ -27,12 +27,16 @@ module cgdice {
           return '<span class="multiplier">' + dices + 'x' + mul + '</span>';
         });
 
-        var unlockable = this._currentCharacter.skillUnlockable(skill);
-        li.toggleClass('locked', !unlockable);
+        var blocking = this._currentCharacter.blockingSkill(skill);
+        li.toggleClass('locked', blocking != null);
+        var skillName = skill.name;
+        if (blocking) {
+          skillName += ' [' + blocking.name + 'の解放が必要]';
+        }
 
         $('<div>').addClass('skill_icon')
-          .toggleClass('locked', !unlockable).addClass(cls).appendTo(li);
-        $('<div>').addClass('skill_name').text(skill.name).appendTo(li);
+          .toggleClass('locked', blocking != null).addClass(cls).appendTo(li);
+        $('<div>').addClass('skill_name').text(skillName).appendTo(li);
         $('<div>').addClass('skill_desc').html(desc).appendTo(li);
         li.appendTo(list);
       });
@@ -62,7 +66,7 @@ module cgdice {
     private skillClicked(event: JQueryMouseEventObject) {
       var li = $(event.currentTarget);
       var skill = <skills.Skill>li.data('skill');
-      if (!this._currentCharacter.skillUnlockable(skill) || skill.unlocked) {
+      if (this._currentCharacter.blockingSkill(skill) || skill.unlocked) {
         return;
       }
       Dialog.confirm(skill.name + 'を解放しますか?', (ok) => {
