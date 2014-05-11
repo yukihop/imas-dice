@@ -184,16 +184,15 @@ module cgdice.characters {
       });
 
       // Attribute
-      var tmp = this.hasUnlockedSkillOfClass('WeakAttributeSkill');
-      if (tmp.length > 0) {
-        if (game.battle.enemy.attribute == tmp[0].param.attribute) {
+      this.hasUnlockedSkillOfClass('WeakAttributeSkill').forEach(skill => {
+        if (game.battle.enemy.attribute == skill.param.attribute) {
           current *= 2;
           result.modifiers.push({
             caption: '弱点属性',
             ATK: current
           });
         }
-      }
+      });
 
       result.ATK = current;
       return result;

@@ -120,6 +120,7 @@
       cost: 2
     - class: AdditionalOnboardSkill
       name: 乱数調整β
+      id: da0b1480
       requires: da0b1480
       id: aa8052cb
       desc: このターン、場に出ているダイスを2個から3個に増やす。
@@ -222,6 +223,11 @@
       id: 5726bfac
       desc: パッション属性の敵に2倍ダメージを与える。
       attribute: passion
+    - class: WeakAttributeSkill
+      name: 運営の天敵
+      id: 933f601a
+      desc: 運営属性の敵に2倍ダメージを与える。
+      attribute: operator
     - class: BringMoreDicesSkill
       name: 召喚術I
       id: d0e3d783

@@ -5,6 +5,7 @@ miku:
   HP: 38
   ATK: 3
   EXP: 3
+
 miku2:
   name: 捨て身の前川みく
   image: miku.png
@@ -12,9 +13,11 @@ miku2:
   HP: 15
   ATK: 20
   EXP: 5
+
 chibichihi:
   name: ちびちひ1号
   image: chibichihi.png
+  attribute: operator
   start_talk: メダルガチャにマニーを詰める係にはなりたくない……
   HP: 100
   ATK: 15
@@ -24,9 +27,11 @@ chibichihi:
     - turn: 30%
       action: NullAction
       notify: ちびちひはボーっとしている！
+
 chihiro:
   name: 千川ちひろ
   image: chihiro.png
+  attribute: operator
   HP: 200
   ATK: 30
   EXP: 30
@@ -34,12 +39,15 @@ chihiro:
     - turn: 1
       action: NullAction
       notify: ちひろは不気味に微笑んでいる！
+
 chihiro2:
   name: 千川ちひろ・強
   image: chihiro.png
+  attribute: operator
   HP: 500
   ATK: 50
   EXP: 90
+
 kirari:
   name: きらりん星人
   image: kirari.png
@@ -53,6 +61,7 @@ kirari:
       status: Stun
       probability: 0.5
       say: にょわー！！
+
 ranko:
   name: 闇に飲まれたらんこP
   image: chibichihi.jpg
