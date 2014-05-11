@@ -18,6 +18,7 @@ module cgdice.battles {
     public ATK: number;
     public EXP: number;
     public attribute: string;
+    public patterns: EnemyPattern[] = [];
 
     private update() {
       var e = this.element;
@@ -48,31 +49,56 @@ module cgdice.battles {
       }
     }
 
-    private myTurn(): void {
-      var power_min: number = this.ATK * 0.8;
-      var power_var: number = this.ATK * 0.4;
-      var power: number = Math.floor(Math.random() * power_var + power_min);
-      power = Math.max(1, power);
-      game.console.log(this.name + 'から' + power + 'の攻撃!');
-
-      new FlyText({
-        text: power.toString(),
-        parent: this.element,
-        class: 'enemy_attack'
-      });
-      this.element.transition(
-        { scale: 1.1 },
-        500,
-        'ease',
-        () => {
-          this.element.transition({ scale: 1 });
-          var event = new BattleEffectEvent('enemyAttack', false, false);
-          event.kind = 'physicalAttack';
-          event.magnitude = power;
-          this.dispatchEvent(event);
-          this.dispatchEvent('enemyTurnEnd');
+    /**
+     * Parse 'turn' parameter.
+     */
+    private checkTurn(turnStr: string): boolean {
+      var tokens = turnStr.trim().split(/\s+/);
+      var i: number, m: any;
+      for (i = 0; i < tokens.length; i++) {
+        var tok = tokens[i];
+        if (tok.match(/^\d+$/)) {
+          // exact turn count
+          if (game.battle.turn != parseInt(tok)) return false;
+        } else if (m = tok.match(/^(\d+)%$/)) {
+          // probability
+          if (Math.random() > (m[1] / 100)) return false;
+        } else if (m = tok.match(/^(\d+)n(\+(\d+))?$/)) {
+          // even, odd, etc.
+          var mod = m[3] ? parseInt(m[3]) : 0;
+          var div = parseInt(m[1]);
+          if (game.battle.turn % div != mod) return false;
+        } else if (m = tok.match(/^(HP)?([><]=?)(\d+)$/i)) {
+          // compare with turn or HP
+          var left = m[1] ? this.HP : game.battle.turn;
+          if (!eval(left + m[2] + m[3])) return false;
+        } else {
+          throw 'invalid token ' + tok;
         }
-        );
+      }
+      return true;
+    }
+
+    private determineNextAction(): string {
+      var result: string = 'AttackAction';
+      this.patterns.some(pat => {
+        if (this.checkTurn(pat.turn.toString())) {
+          result = pat.action;
+          return true;
+        }
+      });
+      return result;
+    }
+
+    private myTurn(): void {
+      var actionClass = this.determineNextAction();
+
+      var action = new (battles[actionClass])(this);
+      action.invoke(() => this.endMyTurn());
+    }
+
+    private endMyTurn() {
+      this.dispatchEvent('enemyTurnEnd');
     }
 
     private die(): void {
@@ -92,11 +118,12 @@ module cgdice.battles {
       this.ATK = e.ATK;
       this.EXP = e.EXP;
       this.attribute = e.attribute ? e.attribute : 'non';
+      if (e.patterns) this.patterns = e.patterns;
       this.update();
     }
   }
 
-  interface FlyTextOptions {
+  export interface FlyTextOptions {
     text: string;
     parent: any;
     callback?: () => void;
@@ -108,7 +135,7 @@ module cgdice.battles {
   /**
    * Flying text effect that shows damage value, etc.
    */
-  class FlyText extends cgdice.DomDisplayObject {
+  export class FlyText extends cgdice.DomDisplayObject {
 
     constructor(options: FlyTextOptions);
     constructor(text: string, parent: JQuery, callback: () => void);
@@ -182,6 +209,7 @@ module cgdice.battles {
    */
   export class Battle extends StatusClient {
     public enemy: Enemy;
+    private _turn: number;
     private _onboard_area: JQuery;
     private _selected_dice: Dice;
     private _queue: { modifier: cgdice.characters.AttackModifier; player: cgdice.characters.Character; }[];
@@ -192,12 +220,17 @@ module cgdice.battles {
       return $('.dice', this._onboard_area).map((i, d) => (<Dice>$(d).data('self')).pips).get();
     }
 
+    get turn(): number { return this._turn; }
+
     public start(enemyID: string, talkID?: string) {
       this.enemy = new Enemy(enemyID);
       $('#enemies', this.element).empty();
       this.enemy.element.appendTo('#enemies');
       this.enemy.on('enemyAttack', this.enemyAttacked, this);
       this.enemy.on('enemyTurnEnd', this.enemyTurnEnd, this);
+
+      this._turn = 0;
+
       this.dispatchEvent('initialized');
       this.startAlliesTurn();
       this.element.show();
@@ -359,10 +392,11 @@ module cgdice.battles {
     }
 
     private startAlliesTurn() {
+      this._turn++;
+      this.element.find('.detached_dice').remove();
       this.dispatchEvent('diceProcess');
       this.shuffleOnboardDice();
       this.diceChanged();
-      this.element.find('.detached_dice').remove();
     }
 
     public enemyAttacked(event: BattleEffectEvent) {

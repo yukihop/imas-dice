@@ -20,12 +20,18 @@ chibichihi:
   ATK: 15
   defeated_talk: ばいばい！
   EXP: 20
+  patterns:
+    - turn: 30%
+      action: NullAction
 chihiro:
   name: 千川ちひろ
   image: chihiro.png
   HP: 200
   ATK: 30
   EXP: 30
+  patterns:
+    - turn: 1
+      action: NullAction
 chihiro2:
   name: 千川ちひろ・強
   image: chihiro.png

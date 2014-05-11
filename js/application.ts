@@ -4,6 +4,7 @@
 /// <reference path="dice.ts" />
 /// <reference path="field.ts" />
 /// <reference path="talkshow.ts" />
+/// <reference path="enemy_action.ts" />
 /// <reference path="battle.ts" />
 /// <reference path="game_result.ts" />
 /// <reference path="skill.ts" />
@@ -44,12 +45,18 @@ module cgdice {
     unlocked?: boolean;
   }
 
+  export interface EnemyPattern {
+    turn: string;
+    action: string;
+  }
+
   export interface EnemyInfo {
     name: string;
     image: string;
     HP: number;
     ATK: number;
     EXP: number;
+    patterns?: EnemyPattern[];
     attribute?: string;
     start_talk?: string;
     defeated_talk?: string;
