@@ -185,8 +185,8 @@ module cgdice.characters {
 
       // Attribute
       var tmp = this.hasUnlockedSkillOfClass('WeakAttributeSkill');
-      if (tmp) {
-        if (game.battle.enemy.attribute == tmp.param.attribute) {
+      if (tmp.length > 0) {
+        if (game.battle.enemy.attribute == tmp[0].param.attribute) {
           current *= 2;
           result.modifiers.push({
             caption: '弱点属性',
@@ -222,15 +222,8 @@ module cgdice.characters {
       return result;
     }
 
-    public hasUnlockedSkillOfClass(className: string): skills.Skill {
-      var result: skills.Skill = null;
-      this._skills.some(s => {
-        if (s.unlocked && s.className == className) {
-          result = s;
-          return true;
-        }
-      });
-      return result;
+    public hasUnlockedSkillOfClass(className: string): skills.Skill[] {
+      return this._skills.filter(s => s.unlocked && s.className == className);
     }
 
     private updateUnlockedMultipliers() {

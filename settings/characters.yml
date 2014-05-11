@@ -201,6 +201,17 @@
       id: 5726bfac
       desc: パッション属性の敵に2倍ダメージを与える。
       attribute: passion
+    - class: BringMoreDicesSkill
+      name: 召喚術I
+      id: d0e3d783
+      desc: ステージ開始時のダイスが3個増える。
+      count: 3
+    - class: BringMoreDicesSkill
+      name: 召喚術II
+      id: b7bd986e
+      requires: d0e3d783
+      desc: ステージ開始時のダイスがさらに3個増える。
+      count: 3
     - class: SpecifyNextDiceSkill
       name: あんたん
       id: f07c4bf9

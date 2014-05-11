@@ -8,8 +8,11 @@ module cgdice.skills {
     desc: string;
     pips?: number;
     ratio?: number;
+    scale?: number;
     proceed?: number;
+    count?: number;
     removeType?: string;
+    stun?: number;
     multipliers?: string[];
     attribute?: string;
   }
@@ -23,7 +26,7 @@ module cgdice.skills {
     public desc: string;
     public owner: characters.Character;
     public cost: number;
-    public param: any;
+    public param: SkillInfo;
 
     static create(param: SkillInfo, owner: characters.Character): Skill {
       var className: string = param.class;
@@ -68,6 +71,9 @@ module cgdice.skills {
   }
 
   export class WeakAttributeSkill extends PassiveSkill {
+  }
+
+  export class BringMoreDicesSkill extends PassiveSkill {
   }
 
   export class RedrawSkill extends CommandSkill {

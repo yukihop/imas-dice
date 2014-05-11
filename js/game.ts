@@ -225,7 +225,16 @@ module cgdice {
       this.gainExp = 0;
 
       this.field.reset(fieldData);
-      this.stack.reset(10);
+
+      // dice
+      var init_dice_count = 10;
+      this.players.forEach(p => {
+        p.hasUnlockedSkillOfClass('BringMoreDicesSkill').forEach(s => {
+          init_dice_count += s.param.count;
+        });
+      });
+      this.stack.reset(init_dice_count);
+
       this.battle.element.hide();
       $('#stage_failed, #stage_failed_dice, #stage_clear').hide();
       this.console.clear();
