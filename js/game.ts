@@ -274,6 +274,7 @@ module cgdice {
 
     private stageCleared() {
       this.setPhase(GamePhase.InResults);
+      this.finalization();
       application.unlockNextStage();
       var unlockPlayer = application.currentStage.unlockPlayerOnClear;
       if (unlockPlayer) {
@@ -287,6 +288,7 @@ module cgdice {
 
     private stageFailed() {
       this.setPhase(GamePhase.InResults);
+      this.finalization();
       $('#stage_failed, #stage_failed_dice').filter(':visible')
         .css({ y: 0 })
         .transition({
