@@ -6,6 +6,7 @@ module cgdice.skills {
     requires: string;
     cost: number;
     desc: string;
+
     pips?: number;
     ratio?: number;
     scale?: number;
@@ -16,6 +17,7 @@ module cgdice.skills {
     multipliers?: string[];
     attribute?: string;
     turns?: number;
+    target?: string;
   }
 
   export class Skill {
@@ -103,8 +105,23 @@ module cgdice.skills {
     }
 
     public invoke(callback: () => void) {
-      var status = new Status(cgdice.StatusType.AttackMultiply, 1, true, { scale: this.param.scale });
-      this.owner.registerStatus(status);
+      var status = new Status(
+        cgdice.StatusType.AttackMultiply,
+        this.param.turns > 0 ? this.param.turns : 1,
+        true,
+        { scale: this.param.scale });
+
+      var target = this.owner;
+      if (typeof this.param.target == 'string') {
+        game.players.some(p => {
+          if (p.name == this.param.target) {
+            target = p;
+            return true;
+          }
+        });
+      }
+
+      target.registerStatus(status);
       if (this.param.stun) {
         var stun = new Status(
           StatusType.Countdown,

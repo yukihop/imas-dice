@@ -163,6 +163,18 @@
       desc: 8マス進む。ただし強制停止マスでは停止する。
       cost: 5
       proceed: 8
+    - class: AttackMultiplySkill
+      name: セクハラ術・山
+      id: 9c94067b
+      desc: このターン、ことりPの攻撃力が2倍になる。
+      cost: 4
+      target: ことりP
+      scale: 2
+    #- class: CommandSkill
+    #  name: セクハラ術・森
+    #  id: 8f6b48b9
+    #  desc: 自分のMPをことりPに分け与える。
+    #  cost: 0
 
 - name: はるかP
   image: haruka_p.png
