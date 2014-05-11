@@ -79,11 +79,12 @@ module cgdice.battles {
       return true;
     }
 
-    private determineNextAction(): string {
-      var result: string = 'AttackAction';
+    private determineNextAction(): EnemyPattern {
+      var result: EnemyPattern = { action: 'AttackAction' };
+      if (game.battle.turn == 0) result = { action: 'NullAction' };
       this.patterns.some(pat => {
         if (this.checkTurn(pat.turn.toString())) {
-          result = pat.action;
+          result = pat;
           return true;
         }
       });
@@ -91,9 +92,12 @@ module cgdice.battles {
     }
 
     private myTurn(): void {
-      var actionClass = this.determineNextAction();
+      var nextAction = this.determineNextAction();
+      var action = new (battles[nextAction.action])(this, nextAction);
 
-      var action = new (battles[actionClass])(this);
+      if (nextAction.notify) new Notification(nextAction.notify);
+      if (nextAction.say) new Notification(nextAction.say);
+
       action.invoke(() => this.endMyTurn());
     }
 
@@ -135,7 +139,7 @@ module cgdice.battles {
   /**
    * Flying text effect that shows damage value, etc.
    */
-  export class FlyText extends cgdice.DomDisplayObject {
+  export class FlyText extends DomDisplayObject {
 
     constructor(options: FlyTextOptions);
     constructor(text: string, parent: JQuery, callback: () => void);
@@ -169,6 +173,27 @@ module cgdice.battles {
         if ('callback' in opt) opt.callback();
         this.element.remove();
       });
+    }
+  }
+
+  export class Notification extends DomDisplayObject {
+    constructor(message: string, callback?: () => void) {
+      super('notification');
+      this.element
+        .text(message)
+        .appendTo(game.battle.element)
+        .position({ of: game.battle.enemy.element })
+        .css({ opacity: 0 })
+        .transition({ opacity: 1, duration: 200 })
+        .transition({ opacity: 1, duration: 1500 })
+        .transition({
+          opacity: 0,
+          duration: 200,
+          complete: () => {
+            this.element.remove();
+            callback && callback();
+          }
+        });
     }
   }
 

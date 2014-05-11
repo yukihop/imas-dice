@@ -1,13 +1,15 @@
 module cgdice.battles {
   export class EnemyAction {
     public owner: Enemy;
+    public options: any;
 
     public invoke(callback: () => void) {
       callback();
     }
 
-    constructor(owner: Enemy) {
+    constructor(owner: Enemy, options: any) {
       this.owner = owner;
+      this.options = options;
     }
   }
 
@@ -47,8 +49,7 @@ module cgdice.battles {
    */
   export class NullAction extends EnemyAction {
     public invoke(callback: () => void) {
-      game.console.log(this.owner.name + 'はボーっとしている');
-      setTimeout(callback, 1500);
+      setTimeout(callback, 1500); // just wait
     }
   }
 

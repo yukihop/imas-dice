@@ -46,8 +46,10 @@ module cgdice {
   }
 
   export interface EnemyPattern {
-    turn: string;
     action: string;
+    turn?: string;
+    say?: string;
+    notify?: string;
   }
 
   export interface EnemyInfo {

@@ -23,6 +23,7 @@ chibichihi:
   patterns:
     - turn: 30%
       action: NullAction
+      notify: ちびちひはボーっとしている！
 chihiro:
   name: 千川ちひろ
   image: chihiro.png
@@ -32,6 +33,7 @@ chihiro:
   patterns:
     - turn: 1
       action: NullAction
+      notify: ちひろは不気味に微笑んでいる！
 chihiro2:
   name: 千川ちひろ・強
   image: chihiro.png
