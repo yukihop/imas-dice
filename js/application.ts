@@ -113,8 +113,9 @@ module cgdice {
 
       var ci: number = 0, si: number = 0;
       this.settings.chapters.some((chap, ci) => {
-        if (chap.unlocked) {
+        if (chap.unlocked && !chap.title.match(/テスト/)) {
           data.lastUnlockedChapter = ci;
+          return false;
         } else {
           return true;
         }
@@ -122,6 +123,7 @@ module cgdice {
       this.settings.chapters[data.lastUnlockedChapter].stages.some((stage, si) => {
         if (stage.unlocked) {
           data.lastUnlockedStage = si;
+          return false;
         } else {
           return true;
         }
