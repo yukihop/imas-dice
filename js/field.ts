@@ -399,8 +399,8 @@ module cgdice.fields {
           dispatchMoveEndEvents();
           break;
         case 'EnemyBlock':
+          this._selected_dice = null;
           setTimeout(() => {
-            dispatchMoveEndEvents();
             game.battle.start((<EnemyBlock>block).enemyID, block.talk);
           }, 1000);
           break;

@@ -354,15 +354,15 @@ module cgdice.battles {
           this.dispatchEvent('diceProcess');
         });
       } else {
-        this.dispatchEvent('diceProcess');
         this.startAlliesTurn();
       }
     }
 
     private startAlliesTurn() {
-      this.element.find('.detached_dice').remove();
+      this.dispatchEvent('diceProcess');
       this.shuffleOnboardDice();
       this.diceChanged();
+      this.element.find('.detached_dice').remove();
     }
 
     public enemyAttacked(event: BattleEffectEvent) {
