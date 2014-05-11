@@ -1,7 +1,7 @@
 # キャラクターデータです。
 # それぞれの意味はほぼ自明だと思いますが一部のみ解説。
 #
-# attribute: cu, co, pa, non(無属性)の4つから選んでください。
+# attribute: cute, cool, passion, non(無属性)の4つから選んでください。
 # base_hp: Lv1での体力。Lv1毎にbase_hpの10%分だけ上昇(Lv11でbase_hpの2倍)。
 # unlockedFromStart: ニューゲーム時にキャラクタが初期解放されているかどうかのフラグ。
 
@@ -22,6 +22,12 @@
       requires: 3e27d0b9
       desc: 倍率ダイス目を[5>3][6>2]に強化する。
       multipliers: ["5>3","6>2"]
+    - class: MultiplierSkill
+      name: 攻撃強化III
+      id: d66e8788
+      requires: 0ba4a4fd
+      desc: 倍率ダイス目を[5>3][6>3]に強化する。
+      multipliers: ["5>3","6>3"]
     - class: AttackMultiplySkill
       name: ぴよパンチ
       id: e77b3b30
@@ -64,6 +70,12 @@
       desc: 味方全員のスタン状態を回復する。
       cost: 3
       removeType: Stun
+#   - class: MultiplierHighlightSkill
+#     name: 主成分分析
+#     desc: 発動可能な倍率ダイス目が自動でハイライトされる。
+#   - class: MeditationSkill
+#     name: 瞑想
+#     desc: 戦闘終了まで攻撃に参加しない代わりに毎ターン誰かのMPを回復する。
 
 - name: あんずP
   image: anzu_p.png
@@ -73,6 +85,12 @@
     - class: MultiplierSkill
       name: 攻撃強化I
       id: 3e27d0b9
+      desc: 倍率ダイス目[1>3]を解放する。
+      multipliers: ["1>3"]
+    - class: MultiplierSkill
+      name: 攻撃強化II
+      id: 0ba4a4fd
+      requires: 3e27d0b9
       desc: 倍率ダイス目[1>5]を解放する。
       multipliers: ["1>5"]
     - class: WeakAttributeSkill
@@ -133,6 +151,9 @@
       target: random
       turns: 2
       scale: 2
+#   - class: MultiplierHighlightSkill
+#     name: アラート
+#     desc: 発動可能な倍率ダイス目が自動でハイライトされる。
 
 - name: らんこP
   image: ranko_p.png
@@ -144,24 +165,43 @@
       id: 3e27d0b9
       desc: 倍率ダイス目[666>10]を解放する。
       multipliers: ["666>10"]
+    - class: MultiplierSkill
+      name: 攻撃強化II
+      id: 0ba4a4fd
+      requires: 3e27d0b9
+      desc: 倍率ダイス目[666>15]を解放する。
+      multipliers: ["666>15"]
     - class: WeakAttributeSkill
       name: クール魂
       id: 5726bfac
       desc: パッション属性の敵に2倍ダメージを与える。
       attribute: passion
     - class: AttackMultiplySkill
-      name: ペイン
+      name: 集中
       id: 288b6e7b
-      desc: 3倍の攻撃力で攻撃し、次ターン1回休み。
+      desc: 3倍の攻撃力で攻撃し、次ターン1回休む。
       scale: 3
       stun: true
       cost: 5
+#   - class: CommandSkill
+#     name: ペイン
+#     desc: 4倍の攻撃力で攻撃するが、次ターンの味方ダメージが2倍になる。
+#     cost: 5
+#   - class: CommandSkill
+#     name: 身喰らい
+#     desc: 最大HPの20%を犠牲にしてダイスを2個補給する。
+#     cost: 1
 
 - name: あかねP
   image: akane_p.png
   attribute: passion
   base_hp: 20
   skills:
+    - class: MultiplierSkill
+      name: 攻撃強化I
+      id: 3e27d0b9
+      desc: 倍率ダイス目[25>3]を解放する。
+      multipliers: ["25>3"]
     - class: WeakAttributeSkill
       name: パッション魂
       id: 0fe6e1d5
@@ -180,11 +220,11 @@
       cost: 4
       target: ことりP
       scale: 2
-    #- class: CommandSkill
-    #  name: セクハラ術・森
-    #  id: 8f6b48b9
-    #  desc: 自分のMPをことりPに分け与える。
-    #  cost: 0
+#   - class: CommandSkill
+#     name: セクハラ術・森
+#     id: 8f6b48b9
+#     desc: 自分のMPをことりPに分け与える。
+#     cost: 0
 
 - name: はるかP
   image: haruka_p.png
@@ -202,11 +242,17 @@
       desc: クール属性の敵に2倍ダメージを与える。
       attribute: cool
     - class: DamageMultiplySkill
-      name: 社長の器
+      name: 降り注ぐ愛
       id: 0f610844
-      desc: 2ターンの間、敵から受けるダメージを半減する。
-      scale: 0.5
+      desc: 2ターンの間、敵から受けるダメージを20%減らす。
+      scale: 0.8
       cost: 3
+#   - class: DiceDamageMultiplySkill
+#     name: シールド
+#     desc: ダイスを1個消費し、出た目×10%だけダメージを軽減する。
+#   - class: DiceDamageMultiplySkill
+#     name: もふもふシールド
+#     desc: ダイスを2個消費し、出た目の合計×10%だけダメージを軽減する。
 
 - name: かえでP
   image: kaede_p.png
@@ -245,3 +291,7 @@
       desc: 次に引かれる手持ちのダイスが必ず6になる。
       pips: 6
       cost: 4
+#   - class: ForceDrawStockSkill
+#     name: ダイバージェンス
+#     desc: 強制的にスタックにもう1個ダイスを引き出す。最大5個。
+#     cost: 1
