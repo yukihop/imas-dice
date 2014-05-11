@@ -749,7 +749,15 @@ canvas {
     top: 20px;
     right: 10px;
     bottom: 20px;
-    padding: 15px;
+    padding: 10px;
+    > p {
+      font-size: 150%;
+      font-weight: bold;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+      .name {
+        color: #fdd;
+      }
+    }
     .skill_list {
       max-height: 370px;
       overflow-y: auto;
@@ -774,7 +782,7 @@ canvas {
         transition: background 0.2s linear;
         cursor: pointer;
         margin-bottom: 2px;
-        height: 50px;
+        min-height: 50px;
         padding-left: 50px;
         .skill_icon {
           width: 48px;

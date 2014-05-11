@@ -6,6 +6,7 @@ module cgdice {
     private resetToCharacter(character: characters.Character, prevAnimation: boolean = false) {
       this._currentCharacter = character;
       var src = 'images/characters/' + character.image.replace('.png', '_large.png');
+      $('.name', this.element).text(character.name);
       $('#skill_selector_bg', this.element)
         .attr('src', src)
         .stop(true, true)
