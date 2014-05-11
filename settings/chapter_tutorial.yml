@@ -17,7 +17,7 @@
 #   stop  書くと強制停止マスになります
 #   tutorial/start  会話IDを書くと止まったときにその会話イベントが発生します。
 
-- title: ここはどこだろう
+- title: 目覚めると異世界だった件
   layout: horizontal
   blocks:
     - start tutorial/start
@@ -44,17 +44,19 @@
     - empty
     - empty
     - boss miku tutorial/boss
-- title: ふらふら
+  talkOnClear: tutorial/experience
+
+- title: 迷い道オーバーラン
   layout: horizontal
   blocks:
-    - start
+    - start tutorial/furafura
     - proceed 6
     - proceed 5
     - proceed 4
     - proceed 3
     - proceed 2
     - proceed 1
-    - empty tutorial/furafura
+    - empty
     - back 1
     - back 2
     - back 3
@@ -73,14 +75,15 @@
     - proceed 1
     - heal 15
     - back 1
-    - empty
+    - treasure 5 stop tutorial/furafura2
     - empty
     - empty
     - empty
     - empty
     - boss miku
   talkOnUnlocked: tutorial/unlock_stage
-- title: 2倍攻撃で蹴散らそう
+
+- title: みくにゃんの逆襲
   initialization: cgdice.application.findCharacter('ことりP').unlockSkill('攻撃強化I');
   blocks:
     - start tutorial/need_multiply
@@ -110,3 +113,19 @@
     - empty
     - boss miku2
   talkOnClear: tutorial/skill_item
+  unlockCharacterOnClear: はるかP
+
+- title: 社長ごあいさつ
+  blocks:
+    - start tutorial/haruka
+    - empty
+    - empty
+    - back 2
+    - empty
+    - damage 20
+    - back 2
+    - empty
+    - empty
+    - damage 20
+    - empty
+    - boss miku3

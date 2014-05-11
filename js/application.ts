@@ -34,7 +34,7 @@ module cgdice {
     talkOnUnlocked?: string;
     talkOnClear?: string;
     talkOnFailed?: string;
-    unlockPlayerOnClear?: any;
+    unlockCharacterOnClear?: any;
   }
 
   export interface ChapterInfo {

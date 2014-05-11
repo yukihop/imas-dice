@@ -2,6 +2,7 @@ miku:
   name: 前川みく
   image: miku.png
   attribute: cute
+  say: 初心者狩りはお任せにゃ！
   HP: 38
   ATK: 3
   EXP: 3
@@ -10,9 +11,19 @@ miku2:
   name: 捨て身の前川みく
   image: miku.png
   attribute: cute
+  say: さっきは油断したにゃ！
   HP: 15
   ATK: 20
   EXP: 5
+
+miku3:
+  name: 前川みく
+  image: miku.png
+  attribute: cute
+  say: 今度こそ覚悟するにゃ！
+  HP: 120
+  ATK: 20
+  EXP: 10
 
 chibichihi:
   name: ちびちひ1号
