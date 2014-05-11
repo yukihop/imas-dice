@@ -47,6 +47,12 @@ kirari:
   HP: 500
   ATK: 20
   EXP: 90
+  patterns:
+    - turn: 30%
+      action: AddStatusAction
+      status: Stun
+      probability: 0.5
+      say: にょわー！！
 ranko:
   name: 闇に飲まれたらんこP
   image: chibichihi.jpg

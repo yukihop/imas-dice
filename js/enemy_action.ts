@@ -40,7 +40,23 @@ module cgdice.battles {
           callback();
         }
         );
+    }
+  }
 
+  export class AddStatusAction extends EnemyAction {
+    public invoke(callback: () => void) {
+      var st = <StatusType>StatusType[<string>this.options.status];
+      if (typeof st == 'undefined') {
+        alert('Internal error: wrong status type');
+      } else {
+        game.players.forEach(p => {
+          if (Math.random() < this.options.probability) {
+            var status = new Status(st, 2, true);
+            p.registerStatus(status);
+          }
+        });
+      }
+      callback();
     }
   }
 
