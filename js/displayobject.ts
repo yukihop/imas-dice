@@ -118,6 +118,12 @@ module cgdice {
       return null;
     }
 
+    public removeAllStatus() {
+      if (this.status.length == 0) return;
+      this.status = [];
+      this.statusChanged();
+    }
+
     private changeStatusAfterTurn(event) {
       if (this.status.length == 0) {
         return;

@@ -266,6 +266,12 @@ module cgdice {
       }
     }
 
+    private finalization() {
+      this.players.forEach(p => p.removeAllStatus());
+      this.field.removeAllStatus();
+      this.battle.removeAllStatus();
+    }
+
     private stageCleared() {
       this.setPhase(GamePhase.InResults);
       application.unlockNextStage();
