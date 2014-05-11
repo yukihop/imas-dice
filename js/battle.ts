@@ -367,7 +367,20 @@ module cgdice.battles {
 
     public enemyAttacked(event: BattleEffectEvent) {
       game.console.log(event.magnitude + 'の攻撃を受けた');
-      game.getDamage(event.magnitude);
+
+      var current = event.magnitude;
+
+      var modifiers = this.findStatus(StatusType.DamageMultiply);
+      modifiers.forEach(mod => {
+        var scale = mod.options.scale;
+        var before = current;
+        current = Math.ceil(current * scale);
+        if (current < before) {
+          new FlyText((before - current) + 'ダメージ軽減!', this.element);
+        }
+      });
+
+      game.getDamage(current);
     }
 
     constructor() {

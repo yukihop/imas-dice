@@ -15,6 +15,7 @@ module cgdice.skills {
     stun?: number;
     multipliers?: string[];
     attribute?: string;
+    turns?: number;
   }
 
   export class Skill {
@@ -112,6 +113,22 @@ module cgdice.skills {
           { next: new Status(StatusType.Stun, 1, true) });
         this.owner.registerStatus(stun);
       }
+      callback();
+    }
+  }
+
+  export class DamageMultiplySkill extends CommandSkill {
+    public skillInvokable() {
+      return (game.phase == GamePhase.InBattle && !game.battle.hasStatus(StatusType.DamageMultiply));
+    }
+
+    public invoke(callback: () => void) {
+      var status = new Status(
+        cgdice.StatusType.DamageMultiply,
+        this.param.turns,
+        true,
+        { scale: this.param.scale });
+      game.battle.registerStatus(status);
       callback();
     }
   }

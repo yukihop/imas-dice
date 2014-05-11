@@ -179,7 +179,7 @@
       id: ee39ef92
       desc: クール属性の敵に2倍ダメージを与える。
       attribute: cool
-    - class: CommandSkill
+    - class: DamageMultiplySkill
       name: 社長の器
       id: 0f610844
       desc: 2ターンの間、敵から受けるダメージを半減する。

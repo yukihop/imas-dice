@@ -46,7 +46,8 @@ module cgdice {
     Stun, // skip one turn
     Curse, // cannot use skill
     Poison, // reduce HP after each dice use
-    Countdown // add another status after specified turns
+    Countdown, // add another status after specified turns
+    DamageMultiply
   }
 
   export class Status {
