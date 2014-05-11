@@ -329,6 +329,19 @@ canvas {
   }
 }
 
+// Attribute Icon
+
+.attribute {
+  width: 24px;
+  height: 24px;
+  background-image: url('../images/attributes.png');
+  background-size: 24px (24px * 4);
+  &.cute { background-position: 0 0; }
+  &.cool { background-position: 0 -24px; }
+  &.passion { background-position: 0 -48px; }
+  &.non { background-position: 0 -72px; }
+}
+
 // Character
 
 .character {
@@ -434,14 +447,6 @@ canvas {
       position: absolute;
       left: -12px;
       top: -12px;
-      width: 24px;
-      height: 24px;
-      background-image: url('../images/attributes.png');
-      background-size: 24px (24px * 4);
-      &.cute { background-position: 0 0; }
-      &.cool { background-position: 0 -24px; }
-      &.passion { background-position: 0 -48px; }
-      &.non { background-position: 0 -72px; }
     }
   }
   #dicegame.ready &:hover .popup { display: block; }
@@ -564,6 +569,11 @@ canvas {
       background-color: black;
       border: 2px solid white;
       border-radius: 5px;
+    }
+    .attribute {
+      position: absolute;
+      left: 0px;
+      bottom: 28px;
     }
     .enemy_hp {
       position: absolute;

@@ -102,6 +102,7 @@ module cgdice.characters {
       }
       this._exp = data.exp;
       data.unlockedSkills.forEach(id => this.findSkill(id).unlocked = true);
+      this.updateUnlockedMultipliers();
     }
 
     public resetHighlight() {
@@ -182,6 +183,18 @@ module cgdice.characters {
         });
       });
 
+      // Attribute
+      var tmp = this.hasUnlockedSkillOfClass('WeakAttributeSkill');
+      if (tmp) {
+        if (game.battle.enemy.attribute == tmp.param.attribute) {
+          current *= 2;
+          result.modifiers.push({
+            caption: '弱点属性',
+            ATK: current
+          });
+        }
+      }
+
       result.ATK = current;
       return result;
     }
@@ -203,6 +216,17 @@ module cgdice.characters {
       this._skills.some(skill => {
         if (skill.name == skillNameOrID || skill.id == skillNameOrID) {
           result = skill;
+          return true;
+        }
+      });
+      return result;
+    }
+
+    public hasUnlockedSkillOfClass(className: string): skills.Skill {
+      var result: skills.Skill = null;
+      this._skills.some(s => {
+        if (s.unlocked && s.className == className) {
+          result = s;
           return true;
         }
       });

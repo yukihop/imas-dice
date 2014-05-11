@@ -197,7 +197,7 @@ module cgdice {
       this.console = new GameLog();
 
       this.element.find('#players')
-        .on('skillTrigger', '.character', (event: JQueryEventObject, skill: skills.Skill) => {
+        .on('skillTrigger', '.character', (event: JQueryEventObject, skill: skills.CommandSkill) => {
           this.setReady(false);
           skill.owner.MP -= skill.cost;
           setTimeout(() => {

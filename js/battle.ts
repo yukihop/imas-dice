@@ -17,10 +17,12 @@ module cgdice.battles {
     public HP: number;
     public ATK: number;
     public EXP: number;
+    public attribute: string;
 
     private update() {
       var e = this.element;
       $('.enemy_name', e).text(this.name);
+      $('.attribute', e).addClass(this.attribute);
       $('.enemy_hp_value', e).text(this.HP);
       $('.enemy_hp_bar', e).css('width', this.HP / this.maxHP * 100 + '%');
     }
@@ -89,6 +91,7 @@ module cgdice.battles {
       this.maxHP = e.HP;
       this.ATK = e.ATK;
       this.EXP = e.EXP;
+      this.attribute = e.attribute ? e.attribute : 'non';
       this.update();
     }
   }

@@ -1,12 +1,14 @@
 miku:
   name: 前川みく
   image: miku.png
+  attribute: cute
   HP: 38
   ATK: 3
   EXP: 3
 miku2:
   name: 捨て身の前川みく
   image: miku.png
+  attribute: cute
   HP: 15
   ATK: 20
   EXP: 5
@@ -33,12 +35,14 @@ chihiro2:
 kirari:
   name: きらりん星人
   image: kirari.png
+  attribute: passion
   HP: 500
   ATK: 20
   EXP: 90
 ranko:
   name: 闇に飲まれたらんこP
   image: chibichihi.jpg
+  attribute: cool
   start_talk: やみのまやみのま
   HP: 300
   ATK: 10

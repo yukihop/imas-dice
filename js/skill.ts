@@ -11,6 +11,7 @@ module cgdice.skills {
     proceed?: number;
     removeType?: string;
     multipliers?: string[];
+    attribute?: string;
   }
 
   export class Skill {
@@ -23,12 +24,6 @@ module cgdice.skills {
     public owner: characters.Character;
     public cost: number;
     public param: any;
-
-    public invoke(callback: () => void) {
-      // abstract class
-      alert('This skill is not implemented!');
-      callback();
-    }
 
     static create(param: SkillInfo, owner: characters.Character): Skill {
       var className: string = param.class;
@@ -58,12 +53,21 @@ module cgdice.skills {
         game.phase == GamePhase.InBattle
         );
     }
+
+    public invoke(callback: () => void) {
+      // abstract class
+      alert('This skill is not implemented!');
+      callback();
+    }
   }
 
   export class PassiveSkill extends Skill {
   }
 
   export class MultiplierSkill extends PassiveSkill {
+  }
+
+  export class WeakAttributeSkill extends PassiveSkill {
   }
 
   export class RedrawSkill extends CommandSkill {

@@ -50,6 +50,7 @@ module cgdice {
     HP: number;
     ATK: number;
     EXP: number;
+    attribute?: string;
     start_talk?: string;
     defeated_talk?: string;
   }
@@ -157,7 +158,6 @@ module cgdice {
       });
 
       this.resetChapterUnlockStatus(0, 0);
-      this.save();
       this.dispatchEvent('gameLoad');
     }
 

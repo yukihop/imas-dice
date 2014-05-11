@@ -47,6 +47,11 @@
       id: 3e27d0b9
       desc: 倍率ダイス目[3>3]を解放する。
       multipliers: ["3>3"]
+    - class: WeakAttributeSkill
+      name: パッション魂
+      id: 0fe6e1d5
+      desc: キュート属性の敵に2倍ダメージを与える。
+      attribute: cute
     - class: HealSkill
       name: 1/6ドリンク
       id: 48c187de
@@ -70,6 +75,11 @@
       id: 3e27d0b9
       desc: 倍率ダイス目[1>5]を解放する。
       multipliers: ["1>5"]
+    - class: WeakAttributeSkill
+      name: キュート魂
+      id: ee39ef92
+      desc: クール属性の敵に2倍ダメージを与える。
+      attribute: cool
     - class: SpecifyNextDiceSkill
       name: 働きたくない
       id: 9450ba26
@@ -98,6 +108,11 @@
       id: 3e27d0b9
       desc: 倍率ダイス目[13>5]を解放する。
       multipliers: ["13>5"]
+    - class: WeakAttributeSkill
+      name: キュート魂
+      id: ee39ef92
+      desc: クール属性の敵に2倍ダメージを与える。
+      attribute: cool
     - class: AdditionalOnboardSkill
       name: ボルテージMAX
       id: aa8052cb
@@ -117,8 +132,13 @@
     - class: MultiplierSkill
       name: 攻撃強化I
       id: 3e27d0b9
-      desc: 倍率ダイス目[666x10]を解放する。
+      desc: 倍率ダイス目[666>10]を解放する。
       multipliers: ["666>10"]
+    - class: WeakAttributeSkill
+      name: クール魂
+      id: 5726bfac
+      desc: パッション属性の敵に2倍ダメージを与える。
+      attribute: passion
     - class: AttackMultiplySkill
       name: ペイン
       id: 288b6e7b
@@ -129,8 +149,14 @@
 
 - name: あかねP
   image: akane_p.png
+  attribute: passion
   base_hp: 20
   skills:
+    - class: WeakAttributeSkill
+      name: パッション魂
+      id: 0fe6e1d5
+      desc: キュート属性の敵に2倍ダメージを与える。
+      attribute: cute
     - class: ProceedSkill
       name: 爆走乙女
       id: baabec8b
@@ -140,6 +166,7 @@
 
 - name: はるかP
   image: haruka_p.png
+  attribute: cute
   base_hp: 45
   skills:
     - class: MultiplierSkill
@@ -147,7 +174,12 @@
       id: 3e27d0b9
       desc: 倍率ダイス目[44>5]を解放する。
       multipliers: ["44>5"]
-    - class: Skill
+    - class: WeakAttributeSkill
+      name: キュート魂
+      id: ee39ef92
+      desc: クール属性の敵に2倍ダメージを与える。
+      attribute: cool
+    - class: CommandSkill
       name: 社長の器
       id: 0f610844
       desc: 2ターンの間、敵から受けるダメージを半減する。
@@ -156,6 +188,7 @@
 
 - name: かえでP
   image: kaede_p.png
+  attribute: cool
   base_hp: 16
   skills:
     - class: MultiplierSkill
@@ -163,6 +196,11 @@
       id: 3e27d0b9
       desc: 倍率ダイス目[246>7]を解放する。
       multipliers: ["246>7"]
+    - class: WeakAttributeSkill
+      name: クール魂
+      id: 5726bfac
+      desc: パッション属性の敵に2倍ダメージを与える。
+      attribute: passion
     - class: SpecifyNextDiceSkill
       name: あんたん
       id: f07c4bf9

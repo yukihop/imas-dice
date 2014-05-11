@@ -8,11 +8,6 @@ module cgdice {
     constructor() {
       super($('#title'));
       this.element.on('click', '#game_start', () => this.menuClicked());
-      this.element.on('click', '#wipe', () => {
-        if (confirm('セーブを初期化しますか?')) {
-          application.wipe();
-        }
-      });
     }
   }
 
@@ -131,7 +126,10 @@ module cgdice {
       $('#unlock_everything', this.element).on('click', () => {
         $('#unlock_all_characters, #unlock_all_stages, #unlock_all_skills').click();
       });
-      $('#wipe', this.element).on('click', () => application.wipe());
+      $('#wipe', this.element).on('click', () => {
+        application.wipe();
+        application.save();
+      });
 
       application.on('gameLoad', () => {
         if (this.element.is(':visible')) this.reset();
