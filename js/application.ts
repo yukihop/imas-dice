@@ -177,10 +177,11 @@ module cgdice {
         chap.stages.some((stage, si) => {
           if (stage == this.currentStage) {
             if (si == chap.stages.length - 1) {
-              // Last stage of a chapter. Unlock next chapter.
-              if (ci == chap.stages.length - 1) {
-                // All stages already unlocked.
+              // Last stage of a chapter cleared.
+              if (ci == chapters.length - 1) {
+                // All chapters already unlocked.
               } else {
+                // Unlock next chapter and its first stage.
                 chapters[ci + 1].unlocked = true;
                 unlockedStage = chapters[ci + 1].stages[0];
                 return true;
