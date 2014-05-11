@@ -113,16 +113,25 @@
       id: ee39ef92
       desc: クール属性の敵に2倍ダメージを与える。
       attribute: cool
-    - class: AdditionalOnboardSkill
-      name: ボルテージMAX
-      id: aa8052cb
-      desc: このターン、場に出ているダイスを2個から3個に増やす。
-      cost: 10
     - class: RedrawSkill
-      name: 乱数調整β
+      name: 乱数調整α
       id: da0b1480
       desc: ダイスを消費せずに、手持ちのダイスの目をランダムに入れ替える。
-      cost: 5
+      cost: 2
+    - class: AdditionalOnboardSkill
+      name: 乱数調整β
+      requires: da0b1480
+      id: aa8052cb
+      desc: このターン、場に出ているダイスを2個から3個に増やす。
+      cost: 4
+    - class: AttackMultiplySkill
+      name: パワー持ち
+      id: 7654f04c
+      desc: ランダムな仲間1人の攻撃力を2ターンの間2倍にする。
+      cost: 3
+      target: random
+      turns: 2
+      scale: 2
 
 - name: らんこP
   image: ranko_p.png

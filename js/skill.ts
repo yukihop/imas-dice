@@ -113,12 +113,16 @@ module cgdice.skills {
 
       var target = this.owner;
       if (typeof this.param.target == 'string') {
-        game.players.some(p => {
-          if (p.name == this.param.target) {
-            target = p;
-            return true;
-          }
-        });
+        if (this.param.target == 'random') {
+          target = game.players[Math.floor(Math.random() * game.players.length)];
+        } else {
+          game.players.some(p => {
+            if (p.name == this.param.target) {
+              target = p;
+              return true;
+            }
+          });
+        }
       }
 
       target.registerStatus(status);
