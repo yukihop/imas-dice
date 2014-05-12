@@ -103,8 +103,23 @@ module cgdice {
       this.stock = stock;
     }
 
+    private blink() {
+      var marker = $('#select_marker', this.element)
+      if ($('.ui-dialog:visible').length) {
+        marker.removeClass('alt');
+      } else {
+        marker.toggleClass('alt');
+      }
+      if (game.ready) {
+        setTimeout(() => this.blink(), 500);
+      }
+    }
+
     constructor() {
       super($('#stack'));
+
+      game.addEventListener('ready', () => this.blink());
+
       this.element.on('click', '.dice', (event) => {
         if (!game.ready) {
           return;
