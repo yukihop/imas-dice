@@ -387,7 +387,7 @@ module cgdice.fields {
         this._selected_dice = null;
       };
 
-      if (game.stack.length == 0 && block.className != 'ProceedBlock') {
+      if (game.stack.length == 0 && !block.className.match(/Proceed|Treasure/)) {
         // Ran out of dices, stage failed
         dispatchMoveEndEvents();
         return;
@@ -411,6 +411,7 @@ module cgdice.fields {
           break;
         case 'TreasureBlock':
           game.stack.stock += (<TreasureBlock>block).diceNumber;
+          game.stack.drawUntilLimit();
           if (block.talk) Talk.show(block.talk);
           dispatchMoveEndEvents();
           break;

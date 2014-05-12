@@ -308,8 +308,7 @@ module cgdice {
         return;
       }
       if (this.stack.stock > 0) {
-        this.stack.stock--;
-        this.stack.draw();
+        this.stack.drawUntilLimit();
       }
       if (this.stack.length == 0) {
         $('#stage_failed_dice').show();

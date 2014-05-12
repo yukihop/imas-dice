@@ -39,6 +39,7 @@ module cgdice {
   export class DiceStack extends DomDisplayObject {
     private _stock: number = 0;
     private _next: number = 0;
+    private _capacity: number = 3;
 
     get length(): number {
       return this.element.find('>.dice').length;
@@ -64,7 +65,11 @@ module cgdice {
         .find('.next_pips').text(this._next);
     }
 
-    public draw() {
+    public draw(noUseStock: boolean = false) {
+      if (!noUseStock && this.stock <= 0) {
+        return;
+      }
+      this.stock--;
       var dice = new Dice();
       dice.roll();
       if (this._next > 0) {
@@ -73,6 +78,14 @@ module cgdice {
         this.element.find('.next').hide(300);
       }
       this.element.prepend(dice.element);
+    }
+
+    public drawUntilLimit() {
+      var count = this._capacity - this.element.find('.dice').length;
+      var i: number;
+      for (i = 0; i < count; i++) {
+        this.draw();
+      }
     }
 
     public shuffleExistingDices() {
@@ -85,7 +98,7 @@ module cgdice {
     public reset(stock: number) {
       this.element.find('.dice').remove();
       for (var i = 0; i <= 2; i++) {
-        this.draw();
+        this.draw(true);
       }
       this.stock = stock;
     }
