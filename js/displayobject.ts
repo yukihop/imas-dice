@@ -14,8 +14,8 @@ module cgdice {
       this.adjustCanvasSize();
       this.stage = new createjs.Stage(this.canvas[0]);
 
-      createjs.Ticker.on('tick', () => {
-        this.stage.update();
+      createjs.Ticker.on('tick', (event) => {
+        this.stage.update(event);
       });
 
     }

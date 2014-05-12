@@ -29,17 +29,17 @@ module cgdice.battles {
     }
 
     public hit(damage: number): void {
+      this.HP = Math.max(this.HP - damage, 0);
+      this.update();
+      this.dispatchEvent('hpChange');
       this.element
-        .transition({ y: 15 }, 150)
-        .transition({ y: 0 }, 150, 'ease', () => {
+        .transition({ y: -20 }, 350)
+        .transition({ y: 0 }, 650, 'ease', () => {
           this.hitEffectEnd(damage);
         });
     }
 
     private hitEffectEnd(damage: number) {
-      this.HP = Math.max(this.HP - damage, 0);
-      this.update();
-      this.dispatchEvent('hpChange');
       if (this.HP <= 0) {
         this.element.animate({ opacity: 0 }, 1000, () => {
           this.die();
@@ -354,12 +354,13 @@ module cgdice.battles {
 
     private playAttackAnimation() {
       if (this._queue.length > 0) {
+        // play next
         var next = this._queue.shift();
         new FlyText({
           text: next.modifier.caption,
           parent: next.player.element,
           class: 'modify_caption',
-          transition: { y: -30, opacity: 0.8, easing: 'out' }
+          transition: { y: -40, opacity: 0.8, easing: 'out' }
         });
         next.player.element.find('.current_attack')
           .text(next.modifier.ATK.toString())
@@ -371,10 +372,14 @@ module cgdice.battles {
           var ae = new AttackEffect();
           ae.x = this.enemy.element.offset().left + Math.random() * this.enemy.element.width();
           ae.y = this.enemy.element.offset().top + Math.random() * this.enemy.element.height();
-          ae.scaleX = ae.scaleY = Math.min(Math.max(1, this._attacks[idx] / 10), 10);
+          ae.framerate = Math.min(Math.max(8, 1000 / this._attacks[idx]), 20);
+          ae.scaleX = ae.scaleY = Math.min(Math.max(1, this._attacks[idx] / 10), 8);
           setTimeout(() => {
             this.stage.addChild(ae);
             ae.gotoAndPlay(player.attribute);
+            player.element
+              .transition({ y: -10, duration: 100 })
+              .transition({ y: 0, duration: 200 });
           }, Math.floor(Math.random() * 500));
         });
 
