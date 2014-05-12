@@ -30,14 +30,21 @@ module cgdice {
 
         var blocking = this._currentCharacter.blockingSkill(skill);
         li.toggleClass('locked', blocking != null);
-        var skillName = skill.name;
-        if (blocking) {
-          skillName += ' [' + blocking.name + 'の解放が必要]';
-        }
 
         $('<div>').addClass('skill_icon')
           .toggleClass('locked', blocking != null).addClass(cls).appendTo(li);
-        $('<div>').addClass('skill_name').text(skillName).appendTo(li);
+
+        var skillName = $('<div>').addClass('skill_name').text(skill.name).appendTo(li);
+        if (skill.cost > 0) {
+          $('<span>').addClass('cost').text('消費: ' + skill.cost).appendTo(skillName);
+        }
+        if (blocking) {
+          $('<span>')
+            .addClass('blocking')
+            .text(' [' + blocking.name + 'の解放が必要]')
+            .appendTo(skillName);
+        }
+
         $('<div>').addClass('skill_desc').html(desc).appendTo(li);
         li.appendTo(list);
       });

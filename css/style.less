@@ -803,7 +803,11 @@ canvas {
           .mixin(passive_skill, 1);
           .mixin(command_skill, 2);
         }
-        .skill_name { line-height: 25px; font-weight: bold; }
+        .skill_name {
+          line-height: 25px; font-weight: bold;
+          span.cost { color: navy; margin: 0 1em; }
+          span.blocking { color: pink; }
+        }
         .skill_desc {
           line-height: 25px;
           vertical-align: center;
