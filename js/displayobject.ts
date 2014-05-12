@@ -20,7 +20,7 @@ module cgdice {
 
     }
 
-    public adjustCanvasSize() {
+    private adjustCanvasSize() {
       if (!this.canvas) {
         return;
       }

@@ -480,7 +480,6 @@ module cgdice.fields {
       super($('#field'));
 
       this.useCanvas();
-      $(window).on('resize', () => this.adjustCanvasSize());
 
       this.stage.addChild(this._container);
       this.on('diceDetermine', this.diceDetermined, this);
