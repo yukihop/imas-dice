@@ -1,0 +1,35 @@
+# 小梅チャプターです
+
+- title: THRILLER
+  layout: horizontal
+  blocks:
+    - start
+    - empty
+    - empty
+    - empty
+    - enemy zombie stop
+    - empty
+    - empty
+    - empty
+    - enemy vampire
+    - enemy vampire
+    - enemy vampire
+    - enemy vampire
+    - enemy vampire
+    - empty
+    - heal 30
+    - empty
+    - empty
+    - enemy zombie
+    - empty
+    - heal 30
+    - empty
+    - enemy zombie
+    - empty
+    - empty
+    - heal 30
+    - enemy zombie
+    - empty
+    - empty
+    - empty
+    - boss vampire

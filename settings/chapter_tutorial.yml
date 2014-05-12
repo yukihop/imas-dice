@@ -17,7 +17,7 @@
 #   stop  書くと強制停止マスになります
 #   tutorial/start  会話IDを書くと止まったときにその会話イベントが発生します。
 
-- title: 目覚めると異世界だった件
+- title: ここはどこ？
   layout: horizontal
   blocks:
     - start tutorial/start

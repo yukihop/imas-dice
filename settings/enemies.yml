@@ -25,6 +25,22 @@ miku3:
   ATK: 20
   EXP: 10
 
+zombie:
+  name: ぞんび
+  image: zombie.png
+  attribute: cool
+  HP: 80
+  ATK: 20
+  EXP: 6
+
+vampire:
+  name: う゛ぁんぱいあ
+  image: zombie.png
+  attribute: cool
+  HP: 120
+  ATK: 20
+  EXP: 6
+
 chibichihi:
   name: ちびちひ1号
   image: chibichihi.png
