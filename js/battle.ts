@@ -406,7 +406,9 @@ module cgdice.battles {
       if (this.enemy.HP <= 0) {
         // Win!
         new GamePhaseMessage('battle_win', 1500, () => {
-          this.element.hide();
+          if (game.field.position != game.field.blocks.length - 1) {
+            this.element.hide();
+          }
           game.gainExp += this.enemy.EXP;
           this.dispatchEvent('battleFinish');
           this.dispatchEvent('diceProcess');
