@@ -166,6 +166,7 @@ module cgdice {
       character_list.find('.character').detach(); // do not empty
 
       var unlock_count = 0;
+      var addable = StageSelector.MAX_PLAYERS - previousSelected.length;
       application.allCharacters.forEach((p, i) => {
         if (!p.unlocked) {
           return;
@@ -173,11 +174,8 @@ module cgdice {
         unlock_count++;
         p.redraw();
         p.updateSkillInvokableStatus();
-        if (previousSelected.length == 0) {
-          p.element.toggleClass('selected', i < StageSelector.MAX_PLAYERS);
-        } else {
-          p.element.toggleClass('selected', previousSelected.indexOf(p) >= 0);
-        }
+        var ok = previousSelected.indexOf(p) >= 0 || (addable-- > 0);
+        p.element.toggleClass('selected', ok);
         $('<li>').append(p.element).appendTo(character_list);
       });
       this._select_max = Math.min(unlock_count, StageSelector.MAX_PLAYERS);
