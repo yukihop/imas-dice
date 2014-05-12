@@ -129,3 +129,5 @@
     - damage 20
     - empty
     - boss miku3
+  talkOnUnlocked: tutorial/haruka_found
+  talkOnClear: tutorial/tutorial_end
