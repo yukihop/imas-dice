@@ -284,20 +284,20 @@ module cgdice.fields {
       var b = this._blockBounds;
       var w = this.stage.canvas.width;
       var h = this.stage.canvas.height;
-      var pad = { left: 50, right: 50, top: 50, bottom: 150 };
+      var pad = { left: 50, right: 50, top: 70, bottom: 170 };
       var x = (w / 2) - block.x;
       if (b.xmax - b.xmin < w - pad.left - pad.right) {
         x = (w - b.xmax - b.xmin + pad.left - pad.right) / 2;
       } else {
-        x = Math.min(x, b.xmin + pad.left);
-        x = Math.max(x, w - b.xmax - pad.right);
+        x = Math.min(x, - b.xmin + pad.left);
+        x = Math.max(x, - b.xmax + w - pad.right);
       }
       var y = (h / 2) - block.y;
       if (b.ymax - b.ymin < h - pad.top - pad.bottom) {
         y = (h - b.ymax - b.ymin + pad.top - pad.bottom) / 2;
       } else {
-        y = Math.min(y, b.ymin + pad.top);
-        y = Math.max(y, w - b.ymax - pad.bottom);
+        y = Math.min(y, - b.ymin + pad.top);
+        y = Math.max(y, - b.ymax + h - pad.bottom);
       }
       createjs.Tween.removeTweens(this._container);
       var duration = animation ? 2000 : 0;
