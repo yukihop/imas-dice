@@ -54,14 +54,15 @@ module cgdice {
 
   export interface EnemyInfo {
     name: string;
+    inherits: string;
     image: string;
     HP: number;
     ATK: number;
     EXP: number;
     patterns?: EnemyPattern[];
     attribute?: string;
-    start_talk?: string;
-    defeated_talk?: string;
+    startTalk?: string;
+    defeatedTalk?: string;
   }
 
   export interface CharacterSaveData {

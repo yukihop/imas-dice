@@ -9,8 +9,7 @@ miku:
 
 miku2:
   name: 捨て身の前川みく
-  image: miku.png
-  attribute: cute
+  inherits: miku
   say: さっきは油断したにゃ！
   HP: 15
   ATK: 20
@@ -18,8 +17,7 @@ miku2:
 
 miku3:
   name: 前川みく
-  image: miku.png
-  attribute: cute
+  inherits: miku
   say: 今度こそ覚悟するにゃ！
   HP: 120
   ATK: 20

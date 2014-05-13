@@ -110,11 +110,22 @@ module cgdice.battles {
       this.dispatchEvent('enemyTurnEnd');
     }
 
+    private resolveEnemyInfoInheritance(id: string): EnemyInfo {
+      var enemies = application.settings.enemies;
+      var info = enemies[id];
+      if (typeof info == 'undefined') {
+        throw 'No  enemy ID ' + id;
+      }
+      if (info.inherits) {
+        return $.extend({}, this.resolveEnemyInfoInheritance(info.inherits), info);
+      } else {
+        return info;
+      }
+    }
+
     constructor(id: string) {
       super('enemy');
-      var data = application.settings.enemies;
-      if (!(id in data)) { alert('Runtime Error: no such enemy ID'); }
-      var e = data[id];
+      var e = this.resolveEnemyInfoInheritance(id);
       this.element.find('.enemy_image').attr('src', 'images/enemies/' + e.image);
       this.name = e.name;
       this.HP = e.HP;
@@ -222,11 +233,6 @@ module cgdice.battles {
       this.on('animationend', this.animationEnd, this);
       this.compositeOperation = 'lighter';
     }
-  }
-
-  export interface EnemyInfo {
-    id: string;
-    level: number;
   }
 
   /**
