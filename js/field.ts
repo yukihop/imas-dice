@@ -433,14 +433,15 @@ module cgdice.fields {
       this._container.addChild(lines);
 
       var bn: Bounds;
-      var layout_func = FieldLayout.horizontal;
+      var layout_func: FieldLayoutFunc = FieldLayout.horizontal;
       if ('layout' in fieldData && fieldData.layout in FieldLayout) {
         layout_func = FieldLayout[fieldData.layout];
       }
+      var block_positions = layout_func(blocksData.length);
 
       for (var i = 0; i < blocksData.length; i++) {
         var b = Block.fromObject(blocksData[i]);
-        var pos = layout_func(i, blocksData.length);
+        var pos = block_positions[i];
         if (i == 0) {
           bn = { xmin: pos.x, xmax: pos.x, ymin: pos.y, ymax: pos.y };
         } else {
@@ -486,24 +487,67 @@ module cgdice.fields {
     }
   }
 
+  interface FieldLayoutFunc {
+    (count: number, params?: string[]): Vector[];
+  }
+
   class FieldLayout {
-    static horizontal(index: number, count: number): Vector {
-      return { x: index * 60, y: Math.sin(2 * Math.PI / 10 * index) * 40 };
-    }
-
-    static vertical(index: number, count: number): Vector {
-      return { x: 300, y: index * 60 };
-    }
-
-    static zigzagHorizontal(index: number, count: number): Vector {
-      var amp = 3;
-      var x = Math.floor(index / amp) * 60;
-      var y = index % amp;
-      if (index % (amp * 2) < amp) {
-        y = amp - y - 1;
+    static horizontal(count: number): Vector[] {
+      var result: Vector[] = [], i = 0;
+      for (i = 0; i < count; i++) {
+        result.push({ x: i * 60, y: Math.sin(2 * Math.PI / 10 * i) * 40 });
       }
-      y *= 60;
-      return { x: x, y: y };
+      return result;
+    }
+
+    static vertical(count: number): Vector[] {
+      var result: Vector[] = [], i = 0;
+      for (i = 0; i < count; i++) {
+        result.push({ x: 300, y: i * 60 });
+      }
+      return result;
+    }
+
+    static zigzagHorizontal(count: number): Vector[] {
+      var amp = 3, result: Vector[] = [], i = 0;
+      for (i = 0; i < count; i++) {
+        var x = Math.floor(i / amp) * 60;
+        var y = i % amp;
+        if (i % (amp * 2) < amp) {
+          y = amp - y - 1;
+        }
+        y *= 60;
+        result.push({ x: x, y: y });
+      }
+      return result;
+    }
+
+    static spiralOut(count: number): Vector[] {
+      var result: Vector[] = [],
+        i = 0,
+        w = 60,
+        rot = 0,
+        cur: Vector = { x: 0, y: 0 },
+        dir: Vector,
+        turned = 0,
+        corner_until = 1;
+      while (i < count) {
+        dir = { x: w * Math.cos(rot), y: w * Math.sin(rot) };
+        if (corner_until-- == 0) {
+          rot += Math.PI / 2;
+          corner_until = Math.floor(++turned / 2);
+        }
+        cur.x += Math.round(dir.x);
+        cur.y += Math.round(dir.y);
+        result.push({ x: cur.x, y: cur.y });
+        i++;
+      }
+      console.log(JSON.stringify(result));
+      return result;
+    }
+
+    static spiralIn(count: number): Vector[] {
+      return FieldLayout.spiralOut(count).reverse();
     }
   }
 

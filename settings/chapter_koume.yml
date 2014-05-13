@@ -1,7 +1,7 @@
 # 小梅チャプターです
 
 - title: THRILLER
-  layout: horizontal
+  layout: spiralIn
   blocks:
     - start
     - empty
