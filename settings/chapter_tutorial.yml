@@ -60,15 +60,24 @@
     - back 1
     - back 2
     - back 3
-    - treasure 5 stop
-    - empty stop
+    - treasure 1 stop
+    - proceed 4
+    - proceed 4
+    - back 1
+    - proceed 2
+    - proceed 2
+    - back 6
+    - empty
+    - empty
+    - empty
+    - treasure 1 stop
     - proceed 4
     - back 2
     - proceed 4
     - back 3
     - proceed 1
     - back 4
-    - treasure 5
+    - empty
     - proceed 1
     - damage 20
     - back 1
