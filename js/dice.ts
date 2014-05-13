@@ -48,10 +48,33 @@ module cgdice {
     get stock(): number { return this._stock; }
     set stock(value: number) {
       if (value < 0) value = 0;
-      this._stock = Math.floor(value);
+      var change = value - this._stock;
+      this._stock = value;
       this.element
         .toggleClass('stock_empty', this._stock == 0)
         .find('.dice_stock').text(this._stock);
+      if (change != 0) {
+        var text = (change > 0 ? '+' : '') + change;
+        var ci = $('<div>');
+        ci.addClass('stock_change')
+          .text(text)
+          .toggleClass('plus', change > 0)
+          .appendTo(this.element.find('#dice_indicator'))
+          .position({
+            of: $('.dice_stock', this.element),
+            my: (change > 0 ? 'bottom-15px' : 'bottom'),
+            at: 'top'
+          })
+          .transition({
+            y: -20,
+            opacity: 0,
+            duration: 2000,
+            easing: 'easeInQuad',
+            complete: () => {
+            ci.remove();
+          }
+          });
+      }
     }
 
     public getNumbers(): number[] {
@@ -97,7 +120,7 @@ module cgdice {
 
     public reset(stock: number) {
       this.element.find('.dice').remove();
-      for (var i = 0; i <= 2; i++) {
+      for (var i = 0; i < this._capacity; i++) {
         this.draw(true);
       }
       this.stock = stock;

@@ -227,7 +227,7 @@ module cgdice {
       this.field.reset(fieldData);
 
       // dice
-      var init_dice_count = 10;
+      var init_dice_count = 12;
       this.players.forEach(p => {
         p.hasUnlockedSkillOfClass('BringMoreDicesSkill').forEach(s => {
           init_dice_count += s.param.count;
