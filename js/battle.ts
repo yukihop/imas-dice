@@ -376,8 +376,9 @@ module cgdice.battles {
         // attack effect animation
         game.players.forEach((player, idx) => {
           var ae = new AttackEffect();
-          ae.x = this.enemy.element.offset().left + Math.random() * this.enemy.element.width();
-          ae.y = this.enemy.element.offset().top + Math.random() * this.enemy.element.height();
+          var en = this.enemy.element;
+          ae.x = (this.element.width() - en.width()) / 2 +  Math.random() * en.width();
+          ae.y = Math.random() * this.enemy.element.height();
           ae.framerate = Math.min(Math.max(8, 1000 / this._attacks[idx]), 20);
           ae.scaleX = ae.scaleY = Math.min(Math.max(1, this._attacks[idx] / 10), 8);
           setTimeout(() => {
