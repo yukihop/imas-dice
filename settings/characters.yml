@@ -291,7 +291,7 @@
       desc: 次に引かれる手持ちのダイスが必ず6になる。
       pips: 6
       cost: 4
-#   - class: ForceDrawStockSkill
-#     name: ダイバージェンス
-#     desc: 強制的にスタックにもう1個ダイスを引き出す。最大5個。
-#     cost: 1
+    - class: ForceDrawDiceSkill
+      name: ダイバージェンス
+      desc: 強制的に手持ちダイスをもう1個引き出す。最大5個。
+      cost: 1

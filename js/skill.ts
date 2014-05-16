@@ -258,4 +258,16 @@ module cgdice.skills {
       callback();
     }
   }
+  
+  export class ForceDrawDiceSkill extends CommandSkill {
+    public skillInvokable() {
+      var result = super.skillInvokable();
+      return result && game.stack.stock > 0 && game.stack.length < 5;
+    }
+    
+    public invoke(callback: () => void) {
+      game.stack.draw();
+      callback();
+    }
+  }
 }
