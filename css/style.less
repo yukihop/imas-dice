@@ -213,7 +213,7 @@ canvas {
     background-color: rgba(0, 0, 0, 0.3);
     border-radius: 15px;
     bottom: 10px;
-    left: 10px;
+    left: 20px;
     padding: 15px 10px;
   }
   #stack {
@@ -694,14 +694,17 @@ canvas {
   left: 10px;
   top: 10px;
   right: 10px;
-  height: 15px;
+  height: 20px;
   border: 1px solid pink;
+  transition: box-shadow 0.3s;
+  background-color: rgba(0, 0, 0, 0.3);
   .hp_value {
     position: absolute;
     font-weight: bold;
     color: black;
     font-size: 15px;
-    line-height: 15px;
+    line-height: 20px;
+    text-shadow: 1px 1px 1px brown;
   }
   .hp_bar {
     position: absolute;
@@ -723,10 +726,10 @@ canvas {
   }
   &.healing {
     border: 1px solid yellow;
-    box-shadow: 3px 3px 3px cyan;
+    box-shadow: 0 0 5px 5px lime;
   }
   &.damaging {
-    box-shadow: 3px 3px 3px red;
+    box-shadow: 0 0 5px 5px red;
   }
 }
 
