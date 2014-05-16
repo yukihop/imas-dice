@@ -390,13 +390,11 @@ module cgdice.battles {
         });
 
         // all attack fly text
-        setTimeout(() => {
-          new FlyText({
-            text: this._attack_all.toString(),
-            parent: this.element,
-            class: 'all_attack'
-          });
-        }, 500);
+        new FlyText({
+          text: this._attack_all.toString(),
+          parent: this.element,
+          class: 'all_attack'
+        });
 
         // enemy hit
         this.enemy.hit(this._attack_all);
