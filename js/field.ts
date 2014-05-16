@@ -475,6 +475,8 @@ module cgdice.fields {
       if (typeof fieldData.initialization == 'string') {
         eval(fieldData.initialization);
       }
+      
+      Talk.resetShown();
     }
 
     constructor() {

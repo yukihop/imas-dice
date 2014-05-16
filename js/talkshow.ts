@@ -7,10 +7,20 @@ module cgdice {
 
     private dialog: JQuery;
     private talks: JQuery;
+    private static shownID: { [id: string]: boolean } = {};
 
     static DIALOG_MAX_HEIGHT = 300;
 
+    static resetShown() {
+      Talk.shownID = {};
+    }
+    
     static show(talkID: string, callback?: () => void) {
+      if (Talk.shownID[talkID]) {
+        callback && callback();
+        return;
+      }
+      Talk.shownID[talkID] = true;
       var splitted = talkID.split('/');
       return new Talk(splitted[0], splitted[1], callback);
     }
