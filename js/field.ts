@@ -422,6 +422,20 @@ module cgdice.fields {
       }
     }
 
+    private createCursor(blackness: number) {
+      this._cursor = this._cursor || new createjs.Shape();
+      if (this._cursor.parent == null) {
+        this._container.addChild(this._cursor);
+      }
+      var whiteness = 255 - blackness;
+      this._cursor.graphics
+        .clear()
+        .beginFill('rgb(' + whiteness + ',' + whiteness + ',' + whiteness + ')')
+        .beginStroke(blackness > 200 ? 'white' : 'gray')
+        .p('AigC0IAAlmIDBAAQAuAAAiAWQAwAfAABAQAABTg0AfQgfATg5AAIg+AAIAABsgAgphlIAABVIAvABQAxgHABgkQgBgmgxgHg');
+      // This path was exported via Flash CC
+    }
+
     public reset(fieldData: StageInfo) {
       var blocksData = fieldData.blocks;
       var prev: Block;
@@ -463,10 +477,7 @@ module cgdice.fields {
 
       this._blockBounds = bn;
 
-      this._cursor = new createjs.Shape();
-      this._cursor.graphics.beginFill('red').beginStroke('white')
-        .drawRect(-10, -15, 20, 30).endFill().endStroke();
-      this._container.addChild(this._cursor);
+      this.createCursor(0);
 
       this.moveTo(0, true);
       this.scrollField(this.blocks[0], false);
@@ -475,7 +486,7 @@ module cgdice.fields {
       if (typeof fieldData.initialization == 'string') {
         eval(fieldData.initialization);
       }
-      
+
       Talk.resetShown();
     }
 
