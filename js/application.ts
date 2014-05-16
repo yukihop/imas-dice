@@ -200,7 +200,7 @@ module cgdice {
         });
         if (unlockedStage) return true;
       });
-      if (unlockedStage) {
+      if (unlockedStage && !unlockedStage.unlocked) {
         unlockedStage.unlocked = true;
         if ('talkOnUnlocked' in unlockedStage) {
           this._stage_selector.openingTalkID = unlockedStage.talkOnUnlocked;
