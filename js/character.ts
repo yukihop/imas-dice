@@ -35,6 +35,7 @@ module cgdice.characters {
     public name: string;
     private _image: string;
     public attribute: string;
+    public desc: string;
     private _exp: number = 0;
     private _multipliers: Multiplier[] = [];
     private _baseHP: number = 10;
@@ -314,6 +315,7 @@ module cgdice.characters {
           this.attribute = c.attribute;
           this._baseHP = c.base_hp;
           this._image = c.image;
+          this.desc = c.desc;
           this.element.css('background-image', 'url(images/characters/' + c.image + ')');
 
           // this._multipliers = $.map(c.multipliers, (v) => { return new Multiplier(v); });

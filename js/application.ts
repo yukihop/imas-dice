@@ -22,7 +22,17 @@ module cgdice {
   export interface Settings {
     chapters: ChapterInfo[];
     enemies: { [key: string]: EnemyInfo };
-    characters: any[];
+    characters: CharacterInfo[];
+  }
+
+  export interface CharacterInfo {
+    name: string;
+    image: string;
+    attribute: string;
+    base_hp: number;
+    unlockedFromStart?: boolean;
+    desc: string;
+    skills: skills.SkillInfo[];
   }
 
   export interface StageInfo {

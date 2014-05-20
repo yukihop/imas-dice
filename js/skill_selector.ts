@@ -7,6 +7,7 @@ module cgdice {
       this._currentCharacter = character;
       var src = 'images/characters/' + character.image.replace('.png', '_large.png');
       $('.name', this.element).text(character.name);
+      $('.character_desc', this.element).text(character.desc);
       $('#skill_selector_bg', this.element)
         .attr('src', src)
         .stop(true, true)
