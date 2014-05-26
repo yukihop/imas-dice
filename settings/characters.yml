@@ -187,10 +187,12 @@
 #     name: ペイン
 #     desc: 4倍の攻撃力で攻撃するが、次ターンの味方ダメージが2倍になる。
 #     cost: 5
-#   - class: CommandSkill
-#     name: 身喰らい
-#     desc: 最大HPの20%を犠牲にしてダイスを2個補給する。
-#     cost: 1
+    - class: ReduceHpAndExtendDiceSkill
+      name: 身喰らい
+      desc: 最大HPの20%を犠牲にしてダイスを2個補給する。
+      cost: 1
+      costHPRatio: 20
+      extendDices: 2
 
 - name: あかねP
   image: akane_p.png

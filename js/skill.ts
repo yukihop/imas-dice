@@ -18,6 +18,8 @@ module cgdice.skills {
     attribute?: string;
     turns?: number;
     target?: string;
+    costHPRatio: number;
+    extendDices: number;
   }
 
   export class Skill {
@@ -258,15 +260,31 @@ module cgdice.skills {
       callback();
     }
   }
-  
+
   export class ForceDrawDiceSkill extends CommandSkill {
     public skillInvokable() {
       var result = super.skillInvokable();
       return result && game.stack.stock > 0 && game.stack.length < 5;
     }
-    
+
     public invoke(callback: () => void) {
       game.stack.draw();
+      callback();
+    }
+  }
+
+  export class ReduceHpAndExtendDiceSkill extends CommandSkill {
+    private costHP() {
+      return Math.floor(game.hp.maxHP * this.param.costHPRatio / 100);
+    }
+
+    public skillInvokable(): boolean {
+      return game.hp.HP > this.costHP();
+    }
+
+    public invoke(callback: () => void) {
+      game.stack.stock += this.param.extendDices;
+      game.hp.HP -= this.costHP();
       callback();
     }
   }
