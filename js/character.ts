@@ -302,6 +302,8 @@ module cgdice.characters {
         m.text(skill.name);
         list.append(m);
       });
+      this.element.toggleClass('no_commandskill', !this._skills.some(
+        s => s.unlocked && s instanceof skills.CommandSkill));
     }
 
     constructor(id: string) {
