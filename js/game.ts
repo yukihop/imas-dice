@@ -310,7 +310,7 @@ module cgdice {
       if (this.stack.stock > 0) {
         this.stack.drawUntilLimit();
       }
-      if (this.stack.length == 0) {
+      if (this.stack.length == 0 && this._phase != GamePhase.InResults) {
         $('#stage_failed_dice').show();
         this.stageFailed();
       } else if (this._phase != GamePhase.InResults) {
