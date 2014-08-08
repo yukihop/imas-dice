@@ -23,17 +23,25 @@ miku3:
   ATK: 20
   EXP: 10
 
-zombie:
+koume:
+  name: 白坂小梅
+  image: koume.png
+  attribute: cool
+  HP: 50
+  ATK: 8
+  EXP: 6
+
+c_zombie:
   name: ぞんび
-  image: zombie.png
+  image: c_zombie.png
   attribute: cool
   HP: 80
-  ATK: 20
+  ATK: 15
   EXP: 6
 
 vampire:
   name: う゛ぁんぱいあ
-  image: zombie.png
+  image: c_zombie.png
   attribute: cool
   HP: 120
   ATK: 20

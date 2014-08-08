@@ -7,29 +7,29 @@
     - empty
     - empty
     - empty
-    - enemy zombie stop
+    - enemy koume stop koume/intro
     - empty
+    - treasure 5 stop
     - empty
-    - empty
-    - enemy vampire
-    - enemy vampire
-    - enemy vampire
-    - enemy vampire
-    - enemy vampire
-    - empty
-    - heal 30
-    - empty
-    - empty
-    - enemy zombie
+    - enemy c_zombie
+    - enemy c_zombie
+    - enemy c_zombie
+    - enemy c_zombie
+    - enemy c_zombie
     - empty
     - heal 30
     - empty
-    - enemy zombie
+    - empty
+    - enemy c_zombie
+    - empty
+    - heal 30
+    - empty
+    - enemy c_zombie
     - empty
     - empty
     - heal 30
-    - enemy zombie
+    - enemy c_zombie
     - empty
     - empty
     - empty
-    - boss vampire
+    - boss koume
