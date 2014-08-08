@@ -19,6 +19,7 @@ module cgdice.battles {
     public EXP: number;
     public attribute: string;
     public patterns: EnemyPattern[] = [];
+    public startTalk: string;
 
     private update() {
       var e = this.element;
@@ -96,7 +97,7 @@ module cgdice.battles {
       var action = new (battles[nextAction.action])(this, nextAction);
 
       if (nextAction.notify) new Notification(nextAction.notify);
-      if (nextAction.say) new Notification(nextAction.say);
+      if (nextAction.say) new Balloon(nextAction.say);
 
       action.invoke(() => this.endMyTurn());
     }
@@ -127,6 +128,7 @@ module cgdice.battles {
       super('enemy');
       var e = this.resolveEnemyInfoInheritance(id);
       this.element.find('.enemy_image').attr('src', 'images/enemies/' + e.image);
+      this.startTalk = e.startTalk;
       this.name = e.name;
       this.HP = e.HP;
       this.maxHP = e.HP;
@@ -208,6 +210,27 @@ module cgdice.battles {
     }
   }
 
+  export class Balloon extends DomDisplayObject {
+    constructor(message: string, callback?: () => void) {
+      super('balloon');
+      this.element
+        .text(message)
+        .appendTo(game.battle.element)
+        .position({ of: game.battle.enemy.element, my: 'left', at: 'right' })
+        .css({ opacity: 0 })
+        .transition({ opacity: 1, duration: 200 })
+        .transition({ opacity: 1, duration: 2500 })
+        .transition({
+          opacity: 0,
+          duration: 200,
+          complete: () => {
+            this.element.remove();
+            callback && callback();
+          }
+        });
+    }
+  }
+  
   /**
    * Attack effect, displayed for a short time and destroied by themselves automatically.
    */
@@ -266,8 +289,12 @@ module cgdice.battles {
       this.startAlliesTurn();
       this.element.show();
       if (talkID) {
-        Talk.show(talkID, () => new GamePhaseMessage('battle_start'));
+        Talk.show(talkID, () => {
+          if (this.enemy.startTalk) new Balloon(this.enemy.startTalk);
+          new GamePhaseMessage('battle_start');
+        });
       } else {
+        if (this.enemy.startTalk) new Balloon(this.enemy.startTalk);
         new GamePhaseMessage('battle_start');
       }
     }

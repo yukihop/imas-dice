@@ -2,7 +2,7 @@ miku:
   name: 前川みく
   image: miku.png
   attribute: cute
-  say: 初心者狩りはお任せにゃ！
+  startTalk: 初心者狩りはお任せにゃ！
   HP: 38
   ATK: 3
   EXP: 3
@@ -10,7 +10,7 @@ miku:
 miku2:
   name: 捨て身の前川みく
   inherits: miku
-  say: さっきは油断したにゃ！
+  startTalk: さっきは油断したにゃ！
   HP: 15
   ATK: 20
   EXP: 5
@@ -18,7 +18,7 @@ miku2:
 miku3:
   name: 前川みく
   inherits: miku
-  say: 今度こそ覚悟するにゃ！
+  startTalk: 今度こそ覚悟するにゃ！
   HP: 120
   ATK: 20
   EXP: 10
@@ -51,10 +51,10 @@ chibichihi:
   name: ちびちひ1号
   image: chibichihi.png
   attribute: operator
-  start_talk: メダルガチャにマニーを詰める係にはなりたくない……
+  startTalk: メダルガチャにマニーを詰める係にはなりたくない……
   HP: 100
   ATK: 15
-  defeated_talk: ばいばい！
+  defeatedTalk: ばいばい！
   EXP: 20
   patterns:
     - turn: 30%
@@ -99,8 +99,8 @@ ranko:
   name: 闇に飲まれたらんこP
   image: chibichihi.jpg
   attribute: cool
-  start_talk: やみのまやみのま
+  startTalk: やみのまやみのま
   HP: 300
   ATK: 10
-  defeated_talk: ぐわああああああ
+  defeatedTalk: ぐわああああああ
   EXP: 50
