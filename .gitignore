@@ -6,5 +6,6 @@ js/*.map
 *.css
 !css/lib
 /.project
+/.idea
 *.ai
 settings/*.json
