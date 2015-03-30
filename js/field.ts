@@ -555,7 +555,6 @@ module cgdice.fields {
         result.push({ x: cur.x, y: cur.y });
         i++;
       }
-      console.log(JSON.stringify(result));
       return result;
     }
 

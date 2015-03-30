@@ -186,6 +186,18 @@ module cgdice {
       this.dispatchEvent('gameLoad');
     }
 
+    public gameClear() {
+      var dialog = $('#game_clear').dialog({
+        dialogClass: 'no_caption',
+        modal: true,
+        width: 640,
+        height: 440
+      });
+      dialog.on('click', () => {
+        setTimeout(1000, () => dialog.dialog('close'));
+      });
+    }
+
     public unlockNextStage() {
       var unlockedStage: StageInfo = null;
       var chapters = this.settings.chapters;
@@ -215,6 +227,9 @@ module cgdice {
         if ('talkOnUnlocked' in unlockedStage) {
           this._stage_selector.openingTalkID = unlockedStage.talkOnUnlocked;
         }
+      }
+      if (unlockedStage == null) {
+        this.gameClear();
       }
     }
 

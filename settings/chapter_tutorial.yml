@@ -130,13 +130,13 @@
   blocks:
     - start tutorial/boss_hint
     - damage 15
+    - enemy stop chibichihi tutorial/boss_chibichihi
     - empty
-    - enemy c_zombie stop
     - empty
     - treasure 3
     - damage 30
     - empty
-    - enemy stop chibichihi
+    - enemy c_zombie stop
     - treasure 3
     - back 2
     - proceed 3
@@ -152,7 +152,7 @@
     - back 2
     - heal 50
     - empty
-    - stop tutorial/boss_message
+    - empty stop tutorial/boss_message
     - empty
     - empty
     - damage 20

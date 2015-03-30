@@ -59,7 +59,7 @@ module.exports = function(grunt) {
         files: { 'pub/js/main.js': ['js/main.ts'] },
         options: {
           target: "ES5",
-          sourceMap: true
+          sourceMap: false
         }
       }
     },
