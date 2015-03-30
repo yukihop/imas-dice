@@ -16,43 +16,28 @@ miku2:
   EXP: 5
 
 miku3:
-  name: 前川みく
+  name: 本気の前川みく
   inherits: miku
   startTalk: 今度こそ覚悟するにゃ！
-  HP: 120
+  HP: 30
   ATK: 20
   EXP: 10
 
-koume:
-  name: 白坂小梅
-  image: koume.png
-  attribute: cool
-  HP: 50
-  ATK: 8
-  EXP: 6
-
 c_zombie:
-  name: ぞんび
+  name: 悪霊になったちびちひ1号
   image: c_zombie.png
-  attribute: cool
-  HP: 80
-  ATK: 15
-  EXP: 6
-
-vampire:
-  name: う゛ぁんぱいあ
-  image: c_zombie.png
-  attribute: cool
-  HP: 120
-  ATK: 20
+  attribute: operator
+  startTalk: ふひひ…
+  HP: 130
+  ATK: 35
   EXP: 6
 
 chibichihi:
   name: ちびちひ1号
   image: chibichihi.png
   attribute: operator
-  startTalk: メダルガチャにマニーを詰める係にはなりたくない……
-  HP: 100
+  startTalk: ちひろ様には近づくな！！
+  HP: 150
   ATK: 15
   defeatedTalk: ばいばい！
   EXP: 20
@@ -65,8 +50,8 @@ chihiro:
   name: 千川ちひろ
   image: chihiro.png
   attribute: operator
-  HP: 200
-  ATK: 30
+  HP: 400
+  ATK: 40
   EXP: 30
   patterns:
     - turn: 1
@@ -74,33 +59,8 @@ chihiro:
       notify: ちひろは不気味に微笑んでいる！
 
 chihiro2:
+  inherits: chihiro
   name: 千川ちひろ・強
-  image: chihiro.png
-  attribute: operator
   HP: 500
   ATK: 50
   EXP: 90
-
-kirari:
-  name: きらりん星人
-  image: kirari.png
-  attribute: passion
-  HP: 500
-  ATK: 20
-  EXP: 90
-  patterns:
-    - turn: 30%
-      action: AddStatusAction
-      status: Stun
-      probability: 0.5
-      say: にょわー！！
-
-ranko:
-  name: 闇に飲まれたらんこP
-  image: chibichihi.jpg
-  attribute: cool
-  startTalk: やみのまやみのま
-  HP: 300
-  ATK: 10
-  defeatedTalk: ぐわああああああ
-  EXP: 50

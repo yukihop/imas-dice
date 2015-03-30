@@ -46,7 +46,7 @@
     - boss miku tutorial/boss
   talkOnClear: tutorial/experience
 
-- title: 迷い道オーバーラン
+- title: よろよろ
   layout: horizontal
   blocks:
     - start tutorial/furafura
@@ -120,23 +120,37 @@
     - empty
     - treasure 5
     - empty
-    - boss miku2
-  talkOnClear: tutorial/skill_item
-  unlockCharacterOnClear: はるかP
-
-- title: 社長ごあいさつ
-  blocks:
-    - start tutorial/haruka
-    - empty
-    - empty
-    - back 2
-    - empty
-    - damage 20
-    - back 2
-    - empty
-    - empty
-    - damage 20
-    - empty
     - boss miku3
-  talkOnUnlocked: tutorial/haruka_found
+  talkOnClear: tutorial/skill_item
+  unlockCharacterOnClear: ["あんずP","らんこP","ゆきほP","さえP"]
+
+- title: ボスステージ
+  layout: spiralIn
+  blocks:
+    - start tutorial/boss_hint
+    - damage 15
+    - empty
+    - enemy c_zombie stop
+    - empty
+    - treasure 1
+    - damage 30
+    - empty
+    - enemy stop chibichihi
+    - empty
+    - back 2
+    - proceed 3
+    - empty
+    - empty
+    - empty
+    - empty
+    - back 2
+    - empty
+    - damage 20
+    - back 2
+    - empty
+    - empty
+    - damage 20
+    - empty
+    - boss chihiro tutorial/boss_before
+  talkOnUnlocked: tutorial/boss_rush
   talkOnClear: tutorial/tutorial_end

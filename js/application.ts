@@ -170,6 +170,7 @@ module cgdice {
       this.resetChapterUnlockStatus(data.lastUnlockedChapter, data.lastUnlockedStage);
 
       this.dispatchEvent('gameLoad');
+      this._title.element.click();
     }
 
     public wipe() {
@@ -270,6 +271,7 @@ module cgdice {
         this._title.element.hide();
         this._stage_selector.reset();
       });
+      this._title.element.hide();
 
       this._stage_selector = new StageSelector();
       this._stage_selector.addEventListener('stageDetermine', (event) => this.stageDetermined(event));

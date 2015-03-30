@@ -78,12 +78,13 @@ module cgdice {
       if (this._currentCharacter.blockingSkill(skill) || skill.unlocked) {
         return;
       }
-      Dialog.confirm(skill.name + 'を解放しますか?', (ok) => {
-        if (ok) {
-          this._currentCharacter.unlockSkill(skill.id);
-          this.updateSkillTree();
-        }
-      });
+      Dialog.alert('スキルバッジがないため解放できません');
+      //Dialog.confirm(skill.name + 'を解放しますか?', (ok) => {
+      //  if (ok) {
+      //    this._currentCharacter.unlockSkill(skill.id);
+      //    this.updateSkillTree();
+      //  }
+      //});
     }
 
     constructor() {
