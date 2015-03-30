@@ -1,0 +1,16 @@
+application: imas-dice
+version: 1
+runtime: php
+api_version: 1
+threadsafe: yes
+
+handlers:
+
+- url: /
+  static_files: pub/index.html
+  upload: pub/index.html
+
+- url: /(.*)
+  static_files: pub/\1
+  upload: pub/(.*\.(html|css|js|jpg|png|ico|json))
+
