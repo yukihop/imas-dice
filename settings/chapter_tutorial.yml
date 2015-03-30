@@ -126,27 +126,33 @@
 
 - title: ボスステージ
   layout: spiralIn
+  initialization: cgdice.application.unlockAllSkills();
   blocks:
     - start tutorial/boss_hint
     - damage 15
     - empty
     - enemy c_zombie stop
     - empty
-    - treasure 1
+    - treasure 3
     - damage 30
     - empty
     - enemy stop chibichihi
-    - empty
+    - treasure 3
     - back 2
     - proceed 3
     - empty
+    - heal 15
     - empty
-    - empty
+    - damage 15
+    - enemy chibichihi
     - empty
     - back 2
-    - empty
+    - treasure 3
     - damage 20
     - back 2
+    - heal 50
+    - empty
+    - stop tutorial/boss_message
     - empty
     - empty
     - damage 20
