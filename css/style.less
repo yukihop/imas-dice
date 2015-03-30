@@ -2,7 +2,7 @@
 
 html, body {
   font-size: 12pt;
-  font-family: sans-serif;
+  font-family: 'メイリオ', 'MS ゴシック', sans-serif;
   color: white;
   height: 100%;
 }
@@ -423,12 +423,25 @@ canvas {
     text-shadow: 2px 2px 1px black;
     text-align: center;
   }
+
+  .statusbg (@x, @y, @size: 48px) { background-position: (-@x * @size) (-@y * @size); }
   .status_list {
     position: absolute;
     font-weight: bold;
     font-size: 10px;
-    background-color: rgba(0, 0, 0, 0.3);
+    .status_icon {
+      display: inline-block;
+      width: 48px;
+      height: 48px;
+      background-image: url('../images/status_icons.png');
+      background-repeat: no-repeat;
+      background-position: -1000px -1000px;
+      overflow: hidden;
+      &.status_0 { .statusbg(0, 0); } // ATK up
+      &.status_1 { .statusbg(0, 4); } // stun
+    }
   }
+
   .mp_frame {
     position: absolute;
     left: 3px;

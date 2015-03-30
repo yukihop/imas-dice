@@ -194,7 +194,7 @@ module cgdice {
         height: 440
       });
       dialog.on('click', () => {
-        setTimeout(1000, () => dialog.dialog('close'));
+        setTimeout(() => dialog.dialog('close'), 1000);
       });
     }
 

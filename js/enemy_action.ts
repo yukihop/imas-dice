@@ -47,7 +47,7 @@ module cgdice.battles {
     public invoke(callback: () => void) {
       var st = <StatusType>StatusType[<string>this.options.status];
       if (typeof st == 'undefined') {
-        alert('Internal error: wrong status type');
+        alert('Internal error: wrong status type ' + this.options.status);
       } else {
         game.players.forEach(p => {
           if (Math.random() < this.options.probability) {

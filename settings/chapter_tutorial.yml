@@ -136,7 +136,7 @@
     - treasure 3
     - damage 30
     - empty
-    - enemy c_zombie stop
+    - enemy stop c_zombie
     - treasure 3
     - back 2
     - proceed 3
@@ -153,8 +153,8 @@
     - heal 50
     - empty
     - empty stop tutorial/boss_message
-    - empty
-    - empty
+    - treasure 3
+    - treasure 3
     - damage 20
     - empty
     - boss chihiro tutorial/boss_before

@@ -138,8 +138,8 @@ module cgdice.characters {
       var list = this.element.find('.status_list');
       list.empty();
       this.status.forEach(st => {
-        var txt = StatusType[st.type] + ' ' + st.remainingTurns + 'T';
-        var div = $('<div>').text(txt);
+        // var txt = StatusType[st.type] + ' ' + st.remainingTurns + 'T';
+        var div = $('<div>').addClass('status_icon status_' + st.type);
         div.appendTo(list);
       });
     }

@@ -10,7 +10,7 @@ miku:
 miku2:
   name: 捨て身の前川みく
   inherits: miku
-  startTalk: さっきは油断したにゃ！
+  startTalk: さ、さっきは油断したにゃ！
   HP: 15
   ATK: 20
   EXP: 5
@@ -27,7 +27,6 @@ c_zombie:
   name: 悪霊になったちびちひ1号
   image: c_zombie.png
   attribute: operator
-  startTalk: ふひひ…
   HP: 130
   ATK: 35
   EXP: 6
@@ -37,9 +36,8 @@ chibichihi:
   image: chibichihi.png
   attribute: operator
   startTalk: ちひろ様には近づくな！！
-  HP: 150
-  ATK: 15
-  defeatedTalk: ばいばい！
+  HP: 250
+  ATK: 25
   EXP: 20
   patterns:
     - turn: 30%
@@ -47,16 +45,23 @@ chibichihi:
       notify: ちびちひはボーっとしている！
 
 chihiro:
-  name: 千川ちひろ
+  name: 千川ちひろ Lv80
+  startTalk: 超得ショップ開催中ですよ？
   image: chihiro.png
   attribute: operator
-  HP: 400
+  HP: 600
   ATK: 40
   EXP: 30
   patterns:
     - turn: 1
       action: NullAction
       notify: ちひろは不気味に微笑んでいる！
+    - turn: 3n
+      notify: ちひろの麻痺攻撃！
+      say: ごめんなさい。現在接続しにくい状態になっているようです。
+      action: AddStatusAction
+      probability: 0.5
+      status: Stun
 
 chihiro2:
   inherits: chihiro
