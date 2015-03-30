@@ -9,7 +9,7 @@ module.exports = function(grunt) {
     less: {
       all: {
         files: {
-          'css/style.css': ['css/style.less']
+          'pub/css/style.css': ['css/style.less']
         }
       }
     },
@@ -21,8 +21,14 @@ module.exports = function(grunt) {
         files: [
           {
             expand: true,
-            src: ['**/*.jade'],
-            dest: '',
+            src: ['talks/*.jade'],
+            dest: 'pub',
+            ext: '.html'
+          },
+          {
+            expand: true,
+            src: ['index.jade'],
+            dest: 'pub',
             ext: '.html'
           }
         ]
@@ -42,7 +48,7 @@ module.exports = function(grunt) {
           {
             expand: true,
             src: ['settings/settings.yml'],
-            dest: '',
+            dest: 'pub',
             ext: '.json'
           }
         ]
@@ -50,7 +56,7 @@ module.exports = function(grunt) {
     },
     typescript: {
       all: {
-        files: { 'js/main.js': ['js/main.ts'] },
+        files: { 'pub/js/main.js': ['js/main.ts'] },
         options: {
           target: "ES5",
           sourceMap: true
