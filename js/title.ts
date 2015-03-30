@@ -8,7 +8,6 @@ module cgdice {
     constructor() {
       super($('#title'));
       this.element.on('click', '#game_start', () => this.menuClicked());
-      this.menuClicked();
     }
   }
 
@@ -93,9 +92,9 @@ module cgdice {
         this.updateSelectedCount();
       });
 
-      //$('#character_list', this.element).sortable({
-      //  distance: 10
-      //});
+      $('#character_list', this.element).sortable({
+        distance: 10
+      });
 
       $('#chapter_prev', this.element).on('click', () => this.scrollChapter(-1));
       $('#chapter_next', this.element).on('click', () => this.scrollChapter(1));
@@ -119,9 +118,7 @@ module cgdice {
         this.reset();
       });
       $('#unlock_all_skills', this.element).on('click', () => {
-        application.allCharacters.forEach(p => {
-          p.allSkills().forEach(s => p.unlockSkill(s.id));
-        });
+        application.unlockAllSkills();
         this.reset();
       });
       $('#unlock_everything', this.element).on('click', () => {

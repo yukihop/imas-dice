@@ -170,7 +170,6 @@ module cgdice {
       this.resetChapterUnlockStatus(data.lastUnlockedChapter, data.lastUnlockedStage);
 
       this.dispatchEvent('gameLoad');
-      this._title.element.click();
     }
 
     public wipe() {
@@ -225,6 +224,12 @@ module cgdice {
       });
     }
 
+    public unlockAllSkills() {
+      application.allCharacters.filter(p => p.unlocked).forEach(p => {
+        p.allSkills().forEach(s => p.unlockSkill(s.id));
+      });
+    }
+
     public findCharacter(name: string): characters.Character {
       var result: characters.Character = null;
       this.allCharacters.some(c => {
@@ -271,7 +276,6 @@ module cgdice {
         this._title.element.hide();
         this._stage_selector.reset();
       });
-      this._title.element.hide();
 
       this._stage_selector = new StageSelector();
       this._stage_selector.addEventListener('stageDetermine', (event) => this.stageDetermined(event));
