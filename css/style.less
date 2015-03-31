@@ -2,7 +2,7 @@
 
 html, body {
   font-size: 12pt;
-  font-family: 'メイリオ', 'MS ゴシック', sans-serif;
+  font-family: sans-serif;
   color: white;
   height: 100%;
 }
@@ -144,19 +144,23 @@ canvas {
         height: @chap_height;
         text-align: left;
         li.chapter {
+          background: url('../images/chapter1.jpg');
           display: inline-block;
           vertical-align: top;
           position: relative;
           width: @chap_width;
           height: @chap_height;
-          .linear-gradient(to right bottom, silver, white;);
           .title {
             color: navy;
             margin: 10px 10px 0 10px;
             font-size: 130%;
+            text-shadow: 1px 1px 2px white;
+            font-weight: bolder;
           }
           .desc {
             margin: 0 10px;
+            font-weight: bolder;
+            text-shadow: 1px 1px 2px white, -1px -1px 1px white;
             color: black;
           }
           ul.stage_list {
@@ -178,7 +182,7 @@ canvas {
               }
               &.locked {
                 background: none;
-                background-color: gray;
+                background-color: rgba(0, 0, 0, 0.3);
                 color: silver;
                 cursor: default;
               }
@@ -429,6 +433,7 @@ canvas {
     position: absolute;
     font-weight: bold;
     font-size: 10px;
+    background-color: rgba(0, 0, 0, 0.3);
     .status_icon {
       display: inline-block;
       width: 48px;
@@ -441,7 +446,6 @@ canvas {
       &.status_1 { .statusbg(0, 4); } // stun
     }
   }
-
   .mp_frame {
     position: absolute;
     left: 3px;
@@ -995,9 +999,6 @@ canvas {
       .character_talk(ranko);
       .character_talk(sae);
       .character_talk(anzu);
-      .character_talk(kaede);
-      .character_talk(haruka);
-      .character_talk(akane);
       .character_talk(chibichihi);
       .character_talk(chihiro);
       &.right { background-position: 240px 0; padding-left: 0; padding-right: 110px; }

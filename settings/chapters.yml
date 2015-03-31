@@ -3,7 +3,6 @@
 # (これは grunt-yaml で実現されている拡張でありYAMLの公式仕様ではありません)
 # ステージファイルの記述方法については、 chapter_tutorial.yml を参照してください。
 
-- title: 体験版
-  desc: 目が覚めたら変な世界に迷いこんでいたことりPのぼうけんがはじまる!!
+- title: 体験版ステージ
+  desc: 目が覚めたら変な世界に迷いこんでいたことりP
   stages: !include settings/chapter_tutorial.yml
-

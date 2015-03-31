@@ -124,7 +124,7 @@
   talkOnClear: tutorial/skill_item
   unlockCharacterOnClear: ["あんずP","らんこP","ゆきほP","さえP"]
 
-- title: おまけチャレンジ
+- title: ボスステージ
   layout: spiralIn
   initialization: cgdice.application.unlockAllSkills();
   blocks:
@@ -159,4 +159,3 @@
     - empty
     - boss chihiro tutorial/boss_before
   talkOnUnlocked: tutorial/boss_rush
-  talkOnClear: tutorial/tutorial_end
