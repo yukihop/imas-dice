@@ -649,12 +649,14 @@ canvas {
   .main_panel;
   display: none;
   font-size: 18px;
-  background-color: brown;
+  background: url('../images/bg/result.jpg');
   text-align: center;
   button {
     width: 200px;
     height: 50px;
+    font-size: 18px;
   }
+  .gain_exp { font-size: 150%; }
   #stage_clear { margin: 0px auto; }
   #growth {
     max-width: 800px;
@@ -667,6 +669,7 @@ canvas {
       background: #300;
       border: 1px solid white;
       box-shadow: 2px 2px 2px yellow;
+      p.changes { height: 50px; line-height: 50px; }
       .name {
         width: 100px;
         height: 100px;
@@ -990,3 +993,6 @@ canvas {
   }
 }
 
+.ui-dialog.no_caption {
+  .ui-dialog-titlebar { display: none; }
+}
