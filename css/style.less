@@ -38,6 +38,7 @@ button {
   border-radius: 5px;
   background-color: #ddd;
   box-shadow: inset -1px -1px 1px #888;
+  font-size: 24px;
   &:hover {
     background-color: #eee;
   }
@@ -96,7 +97,7 @@ canvas {
 
 #stage_select {
   .main_panel;
-  .linear-gradient(to right bottom, salmon, white;);
+  background: url('../images/bg/stage_select.jpg');
   >p {
     color: brown;
     text-align: center;
@@ -104,7 +105,9 @@ canvas {
     text-shadow: 1px 1px white;
   }
   #chapter_selector {
-    text-align: center;
+    position: absolute;
+    left: 260px;
+    top: 30px;
     @chap_width: 400px;
     @chap_height: 250px;
     height: @chap_height;
@@ -114,6 +117,8 @@ canvas {
       vertical-align: top;
       width: 30px;
       height: @chap_height;
+      line-height: @chap_height;
+      text-align: center;
       background-color: #666;
       cursor: pointer;
       &:hover {
@@ -182,9 +187,16 @@ canvas {
       }
     }
   }
+  #character_count {
+    position: absolute;
+    top: 360px;
+    left: 30px;
+    font-size: 24px;
+  }
   #character_list {
-    padding-top: 45px;
-    width: 850px;
+    position: absolute;
+    top: 380px;
+    width: 1000px;
     height: 100px;
     text-align: center;
     margin: 0 auto;
