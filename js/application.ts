@@ -312,6 +312,9 @@ module cgdice {
     }
 
     public run(): void {
+      if (location.href.match(/imas-dice/)) {
+        $('#cheat_menu').hide();
+      }
       createjs.Ticker.setFPS(30);
       this._loader.on('complete', this.preloadComplete, this);
       this._loader.loadManifest([
