@@ -124,7 +124,7 @@
   talkOnClear: tutorial/skill_item
   unlockCharacterOnClear: ["あんずP","らんこP","ゆきほP","さえP"]
 
-- title: ボスステージ
+- title: おまけチャレンジ
   layout: spiralIn
   initialization: cgdice.application.unlockAllSkills();
   blocks:
