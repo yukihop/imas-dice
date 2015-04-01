@@ -4,5 +4,5 @@
 # ステージファイルの記述方法については、 chapter_tutorial.yml を参照してください。
 
 - title: 体験版ステージ
-  desc: 目が覚めたら変な世界に迷いこんでいたことりP
+  desc: 目が覚めたら妙な世界に迷いこんでいたことりPが大冒険的なことをする件
   stages: !include settings/chapter_tutorial.yml
