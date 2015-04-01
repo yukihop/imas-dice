@@ -153,9 +153,6 @@ module cgdice {
         alert('構文エラーです');
         return;
       }
-      if ('characters' in data) {
-        return;
-      }
 
       this.allCharacters.forEach(c => {
         if (c.name in data.characters) {

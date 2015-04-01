@@ -1,13 +1,37 @@
 module cgdice {
 
   export class Title extends cgdice.DomDisplayObject {
-    private menuClicked() {
+    private hasSaveData: boolean = false;
+
+    private startClicked() {
+      if (this.hasSaveData) {
+        Dialog.confirm('ゲームの進行状況をクリアしますか?', (ok) => {
+          if (ok) {
+            application.wipe();
+            application.save();
+            this.closeTitle();
+          }
+        });
+      } else {
+        this.closeTitle();
+      }
+    }
+
+    private closeTitle() {
       this.dispatchEvent('titleClose');
     }
 
     constructor() {
       super($('#title'));
-      this.element.on('click', '#game_start', () => this.menuClicked());
+
+      var data_string = <string>localStorage.getItem('saveData1');
+      if (data_string) {
+        this.hasSaveData = true;
+      }
+
+      this.element.on('click', '#game_start', () => this.startClicked());
+      this.element.on('click', '#game_continue', () => this.closeTitle());
+      this.element.find('#game_continue').prop('disabled', !this.hasSaveData);
     }
   }
 
