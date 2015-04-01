@@ -31,6 +31,9 @@ module cgdice {
 
       this.element.on('click', '#game_start', () => this.startClicked());
       this.element.on('click', '#game_continue', () => this.closeTitle());
+      this.element.on('click', '#show_update_history', () => {
+        $('#update_history').toggle();
+      });
       this.element.find('#game_continue').prop('disabled', !this.hasSaveData);
     }
   }
