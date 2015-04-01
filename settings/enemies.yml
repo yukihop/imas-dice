@@ -49,15 +49,15 @@ chihiro:
   startTalk: 超得ショップ開催中ですよ？
   image: chihiro.png
   attribute: operator
-  HP: 600
-  ATK: 40
+  HP: 900
+  ATK: 55
   EXP: 30
   patterns:
     - turn: 1
       action: NullAction
       notify: ちひろは不気味に微笑んでいる！
-    - turn: 3n
-      notify: ちひろの麻痺攻撃！
+    - turn: 2n
+      notify: ちひろのショック攻撃！
       say: ごめんなさい。現在接続しにくい状態になっているようです。
       action: AddStatusAction
       probability: 0.5

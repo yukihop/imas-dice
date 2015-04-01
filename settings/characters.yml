@@ -34,13 +34,6 @@
       desc: このターンの自分の攻撃力が2倍になる。
       scale: 2
       cost: 3
-    - class: AttackMultiplySkill
-      name: ぴよキック
-      id: c02bffea
-      requires: e77b3b30
-      desc: このターンの自分の攻撃力が3倍になる。
-      scale: 3
-      cost: 5
 
 - name: ゆきほP
   image: yukiho_p.png
@@ -102,19 +95,19 @@
       name: 働きたくない
       id: 9450ba26
       desc: 次に引かれる手持ちのダイスが必ず1になる。
-      cost: 5
+      cost: 3
       pips: 1
     - class: ProceedSkill
       name: おうち帰りたい
       id: 4516a91e
       desc: 5マス戻る。
-      cost: 4
+      cost: 3
       proceed: -5
     - class: FreeTradeSkill
       name: フリートレード
       id: 42608782
       desc: 場のダイスの任意の1個と手持ちのダイスの任意の1個を交換する。
-      cost: 6
+      cost: 4
 
 - name: さえP
   image: sae_p.png
