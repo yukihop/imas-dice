@@ -8,11 +8,15 @@ module cgdice {
       var src = 'images/characters/' + character.image.replace('.png', '_large.png');
       $('.name', this.element).text(character.name);
       $('.character_desc', this.element).text(character.desc);
-      $('#skill_selector_bg', this.element)
-        .attr('src', src)
-        .stop(true, true)
-        .css({ x: prevAnimation ? -50 : 50, opacity: 0 })
-        .transition({ x: 0, opacity: 1, duration: 500 });
+      var img = $('<img>')
+        .on('load', () => {
+          $('#skill_selector_bg', this.element)
+            .attr('src', src)
+            .stop(true, true)
+            .css({ x: prevAnimation ? -50 : 50, opacity: 0 })
+            .transition({ x: 0, opacity: 1, duration: 500 });
+        })
+        .attr('src', src);
       this.updateSkillTree();
     }
 
