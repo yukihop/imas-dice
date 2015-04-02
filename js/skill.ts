@@ -239,6 +239,8 @@ module cgdice.skills {
 
     public invoke(callback: () => void) {
       this._callback = callback;
+      this.selectedOnboard = null;
+      this.selectedStack = null;
       game.stack.element
         .on('click.freetrade', '.dice', $.proxy(this.stackDiceClick, this));
       game.battle.element.find('#onboard')
